@@ -1,0 +1,80 @@
+0  0x0000000000000000 in ?? ()
+#1  0x000000000050d7c2 in KTNumPlist (list=0x100000d694c0, famfirst=0x7fffffffd4d0) at ../../src/plist.c:317
+#2  0x000000000050ce3e in TypePlistWithKTnum (list=0x100000d694c0, ktnum=0x0) at ../../src/plist.c:548
+#3  0x00000000004f2b1f in DoFilter (self=<value optimized out>, obj=0x13) at ../../src/opers.c:979
+#4  0x00000000004f2ba6 in DoAndFilter (self=0x1000000284f8, obj=0x13) at ../../src/opers.c:1082
+#5  0x00000000004f2ba6 in DoAndFilter (self=0x100000028610, obj=0x13) at ../../src/opers.c:1082
+#6  0x00000000004f2ba6 in DoAndFilter (self=0x10000002b878, obj=0x13) at ../../src/opers.c:1082
+#7  0x00000000004b30c6 in EvalFunccall1args (call=168) at ../../src/funcs.c:486
+#8  0x00000000004ad1a1 in EvalUnknownBool (expr=17592200107792) at ../../src/exprs.c:198
+#9  0x00000000004aa767 in EvalNot (expr=<value optimized out>) at ../../src/exprs.c:327
+#10 0x00000000005276ae in ExecIf (stat=440) at ../../src/stats.c:287
+#11 0x00000000005275ab in ExecSeqStat7 (stat=32) at ../../src/stats.c:247
+#12 0x00000000004b4dc5 in DoExecFunc1args (func=0x100000650458, arg1=0x100000d694c0) at ../../src/funcs.c:861
+#13 0x00000000004b30c6 in EvalFunccall1args (call=2480) at ../../src/funcs.c:486
+#14 0x0000000000541b55 in ExecAssLVar11 (stat=<value optimized out>) at ../../src/vars.c:306
+#15 0x00000000005272dc in ExecSeqStat (stat=5616) at ../../src/stats.c:161
+#16 0x000000000052798b in ExecWhile (stat=5720) at ../../src/stats.c:1048
+#17 0x00000000005272dc in ExecSeqStat (stat=6264) at ../../src/stats.c:161
+#18 0x00000000004b51c7 in DoExecFunc5args (func=0x10000064fa50, arg1=0x10000070d2d0, arg2=0x10000070dc50, arg3=0x100000fe7b80, arg4=0x100000ff6fc0, arg5=0x1000004fc268) at ../../src/funcs.c:1033
+#19 0x00000000004b26f3 in EvalFunccall5args (call=2608) at ../../src/funcs.c:637
+#20 0x00000000005418d5 in ExecAssLVar15 (stat=<value optimized out>) at ../../src/vars.c:362
+#21 0x000000000052730b in ExecSeqStat2 (stat=3264) at ../../src/stats.c:177
+#22 0x0000000000527470 in ExecSeqStat5 (stat=3664) at ../../src/stats.c:217
+#23 0x000000000052798b in ExecWhile (stat=3736) at ../../src/stats.c:1048
+#24 0x00000000005272dc in ExecSeqStat (stat=7032) at ../../src/stats.c:161
+#25 0x00000000004b51c7 in DoExecFunc5args (func=0x1000006520e0, arg1=0x1000007be0c0, arg2=0x1000007db6f8, arg3=0x10000070d2d0, arg4=0x10000070d2d0, arg5=0x1000004fc268) at ../../src/funcs.c:1033
+#26 0x00000000004b26f3 in EvalFunccall5args (call=4264) at ../../src/funcs.c:637
+---Type <return> to continue, or q <return> to quit--- 
+#27 0x0000000000541e75 in ExecAssLVar06 (stat=<value optimized out>) at ../../src/vars.c:236
+#28 0x00000000005272dc in ExecSeqStat (stat=5672) at ../../src/stats.c:161
+#29 0x00000000005294b0 in ExecForRange (stat=<value optimized out>) at ../../src/stats.c:846
+#30 0x00000000005272dc in ExecSeqStat (stat=6024) at ../../src/stats.c:161
+#31 0x00000000004b53bd in DoExecFunc4args (func=0x100000651e08, arg1=0x1000007be0c0, arg2=0x1000007db6f8, arg3=0x10000070dc50, arg4=0x100000837c38) at ../../src/funcs.c:987
+#32 0x00000000004b2a30 in EvalFunccall4args (call=712) at ../../src/funcs.c:596
+#33 0x0000000000541fb5 in ExecAssLVar04 (stat=<value optimized out>) at ../../src/vars.c:208
+#34 0x000000000052760a in ExecSeqStat7 (stat=32) at ../../src/stats.c:250
+#35 0x00000000004b559d in DoExecFunc3args (func=0x10000064f1e0, arg1=0x1000007be0c0, arg2=0x1000007db6f8, arg3=0x100000837c38) at ../../src/funcs.c:943
+#36 0x00000000004b2cdd in EvalFunccall3args (call=344) at ../../src/funcs.c:558
+#37 0x00000000005420f5 in ExecAssLVar02 (stat=<value optimized out>) at ../../src/vars.c:180
+#38 0x000000000052735b in ExecSeqStat3 (stat=32) at ../../src/stats.c:189
+#39 0x00000000004b4dc5 in DoExecFunc1args (func=0x10000055bc60, arg1=0x100000837c38) at ../../src/funcs.c:861
+#40 0x00000000004cae3c in IntrFuncCallEnd (funccall=1, options=0, nr=1) at ../../src/intrprtr.c:417
+#41 0x0000000000515005 in ReadCallVarAss (follow=3221225472, mode=114 'r') at ../../src/read.c:535
+#42 0x0000000000517279 in ReadAtom (follow=3221225472, mode=19 '\023') at ../../src/read.c:1384
+#43 0x000000000051733a in ReadFactor (follow=3221225472, mode=54 '6') at ../../src/read.c:1446
+#44 0x0000000000517551 in ReadTerm (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1497
+#45 0x0000000000517632 in ReadAri (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1530
+#46 0x0000000000517751 in ReadRel (follow=3221225472, mode=54 '6') at ../../src/read.c:1569
+#47 0x00000000005178f1 in ReadAnd (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1608
+#48 0x00000000005179b1 in ReadExpr (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1634
+#49 0x00000000005151d7 in ReadCallVarAss (follow=3221225472, mode=120 'x') at ../../src/read.c:545
+#50 0x0000000000517279 in ReadAtom (follow=3221225472, mode=19 '\023') at ../../src/read.c:1384
+#51 0x000000000051733a in ReadFactor (follow=3221225472, mode=54 '6') at ../../src/read.c:1446
+#52 0x0000000000517551 in ReadTerm (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1497
+#53 0x0000000000517632 in ReadAri (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1530
+---Type <return> to continue, or q <return> to quit---
+#54 0x0000000000517751 in ReadRel (follow=3221225472, mode=54 '6') at ../../src/read.c:1569
+#55 0x00000000005178f1 in ReadAnd (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1608
+#56 0x00000000005179b1 in ReadExpr (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1634
+#57 0x0000000000519567 in ReadEvalCommand (context=0x100000001c50) at ../../src/read.c:2261
+#58 0x00000000004bad12 in Shell (context=<value optimized out>, canReturnVoid=0, canReturnObj=0, lastDepth=3, setTime=1, prompt=0x7fffffffdfe0 "gap> ", preCommandHook=0x10000012a830, 
+    catchQUIT=1, inFile=0x100005b09588 "\032", outFile=0x100005b095a8 "\201\003") at ../../src/gap.c:306
+#59 0x00000000004bb2ce in FuncSHELL (self=<value optimized out>, args=0x10000012a828) at ../../src/gap.c:500
+#60 0x00000000004b4759 in ExecProccallXargs (call=944) at ../../src/funcs.c:387
+#61 0x0000000000527470 in ExecSeqStat5 (stat=32) at ../../src/stats.c:217
+#62 0x00000000004b4a49 in DoExecFunc0args (func=0x100000066d20) at ../../src/funcs.c:821
+#63 0x00000000004cadb9 in IntrFuncCallEnd (funccall=0, options=0, nr=0) at ../../src/intrprtr.c:416
+#64 0x0000000000515340 in ReadCallVarAss (follow=3221225472, mode=120 'x') at ../../src/read.c:565
+#65 0x0000000000517279 in ReadAtom (follow=3221225472, mode=19 '\023') at ../../src/read.c:1384
+#66 0x000000000051733a in ReadFactor (follow=3221225472, mode=54 '6') at ../../src/read.c:1446
+#67 0x0000000000517551 in ReadTerm (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1497
+#68 0x0000000000517632 in ReadAri (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1530
+#69 0x0000000000517751 in ReadRel (follow=3221225472, mode=54 '6') at ../../src/read.c:1569
+#70 0x00000000005178f1 in ReadAnd (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1608
+#71 0x00000000005179b1 in ReadExpr (follow=17592200107792, mode=19 '\023') at ../../src/read.c:1634
+#72 0x0000000000519567 in ReadEvalCommand (context=0x100000001c50) at ../../src/read.c:2261
+#73 0x000000000052dfa1 in READ_GAP_ROOT (filename=0xc06320 "lib/init.g") at ../../src/streams.c:475
+#74 0x00000000004b5f17 in InitializeGap (pargc=<value optimized out>, argv=<value optimized out>) at ../../src/gap.c:3411
+#75 0x00000000004ba8cd in main (argc=1, argv=0x50f860, environ=0x100007de63e8) at ../../src/gap.c:793
+

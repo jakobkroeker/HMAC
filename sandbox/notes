@@ -1,0 +1,82 @@
+#######################
+# Notes
+#######################
+# it is possible to install global functions with a point in it:
+#DeclareGlobalFunction( "@HMAC@PadicLift\.Tests\.TEST_LIFT_OPTIONS"); 
+#InstallGlobalRecordFunction@HMAC ( ["@HMAC@PadicLift","Tests"], "TEST_LIFT_OPTIONS", @HMAC@PadicLift\.Tests\.TEST_LIFT_OPTIONS);
+#InstallGlobalFunction( @HMAC@PadicLift\.Tests\.TEST_LIFT_OPTIONS, 
+#
+# examine an object:
+# REC_NAMES_COMOBJ
+# track functions defined in a (sub-) package:
+#
+#old_DeclareGlobalFunction := DeclareGlobalFunction;
+#MakeReadWriteGlobal("DeclareGlobalFunction");
+#funcs := [];
+#DeclareGlobalFunction := function(arg) Add(funcs,arg[1]);
+#CallFuncList(old_DeclareGlobalFunction,arg); end;
+#
+# lookup help:
+# -google SetHelpViewer gap system
+# example:
+# ?FR:InfoFR
+#
+# include in fr.xml <#Include SYSTEM "../hurwitz/hurwitz.xml">
+# HURWITZDOC@HMAC()
+# see also the documentation DTD !
+# GAPDoc: Short description should be always mentioned before return value!
+###########################
+#
+# issues:
+#
+#  in padicLift.gi:  todo: probably hints a problem  - errorTolerance reduced from 1.e-14 to 1.e-13.....
+ä
+# - mpir is not detected (by whom?)
+# - hurwitzMapSearch depends on flintlib ->update Makefile.in!
+#
+# if float.so is not compiled, float package loads anyway but FPLLLReducedBasis-function is not defined. 
+# compiling float: wenn man installiertes mpfi benutzt, gibts multiple definition error - fedora zu alt...
+#
+# TODO: introduce type "Power@Fr" , multiplication and Value for it. 
+#
+# TODO: rename UNIQUE_PRODUCT to FACTORIZE@FR or similar (yes or no?) 
+#
+# TODO: add examples as tests, especially threeCV.g !
+#
+# How to get all loaded packages and show package-dependent functions?
+#
+# write GAP techical article: hiding private data, namespacing.
+
+# GAP Documentation (http://www.gap-system.org/Manuals/doc/ref/chap76.html):
+# missing examples. But examples are essential !!!!!!!
+#
+
+ ShowPackageVariables("FR") does not work.
+ 
+ 
+
+computing hurwitz map:
+
+
+the (alpha factor) computation could fail, if 
+first polynomial has not the infinity root. 
+
+workaround: the user has to choose shapes order to prevent computation failure.
+
+
+Paper:
+
+algorithm overview details not correct. (Seite 4)
+
+Seite 4: to get a rough runtime prediction for the brute force search
+we compute the search space size using combinatorics and
+the gauss formula for the number of irreducible polynomials of a given degree 
+over a finite field.
+
+Seite 5 'well known fact' streichen.
+
+
+# related interesting mathematcal discussion link:
+http://mathoverflow.net/questions/38274/what-are-the-shapes-of-rational-functions
+
+

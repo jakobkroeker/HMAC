@@ -1,0 +1,6 @@
+HMAC requires external libraries for its DLL. The compilation script will
+download them automatically for you; they can also be fetched manually,
+using the commands
+
+wget --no-check-certificate https://forge.imag.fr/frs/download.php/202/givaro-3.6.0.tar.gz
+

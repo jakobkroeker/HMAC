@@ -1,0 +1,35 @@
+Since GAP 4.5 users can configure the way help sections are displayed
+in text mode (in the terminal running GAP) or in HTML mode (in a web browser).
+
+In a running GAP session the setting can be changed with the commands
+  SetGAPDocTextTheme,  resp.
+  SetGAPDocHTMLStyle
+
+See the help pages for these commands for more details.
+
+For example, the commands
+  SetGAPDocTextTheme("none");
+or
+  SetGAPDocTextTheme("old");
+would cause that no colors are used to markup the text version of the help
+sections.
+
+(If only a specific color disturbs you, there is also the possibility to change
+just that.)
+
+If you want to use one of the above options in all GAP sessions by default
+you can specify that in your 'gap.ini' file, add a line like
+
+  SetUserPreference( "gapdoc", "TextTheme", [ "none" ] );
+
+Users of the HTML help may want to use something like
+  SetUserPreference( "gapdoc", "HTMLStyle", [ "default", "ragged" ] );
+and/or
+  SetUserPreference( "gapdoc", "UseMathJax", true );
+
+If you do not yet use a gap.ini file, see the help section of
+'WriteGapIniFile' to learn how to create one.
+
+With best regards,
+  Frank Lübeck
+

@@ -1,0 +1,198 @@
+## to debug: 1. compile with fstabs turned on!
+
+ gap
+gap: halfing pool size.
+gap: halfing pool size.
+gap: halfing pool size.
+ ┌───────┐   GAP, Version 4.dev of today (free software, GPL)
+ │  GAP  │   http://www.gap-system.org
+ └───────┘   Architecture: x86_64-unknown-linux-gnu-gcc-default64
+ Libs used:  gmp, readline
+ Loading the library #I  
+#I  The call to 'SetUserPreferences' (probably in a 'gap.ini' file)
+#I  should be replaced by individual 'SetUserPreference' calls,
+#I  which are package specific.
+#I  Try 'WriteGapIniFile()'.
+and packages ...
+ Components: trans 1.0, prim 2.1, small* 1.0, id* 1.0
+ Packages:   AClib 1.2, Alnuth 3.0.0, AutPGrp 1.5, CRISP 1.3.5, Cryst 4.1.10, CrystCat 1.1.6, FactInt 1.5.3, FGA 1.1.1, GAPDoc 1.5.1, IRREDSOL 1.2.1, LAGUNA 3.6.1, Polenta 1.3.1, Polycyclic 2.10.1, RadiRoot 2.6, Sophus 1.22
+ Try '?help' for help. See also  '?copyright' and  '?authors'
+gap> 
+gap> LoadPackage("float");
+Loading FLOAT 0.4.6 ...
+true
+gap> LoadPackage("fr");
+#I  Package ``ACE'': The program `ace' is not compiled
+#I  Package ``ACE'': The program `ace' is not compiled
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading  NQL 0.10 (Nilpotent Quotient Algorithm for L-presented Groups)
+by René Hartung (http://www.uni-math.gwdg.de/rhartung).
+Homepage: http://www.uni-math.gwdg.de/rhartung/pub/nql/
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading FR 1.2.7.0 ...
+true
+gap> 
+gap> RereadPackage("fr","hurwitz/gap/utils.gd");
+true
+gap> RereadPackage("fr","hurwitz/gap/utils.gi");
+true
+gap> 
+gap> RereadPackage("fr","hurwitz/gap/padicLift.gd");
+true
+gap> RereadPackage("fr","hurwitz/gap/padicLift.gi");
+#I  method installed for IsLiftOptions matches more than one declaration
+true
+gap>  
+gap> RereadPackage("fr","hurwitz/gap/hurwitz.gd");
+#I  MakeReadOnlyGlobal: Hurwitz@FR already read-only
+true
+gap> RereadPackage("fr","hurwitz/gap/hurwitz.gi");
+#W NewRepresentation "IsInfinityPol@FR" in Reread. Change of Super-rep not handled
+true
+gap> 
+gap> 
+gap> SetFloats( MPC, 100 );
+gap>    
+gap> finiteField :=GF (11);
+GF(11)
+gap> 
+gap> rng :=  PolynomialRing( finiteField, 1);
+GF(11)[x_1]
+gap> x_1:=IndeterminatesOfPolynomialRing(rng)[1];
+x_1
+gap>   
+gap> hmsProblem:= rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], 
+>       [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+>   normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), 
+>       rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+>       rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], 
+>   shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] );
+rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+  normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+      rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+      rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+      rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] )
+gap> 
+gap>  polTuple:=[ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), 
+>   x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, 
+>   x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ];
+[ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, 
+  x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ]
+gap> 
+gap>   lifter := Hurwitz@FR.HurwitzMapLifter(polTuple, finiteField, hmsProblem);
+rec( coeffVariables := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11, a_12, a_13, a_14, a_15 ], computeApproxHurwitzMaps := function( liftOptions ) ... end, 
+  computeApproxHurwitzMapsOptimized := function( liftOptions ) ... end, finiteField := GF(11), getMapDegree := function(  ) ... end, hmsProblem := rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], 
+      criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+      normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+          rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+          rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+          rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] ), 
+  ideal := <two-sided ideal in Integers[a_1,a_2,a_3,a_4,a_5,a_6,a_7,a_8,a_9,a_10,a_11,a_12,a_13,a_14,a_15,alpha_1,alpha_2,alpha_3,alpha_4], (19 generators)>, 
+  idealFactorsTuple := [ [ [ x_1^2+a_1*x_1+a_2, 1 ] ], [ [ x_1, 2 ], [ x_1^2+a_3*x_1+a_4, 1 ] ], [ [ x_1-1, 2 ], [ x_1^2+a_5*x_1+a_6, 1 ] ], [ [ x_1+a_7, 2 ], [ x_1^2+a_8*x_1+a_9, 1 ] ], [ [ x_1+a_10, 2 ], [ x_1^2+a_11*x_1+a_12, 1 ] ],
+      [ [ x_1+a_13, 2 ], [ x_1^2+a_14*x_1+a_15, 1 ] ] ], isConsistent := function(  ) ... end, normalizePolynomials := function(  ) ... end, normalizedFactorBases := function(  ) ... end, normalizedFactors := function(  ) ... end, 
+  point := [ Z(11), Z(11)^2, Z(11)^8, Z(11)^6, Z(11)^4, Z(11), Z(11)^6, Z(11)^7, Z(11)^0, Z(11)^3, Z(11)^6, Z(11)^8, Z(11)^4, Z(11)^2, Z(11)^7, Z(11)^4, Z(11), Z(11)^3, Z(11)^4 ], 
+  pointHumanReadable := [ 2, 4, 3, 9, 5, 2, 9, 7, 1, 8, 9, 3, 5, 4, 7, 5, 2, 8, 5 ], polTuple := [ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), 
+      x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ], polynomialsAreNormalized := function(  ) ... end, 
+  removeConstantFactors := function(  ) ... end, scalingVariables := [ alpha_1, alpha_2, alpha_3, alpha_4 ], tupleMatchesShapes := function( tuple ) ... end, unknownRingIndeterminates := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, 
+      a_10, a_11, a_12, a_13, a_14, a_15, alpha_1, alpha_2, alpha_3, alpha_4 ], unknownVariables := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11, a_12, a_13, a_14, a_15, alpha_1, alpha_2, alpha_3, alpha_4 ] )
+gap>   
+gap>   
+gap>   liftOptions := @PadicLift.LiftOptions();
+rec( Getters := function(  ) ... end, Setters := function(  ) ... end, clone := function(  ) ... end, dataType := "LiftOptions", decimalPrecision := function(  ) ... end, initialLatticeDim := function(  ) ... end, 
+  initialLiftDepth := function(  ) ... end, latticeDimIncrementFkt := function( val ) ... end, logger := function( level, message ) ... end, maxLatticeDim := function(  ) ... end, maxLiftDepth := function(  ) ... end, 
+  maxPairingTolerance := function(  ) ... end, minColumnNormDistanceFactor := function(  ) ... end, print := function(  ) ... end, rootCalculator := function(  ) ... end, setDecimalPrecision := function( precision ) ... end, 
+  setInitialLatticeDim := function( latticeDim ) ... end, setInitialLiftDepth := function( depth ) ... end, setLatticeDimIncrementFkt := function( incrementFunction ) ... end, setMaxLatticeDim := function( maxLatticeDim ) ... end, 
+  setMaxLiftDepth := function( liftDepth ) ... end, setMaxPairingTolerance := function( pairingTolerance ) ... end, setMinColumnNormDistanceFactor := function( factor ) ... end, setRootCalculator := function( rootCalculator ) ... end, 
+  setVerbose := function( verbose ) ... end, setVerboseLevel := function( level ) ... end, setVerbosePairing := function( verbosePairing ) ... end, verbose := function(  ) ... end, verboseLevel := function(  ) ... end, 
+  verbosePairing := function(  ) ... end )
+gap>     liftOptions.setDecimalPrecision(24); 
+gap>     liftOptions.setVerbose(true);
+gap>     liftOptions.setVerboseLevel(1);
+gap>     liftOptions.setInitialLiftDepth(11);
+gap>     liftOptions.setLatticeDimIncrementFkt(function(val) return val+5; end);
+gap>     liftOptions.setInitialLatticeDim(58);
+gap>     liftOptions.setMaxLatticeDim(122);
+gap>     
+gap>     #liftOptions.setInitialLatticeDim(121);
+gap>     
+gap>     Print("lift\n");
+lift
+gap>     mapCandidates := lifter.computeApproxHurwitzMapsOptimized(liftOptions); 
+#I  #
+ # currLiftDepth: 0
+#I  
+
+#I  #
+ # currLiftDepth: 1
+#I  
+
+#I  #
+ # currLiftDepth: 2
+#I  
+
+#I  #
+ # currLiftDepth: 3
+#I  
+
+#I  #
+ # currLiftDepth: 4
+#I  
+
+#I  #
+ # currLiftDepth: 5
+#I  
+
+#I  #
+ # currLiftDepth: 6
+#I  
+
+#I  #
+ # currLiftDepth: 7
+#I  
+
+#I  #
+ # currLiftDepth: 8
+#I  
+
+#I  #
+ # currLiftDepth: 9
+#I  
+
+#I  #
+ # currLiftDepth: 10
+#I  
+
+#I  #
+ # currLiftDepth: 11
+#I  
+
+#I  # currentLatticeDim: 58
+#I  
+
+#I  # currentLatticeDim: 63
+#I  
+
+#I  # currentLatticeDim: 68
+#I  
+
+#I  # currentLatticeDim: 73
+#I  
+
+#I  # currentLatticeDim: 78
+#I  
+
+#I  # currentLatticeDim: 83
+#I  
+
+#I  # currentLatticeDim: 88
+#I  
+
+#I  # currentLatticeDim: 93
+#I  
+
+Speicherzugriffsfehler
+kroeker@mathpc26:~$ 
+

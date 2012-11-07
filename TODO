@@ -1,0 +1,25 @@
+
+
+
+# link to libflint is not found; 
+
+# bugs: DeclareGlobalFunction(""); is allowed. 
+
+# not working AdditiveInverse for RationalFunction? 
+
+ numthread parameter for c++ program.
+
+- cannot include GAPDOC in  subsections.
+-finish documentation
+-finish cleanup
+
+- improve the data format for the returned records  - introduce objects?
+
+- create object datatypes 'Power' ,  'Product' , 'Shape'
+- Power object has properties 'Base' and 'Exponent'
+- Product has Property 'Factors'
+
+
+- setup different Info loggers and their output target
+
+ <List> cannot have sublists?

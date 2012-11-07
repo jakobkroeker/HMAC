@@ -1,0 +1,303 @@
+run -A -m 2048 -l /home/kroeker/gapdev
+Starting program: /media/var_scratch/kroeker/4.0/bin/x86_64-unknown-linux-gnu-gcc-default64/gap -A -m 2048 -l /home/kroeker/gapdev
+gap: halfing pool size.
+gap: halfing pool size.
+ ┌───────┐   GAP, Version 4.dev of today (free software, GPL)
+ │  GAP  │   http://www.gap-system.org
+ └───────┘   Architecture: x86_64-unknown-linux-gnu-gcc-default64
+ Libs used:  gmp, readline
+ Loading the library #I  
+#I  The call to 'SetUserPreferences' (probably in a 'gap.ini' file)
+#I  should be replaced by individual 'SetUserPreference' calls,
+#I  which are package specific.
+#I  Try 'WriteGapIniFile()'.
+and packages ...
+ Components: trans 1.0, prim 2.1, small* 1.0, id* 1.0
+ Packages:   GAPDoc 1.5.1
+ Try '?help' for help. See also  '?copyright' and  '?authors'
+gap> LoadPackage("float");
+Loading FLOAT 0.4.6 ...
+true
+gap> LoadPackage("fr");
+#I  Package ``ACE'': The program `ace' is not compiled
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading  AutPGrp 1.5 (Computing the Automorphism Group of a p-Group)
+by Bettina Eick (http://www.icm.tu-bs.de/~beick) and
+   Eamonn O'Brien (http://www.math.auckland.ac.nz/~obrien).
+Homepage: http://www.icm.tu-bs.de/~beick/so.html
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading  FGA 1.1.1 (Free Group Algorithms)
+by Christian Sievers (c.sievers@tu-bs.de).
+Homepage: http://www.icm.tu-bs.de/ag_algebra/software/FGA/
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading Alnuth 3.0.0 ... 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading  Polycyclic 2.10.1 (Computation with polycyclic groups)
+by Bettina Eick (beick@tu-bs.de),
+   Werner Nickel (http://www.mathematik.tu-darmstadt.de/~nickel/), and
+   Max Horn (http://www.icm.tu-bs.de/~mhorn).
+Homepage: http://www.icm.tu-bs.de/ag_algebra/software/polycyclic/
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+#I  Package ``ACE'': The program `ace' is not compiled
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading  NQL 0.10 (Nilpotent Quotient Algorithm for L-presented Groups)
+by René Hartung (http://www.uni-math.gwdg.de/rhartung).
+Homepage: http://www.uni-math.gwdg.de/rhartung/pub/nql/
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Loading FR 1.2.7.0 ...
+true
+gap> 
+gap> RereadPackage("fr","hurwitz/gap/utils.gd");
+true
+gap> RereadPackage("fr","hurwitz/gap/utils.gi");
+true
+gap> 
+gap> RereadPackage("fr","hurwitz/gap/padicLift.gd");
+true
+gap> RereadPackage("fr","hurwitz/gap/padicLift.gi");
+#I  method installed for IsLiftOptions matches more than one declaration
+true
+gap>  
+gap> RereadPackage("fr","hurwitz/gap/hurwitz.gd");
+#I  MakeReadOnlyGlobal: Hurwitz@FR already read-only
+true
+gap> RereadPackage("fr","hurwitz/gap/hurwitz.gi");
+#W NewRepresentation "IsInfinityPol@FR" in Reread. Change of Super-rep not handled
+true
+gap>   liftOptions := @PadicLift.LiftOptions();
+rec( Getters := function(  ) ... end, Setters := function(  ) ... end, clone := function(  ) ... end, dataType := "LiftOptions", decimalPrecision := function(  ) ... end, initialLatticeDim := function(  ) ... end, 
+  initialLiftDepth := function(  ) ... end, latticeDimIncrementFkt := function( val ) ... end, logger := function( level, message ) ... end, maxLatticeDim := function(  ) ... end, maxLiftDepth := function(  ) ... end, 
+  maxPairingTolerance := function(  ) ... end, minColumnNormDistanceFactor := function(  ) ... end, print := function(  ) ... end, rootCalculator := function(  ) ... end, setDecimalPrecision := function( precision ) ... end, 
+  setInitialLatticeDim := function( latticeDim ) ... end, setInitialLiftDepth := function( depth ) ... end, setLatticeDimIncrementFkt := function( incrementFunction ) ... end, setMaxLatticeDim := function( maxLatticeDim ) ... end, 
+  setMaxLiftDepth := function( liftDepth ) ... end, setMaxPairingTolerance := function( pairingTolerance ) ... end, setMinColumnNormDistanceFactor := function( factor ) ... end, setRootCalculator := function( rootCalculator ) ... end, 
+  setVerbose := function( verbose ) ... end, setVerboseLevel := function( level ) ... end, setVerbosePairing := function( verbosePairing ) ... end, verbose := function(  ) ... end, verboseLevel := function(  ) ... end, 
+  verbosePairing := function(  ) ... end )
+gap>     liftOptions.setDecimalPrecision(24); 
+gap>     liftOptions.setVerbose(true);
+gap>     liftOptions.setVerboseLevel(1);
+gap>     liftOptions.setInitialLiftDepth(11);# 10
+gap>     liftOptions.setLatticeDimIncrementFkt(function(val) return val+5; end);
+gap>     liftOptions.setInitialLatticeDim(58);#?
+gap>     liftOptions.setMaxLatticeDim(122);
+gap>     
+gap>     #liftOptions.setInitialLatticeDim(121);
+gap>     
+gap>     Print("lift\n");
+lift
+gap>     mapCandidates := lifter.computeApproxHurwitzMapsOptimized(liftOptions); 
+Error, Variable: 'lifter' must have a value
+not in any function at line 24 of *stdin*
+gap> SetFloats( MPC, 100 );
+gap>    
+gap> finiteField :=GF (11);
+GF(11)
+gap> 
+gap> rng :=  PolynomialRing( finiteField, 1);
+GF(11)[x_1]
+gap> x_1:=IndeterminatesOfPolynomialRing(rng)[1];
+x_1
+gap> 
+gap>   
+gap> hmsProblem:= rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], 
+>       [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+>   normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), 
+>       rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+>       rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], 
+>   shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+>       rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] );
+rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+  normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+      rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+      rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+      rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] )
+gap> 
+gap>  polTuple:=[ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), 
+>   x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, 
+>   x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ];
+[ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, 
+  x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ]
+gap> 
+gap>   lifter := Hurwitz@FR.HurwitzMapLifter(polTuple, finiteField, hmsProblem);
+rec( coeffVariables := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11, a_12, a_13, a_14, a_15 ], computeApproxHurwitzMaps := function( liftOptions ) ... end, 
+  computeApproxHurwitzMapsOptimized := function( liftOptions ) ... end, finiteField := GF(11), getMapDegree := function(  ) ... end, hmsProblem := rec( complexCriticalValues := [ infinity, .0e0, .1e1, .2e1, .8e1, .5e1 ], 
+      criticalValues := [ [ infinity, infinity ], [ 0, 0 ], [ 1, 0 ], [ 2, 0 ], [ 8, 0 ], [ 5, 0 ] ], dataType := "HurwitzMapSearchProblem", 
+      normalizationRules := [ rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 1, root := infinity ), rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 2, root := 0 ), 
+          rec( dataType := "NormalizationRule", multiplicity := 2, polynomialId := 3, root := 1 ) ], shapes := [ rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+          rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), 
+          rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ), rec( dataType := "Shape", degree := 4, partition := [ 2, 1, 1 ] ) ] ), 
+  ideal := <two-sided ideal in Integers[a_1,a_2,a_3,a_4,a_5,a_6,a_7,a_8,a_9,a_10,a_11,a_12,a_13,a_14,a_15,alpha_1,alpha_2,alpha_3,alpha_4], (19 generators)>, 
+  idealFactorsTuple := [ [ [ x_1^2+a_1*x_1+a_2, 1 ] ], [ [ x_1, 2 ], [ x_1^2+a_3*x_1+a_4, 1 ] ], [ [ x_1-1, 2 ], [ x_1^2+a_5*x_1+a_6, 1 ] ], [ [ x_1+a_7, 2 ], [ x_1^2+a_8*x_1+a_9, 1 ] ], [ [ x_1+a_10, 2 ], [ x_1^2+a_11*x_1+a_12, 1 ] ],
+      [ [ x_1+a_13, 2 ], [ x_1^2+a_14*x_1+a_15, 1 ] ] ], isConsistent := function(  ) ... end, normalizePolynomials := function(  ) ... end, normalizedFactorBases := function(  ) ... end, normalizedFactors := function(  ) ... end, 
+  point := [ Z(11), Z(11)^2, Z(11)^8, Z(11)^6, Z(11)^4, Z(11), Z(11)^6, Z(11)^7, Z(11)^0, Z(11)^3, Z(11)^6, Z(11)^8, Z(11)^4, Z(11)^2, Z(11)^7, Z(11)^4, Z(11), Z(11)^3, Z(11)^4 ], 
+  pointHumanReadable := [ 2, 4, 3, 9, 5, 2, 9, 7, 1, 8, 9, 3, 5, 4, 7, 5, 2, 8, 5 ], polTuple := [ x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)^6*x_1^2, x_1^4+Z(11)^8*x_1^3+Z(11)^2*x_1^2+x_1+Z(11), 
+      x_1^4+Z(11)^8*x_1^3-x_1^2+Z(11)*x_1+Z(11)^2, x_1^4+Z(11)^8*x_1^3+Z(11)*x_1^2+Z(11)^3*x_1+Z(11)^4, x_1^4+Z(11)^8*x_1^3+Z(11)^9*x_1^2+Z(11)^4*x_1-Z(11)^0 ], polynomialsAreNormalized := function(  ) ... end, 
+  removeConstantFactors := function(  ) ... end, scalingVariables := [ alpha_1, alpha_2, alpha_3, alpha_4 ], tupleMatchesShapes := function( tuple ) ... end, unknownRingIndeterminates := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, 
+      a_10, a_11, a_12, a_13, a_14, a_15, alpha_1, alpha_2, alpha_3, alpha_4 ], unknownVariables := [ a_1, a_2, a_3, a_4, a_5, a_6, a_7, a_8, a_9, a_10, a_11, a_12, a_13, a_14, a_15, alpha_1, alpha_2, alpha_3, alpha_4 ] )
+gap>    
+gap>     liftOptions := @PadicLift.LiftOptions();
+rec( Getters := function(  ) ... end, Setters := function(  ) ... end, clone := function(  ) ... end, dataType := "LiftOptions", decimalPrecision := function(  ) ... end, initialLatticeDim := function(  ) ... end, 
+  initialLiftDepth := function(  ) ... end, latticeDimIncrementFkt := function( val ) ... end, logger := function( level, message ) ... end, maxLatticeDim := function(  ) ... end, maxLiftDepth := function(  ) ... end, 
+  maxPairingTolerance := function(  ) ... end, minColumnNormDistanceFactor := function(  ) ... end, print := function(  ) ... end, rootCalculator := function(  ) ... end, setDecimalPrecision := function( precision ) ... end, 
+  setInitialLatticeDim := function( latticeDim ) ... end, setInitialLiftDepth := function( depth ) ... end, setLatticeDimIncrementFkt := function( incrementFunction ) ... end, setMaxLatticeDim := function( maxLatticeDim ) ... end, 
+  setMaxLiftDepth := function( liftDepth ) ... end, setMaxPairingTolerance := function( pairingTolerance ) ... end, setMinColumnNormDistanceFactor := function( factor ) ... end, setRootCalculator := function( rootCalculator ) ... end, 
+  setVerbose := function( verbose ) ... end, setVerboseLevel := function( level ) ... end, setVerbosePairing := function( verbosePairing ) ... end, verbose := function(  ) ... end, verboseLevel := function(  ) ... end, 
+  verbosePairing := function(  ) ... end )
+gap>     liftOptions.setDecimalPrecision(24); 
+gap>     liftOptions.setVerbose(true);
+gap>     liftOptions.setVerboseLevel(1);
+gap>     liftOptions.setInitialLiftDepth(11);# 10
+gap>     liftOptions.setLatticeDimIncrementFkt(function(val) return val+5; end);
+gap>     liftOptions.setInitialLatticeDim(58);#?
+gap>     liftOptions.setMaxLatticeDim(122);
+gap>     
+gap>     #liftOptions.setInitialLatticeDim(121);
+gap>     
+gap>     Print("lift\n");
+lift
+gap>     mapCandidates := lifter.computeApproxHurwitzMapsOptimized(liftOptions); 
+#I  #
+ # currLiftDepth: 0
+#I  
+
+#I  #
+ # currLiftDepth: 1
+#I  
+
+#I  #
+ # currLiftDepth: 2
+#I  
+
+#I  #
+ # currLiftDepth: 3
+#I  
+
+#I  #
+ # currLiftDepth: 4
+#I  
+
+#I  #
+ # currLiftDepth: 5
+#I  
+
+#I  #
+ # currLiftDepth: 6
+#I  
+
+#I  #
+ # currLiftDepth: 7
+#I  
+
+#I  #
+ # currLiftDepth: 8
+#I  
+
+#I  #
+ # currLiftDepth: 9
+#I  
+
+#I  #
+ # currLiftDepth: 10
+#I  
+
+#I  #
+ # currLiftDepth: 11
+#I  
+
+#I  # currentLatticeDim: 58
+#I  
+
+dofplll
+1dofplll lllReduction finished
+1
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000000000 in ?? ()
+(gdb) backtrace
+#0  0x0000000000000000 in ?? ()
+#1  0x0000000000535e8d in FuncIS_LIST (self=0x1000000041f8, obj=0x1000006fe610) at ../../src/lists.c:71
+#2  0x00000000004f728f in EvalFunccall1args (call=1072) at ../../src/funcs.c:486
+#3  0x00000000004e934f in EvalUnknownBool (expr=1072) at ../../src/exprs.c:198
+#4  0x00000000005a7e66 in ExecIfElse (stat=1984) at ../../src/stats.c:308
+#5  0x00000000005a9b85 in ExecForRange (stat=2048) at ../../src/stats.c:846
+#6  0x00000000005a7625 in ExecSeqStat4 (stat=32) at ../../src/stats.c:204
+#7  0x00000000004f9c37 in DoExecFunc2args (func=0x100000645a90, arg1=0x1000006fa9b8, arg2=0x100000096058) at ../../src/funcs.c:901
+#8  0x00000000004f76f9 in EvalFunccall2args (call=560) at ../../src/funcs.c:521
+#9  0x00000000005c8893 in ExecAssLVar02 (stat=616) at ../../src/vars.c:180
+#10 0x00000000005a75c4 in ExecSeqStat4 (stat=32) at ../../src/stats.c:203
+#11 0x00000000004f9b53 in DoExecFunc1args (func=0x1000006668b0, arg1=0x1000006fa9b8) at ../../src/funcs.c:861
+#12 0x00000000004f728f in EvalFunccall1args (call=528) at ../../src/funcs.c:486
+#13 0x00000000005c8893 in ExecAssLVar02 (stat=576) at ../../src/vars.c:180
+#14 0x00000000005a7b31 in ExecSeqStat7 (stat=32) at ../../src/stats.c:248
+#15 0x00000000004f9b53 in DoExecFunc1args (func=0x1000006669d8, arg1=0x1000006fa9b8) at ../../src/funcs.c:861
+#16 0x00000000004f728f in EvalFunccall1args (call=2480) at ../../src/funcs.c:486
+#17 0x00000000005c94ea in ExecAssLVar11 (stat=2528) at ../../src/vars.c:306
+#18 0x00000000005a7337 in ExecSeqStat (stat=5584) at ../../src/stats.c:161
+#19 0x00000000005aa7f8 in ExecWhile (stat=5720) at ../../src/stats.c:1048
+#20 0x00000000005a7337 in ExecSeqStat (stat=6224) at ../../src/stats.c:161
+#21 0x00000000005a7d13 in ExecSeqStat7 (stat=32) at ../../src/stats.c:255
+#22 0x00000000004f9f67 in DoExecFunc5args (func=0x100000666d50, arg1=0x10000060f388, arg2=0x10000060fff8, arg3=0x1000007090c0, arg4=0x10000072fa30, arg5=0x1000005cc0e8) at ../../src/funcs.c:1033
+#23 0x00000000004f8b89 in EvalFunccall5args (call=2608) at ../../src/funcs.c:637
+#24 0x00000000005c9a69 in ExecAssLVar15 (stat=2688) at ../../src/vars.c:362
+#25 0x00000000005a73aa in ExecSeqStat2 (stat=3264) at ../../src/stats.c:177
+#26 0x00000000005a7de1 in ExecIf (stat=3312) at ../../src/stats.c:291
+#27 0x00000000005a7732 in ExecSeqStat5 (stat=3664) at ../../src/stats.c:217
+#28 0x00000000005aa7f8 in ExecWhile (stat=3736) at ../../src/stats.c:1048
+#29 0x00000000005a7337 in ExecSeqStat (stat=6968) at ../../src/stats.c:161
+#30 0x00000000005a7d13 in ExecSeqStat7 (stat=32) at ../../src/stats.c:255
+#31 0x00000000004f9f67 in DoExecFunc5args (func=0x100000665fc8, arg1=0x100000681100, arg2=0x10000068c020, arg3=0x10000060f388, arg4=0x10000060f388, arg5=0x1000005cc0e8) at ../../src/funcs.c:1033
+#32 0x00000000004f8b89 in EvalFunccall5args (call=4264) at ../../src/funcs.c:637
+#33 0x00000000005c8e0f in ExecAssLVar06 (stat=4344) at ../../src/vars.c:236
+#34 0x00000000005a7337 in ExecSeqStat (stat=5632) at ../../src/stats.c:161
+#35 0x00000000005a9b85 in ExecForRange (stat=5744) at ../../src/stats.c:846
+#36 0x00000000005a7337 in ExecSeqStat (stat=5984) at ../../src/stats.c:161
+#37 0x00000000005a7d13 in ExecSeqStat7 (stat=32) at ../../src/stats.c:255
+#38 0x00000000004f9e41 in DoExecFunc4args (func=0x1000006660d8, arg1=0x100000681100, arg2=0x10000068c020, arg3=0x10000060fff8, arg4=0x1000006ac548) at ../../src/funcs.c:987
+#39 0x00000000004f8378 in EvalFunccall4args (call=712) at ../../src/funcs.c:596
+#40 0x00000000005c8b51 in ExecAssLVar04 (stat=784) at ../../src/vars.c:208
+#41 0x00000000005a7bf3 in ExecSeqStat7 (stat=32) at ../../src/stats.c:250
+#42 0x00000000004f9d31 in DoExecFunc3args (func=0x1000006670f8, arg1=0x100000681100, arg2=0x10000068c020, arg3=0x1000006ac548) at ../../src/funcs.c:943
+#43 0x00000000004f7c9d in EvalFunccall3args (call=344) at ../../src/funcs.c:558
+#44 0x00000000005c8893 in ExecAssLVar02 (stat=408) at ../../src/vars.c:180
+#45 0x00000000005a7456 in ExecSeqStat3 (stat=32) at ../../src/stats.c:189
+#46 0x00000000004f9b53 in DoExecFunc1args (func=0x1000006d3af8, arg1=0x1000006ac548) at ../../src/funcs.c:861
+#47 0x00000000005129b7 in IntrFuncCallEnd (funccall=1, options=0, nr=1) at ../../src/intrprtr.c:417
+#48 0x000000000058ee0f in ReadCallVarAss (follow=3221225472, mode=114 'r') at ../../src/read.c:535
+#49 0x00000000005914f0 in ReadAtom (follow=3221225472, mode=114 'r') at ../../src/read.c:1384
+#50 0x00000000005916cd in ReadFactor (follow=3221225472, mode=114 'r') at ../../src/read.c:1446
+#51 0x000000000059187b in ReadTerm (follow=3221225472, mode=114 'r') at ../../src/read.c:1497
+#52 0x0000000000591980 in ReadAri (follow=3221225472, mode=114 'r') at ../../src/read.c:1530
+#53 0x0000000000591a95 in ReadRel (follow=3221225472, mode=114 'r') at ../../src/read.c:1569
+#54 0x0000000000591c0c in ReadAnd (follow=3221225472, mode=114 'r') at ../../src/read.c:1608
+#55 0x0000000000591ce8 in ReadExpr (follow=3221225472, mode=114 'r') at ../../src/read.c:1634
+#56 0x000000000058eea0 in ReadCallVarAss (follow=3221225472, mode=120 'x') at ../../src/read.c:545
+#57 0x00000000005914f0 in ReadAtom (follow=3221225472, mode=120 'x') at ../../src/read.c:1384
+#58 0x00000000005916cd in ReadFactor (follow=3221225472, mode=120 'x') at ../../src/read.c:1446
+#59 0x000000000059187b in ReadTerm (follow=3221225472, mode=120 'x') at ../../src/read.c:1497
+#60 0x0000000000591980 in ReadAri (follow=3221225472, mode=120 'x') at ../../src/read.c:1530
+#61 0x0000000000591a95 in ReadRel (follow=3221225472, mode=120 'x') at ../../src/read.c:1569
+#62 0x0000000000591c0c in ReadAnd (follow=3221225472, mode=120 'x') at ../../src/read.c:1608
+---Type <return> to continue, or q <return> to quit---obj
+#63 0x0000000000591ce8 in ReadExpr (follow=3221225472, mode=120 'x') at ../../src/read.c:1634
+#64 0x00000000005933db in ReadEvalCommand (context=0x100000001c50) at ../../src/read.c:2261
+#65 0x00000000004fb031 in Shell (context=0x100000001c50, canReturnVoid=0, canReturnObj=0, lastDepth=3, setTime=1, prompt=0x7fffffffd430 "gap> ", preCommandHook=0x100000253078, catchQUIT=1, inFile=0x100003499fe8 "", 
+    outFile=0x10000349a008 "\240\a") at ../../src/gap.c:306
+#66 0x00000000004fb92d in FuncSHELL (self=0x100000011138, args=0x100000253080) at ../../src/gap.c:500
+#67 0x00000000004f6b07 in ExecProccallXargs (call=944) at ../../src/funcs.c:387
+#68 0x00000000005a7732 in ExecSeqStat5 (stat=32) at ../../src/stats.c:217
+#69 0x00000000004f9a85 in DoExecFunc0args (func=0x100000043758) at ../../src/funcs.c:821
+#70 0x0000000000512981 in IntrFuncCallEnd (funccall=0, options=0, nr=0) at ../../src/intrprtr.c:416
+#71 0x000000000058edec in ReadCallVarAss (follow=3221225472, mode=120 'x') at ../../src/read.c:532
+#72 0x00000000005914f0 in ReadAtom (follow=3221225472, mode=120 'x') at ../../src/read.c:1384
+#73 0x00000000005916cd in ReadFactor (follow=3221225472, mode=120 'x') at ../../src/read.c:1446
+#74 0x000000000059187b in ReadTerm (follow=3221225472, mode=120 'x') at ../../src/read.c:1497
+#75 0x0000000000591980 in ReadAri (follow=3221225472, mode=120 'x') at ../../src/read.c:1530
+#76 0x0000000000591a95 in ReadRel (follow=3221225472, mode=120 'x') at ../../src/read.c:1569
+#77 0x0000000000591c0c in ReadAnd (follow=3221225472, mode=120 'x') at ../../src/read.c:1608
+#78 0x0000000000591ce8 in ReadExpr (follow=3221225472, mode=120 'x') at ../../src/read.c:1634
+#79 0x00000000005933db in ReadEvalCommand (context=0x100000001c50) at ../../src/read.c:2261
+#80 0x00000000005ad9f0 in READ_GAP_ROOT (filename=0xcbaaa0 "lib/init.g") at ../../src/streams.c:475
+#81 0x0000000000503945 in InitializeGap (pargc=0x7fffffffdafc, argv=0x7fffffffdc08) at ../../src/gap.c:3411
+#82 0x00000000004fc51a in main (argc=6, argv=0x7fffffffdc08, environ=0x7fffffffdc40) at ../../src/gap.c:793
+

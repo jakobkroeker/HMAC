@@ -1,0 +1,81 @@
+
+
+This is the README file for the GAP package 'HMAC'.
+
+
+
+Description
+--------------------------------------------------------------------------------------
+
+The HMAC package implements algorithmic construction of Hurwitz map approximations
+using an algebraic approach.
+The package also supports p-adic lifting of smooth isolated solutions of a polynomial system
+over prime fields.
+
+Authors: Jakob Kroeker and Laurent Bartholdi
+
+
+Install
+--------------------------------------------------------------------------------------
+
+To use the package you have to install (or download and build)
+
+- a C++ compiler (e.g. GCC)
+- (GNU) Make
+- Bash shell 
+
+-the GAP computer algebra system, release 4.5.6 or later:
+ http://www.gap-system.org/Releases/index.html 
+
+the GAP packages 
+-'FLOAT' ( https://github.com/laurentbartholdi/float.git )
+-'FR' (  https://github.com/laurentbartholdi/fr )
+- and the package 'HMAC' itself
+
+If  building 'FR' or 'FLOAT' fails on your system, please report the observed issues.
+
+You may also try alternatively FLOAT and FR from 
+ https://github.com/jakobkroeker/float.git
+ https://github.com/jakobkroeker/fr.git
+
+
+The HMAC package is built by running
+  ./configure 
+and 
+  make
+
+
+If the build processs fails due to a missing package, please install them on your system and retry; 
+see also './configure --help' for options on that.
+
+
+Usage
+--------------------------------------------------------------------------------------
+
+   See examples in the 'example'-folder 
+   or consult the documentation ( 'manual.pdf' or 'index.html' ) in the 'doc'-folder.
+
+
+
+License
+--------------------------------------------------------------------------------------
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or any
+later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program, in the file COPYING.  If not, see
+<http://www.gnu.org/licenses/>.
+
+  Jakob Kröker, Hannover, 30.10.2012
+
+
+
+

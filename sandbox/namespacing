@@ -1,0 +1,61 @@
+
+
+Namespaces and grouping.
+
+
+für ein Paket 
+
+
+1. Packe alle Objekte eines Pakets in ein speziellen Kontainer/Record,
+um diese gut wiederzufinden ? (ja/nein) ?
+
+@HMAC@ALL wuerde 'Funktion@HMAC@Utils' enthalten?
+
+Ist @HMAC@ALL notwendig?
+
+
+2a. Verschachteltes Namespacing:
+
+@HMAC@Utils@Funktion ? nö
+
+@HMAC@Utils.Funktion ? bevorzuge diese Variante.
+
+@HMAC.Utils.Funktion ? (etwas langsamer und es ist nicht ersichtlich, dass Utils ein Namensraum ist.
+
+2b)
+
+globaler Zugriff; Auffinden über funktionsname
+
+Funktion@HMAC@Utils ? bevorzuge diese Variante. Zum auffinden ungeeignet.
+
+
+
+
+3. Suchfunktion...
+
+
+4. Optional grouping? - no
+Problem: what todo if namespaces are too deep?
+
+
+4. man könnte auch die Globale Funktionsregistrierung einfach setzen:
+dann würde es alle Funktionen@PAKETNAME geben (vorausgesetzt, es gibt keine Konflikte)
+
+Voll ausgeschrieben wäre es z.B. :
+
+Funktionen@PAKETNAME@NAMESPACE@Internal
+
+
+Oder vereinfacht 
+
+Funktionen@PAKETNAME(@NAMESPACE)@Internal
+
+-> nö
+
+@HMAC@ſſſ.Internal.fff
+
+
+
+
+
+

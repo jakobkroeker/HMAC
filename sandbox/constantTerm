@@ -1,0 +1,98 @@
+
+DeclareOperation( "IsMonomial",  [IsObject] ); 
+
+DeclareAttribute("CoefficientsDictionaryOfPolynomial",IsPolynomial);
+
+DeclareOperation("CoefficientOfPolynomial",[ IsPolynomial, IsPolynomial ] );
+
+DeclareOperation("ConstantTerm",[ IsPolynomial ] );
+
+
+InstallMethod( IsMonomial, "", [IsObject], 
+function (monomial)
+	local  monomData;
+	if not IsPolynomial (monomial) then 
+		return false;
+	fi;
+	monomData := ExtRepPolynomialRatFun(monomial);
+	if Size(monomData) <>2 or not IsOne(monomData[2]) then
+		return false;
+	fi;
+	return true;
+end
+);
+
+
+InstallMethod( CoefficientsDictionaryOfPolynomial , 
+"get coefficient dict of a  polynomial ", [ IsPolynomial ],
+ function( polynomial )
+    local  coeffData, pos, dict;
+    
+    if HasCoefficientsDictionaryOfPolynomial(polynomial) then
+        dict := CoefficientsDictionaryOfPolynomial(polynomial);
+    else
+        dict := NewDictionary([1,2,3,4], true);
+        coeffData := ExtRepPolynomialRatFun(polynomial);
+        for pos in [1..Size(coeffData)/2] do
+            AddDictionary(dict,coeffData[pos*2-1], coeffData[pos*2] );
+        od;    
+    fi;
+    return dict ;
+end
+);
+
+
+
+InstallMethod( CoefficientOfPolynomial , 
+"get coefficient for a given monomial of an polynomial ", [ IsPolynomial, IsPolynomial ],
+ function( polynomial, monomial )
+    
+    local  monomData, dict, coefficient;
+ 
+    if not IsMonomial ( monomial ) then 
+    	Error( "CoefficientOfPolynomial: second parameter is not a monomial !" );
+    fi;
+    
+    monomData := ExtRepPolynomialRatFun(monomial);
+    dict := CoefficientsDictionaryOfPolynomial(polynomial);
+    coefficient := LookupDictionary(dict, monomData[1]);
+    if coefficient=fail then 
+        return Zero( CoefficientsFamily(FamilyObj(polynomial)) ) ;
+    fi;
+    return coefficient;       
+end
+);
+
+
+InstallMethod( ConstantTerm , 
+"get constant part of a polynomial ", [ IsPolynomial ],
+ function( polynomial )
+    
+    local  dict, coefficient;
+    dict := CoefficientsDictionaryOfPolynomial(polynomial);
+    coefficient := LookupDictionary(dict, []);
+    if coefficient=fail then 
+        return Zero( CoefficientsFamily(FamilyObj(polynomial)) ) ;
+    fi;
+    return coefficient;       
+end
+);
+
+
+# Example:
+
+rng := PolynomialRing( ZmodnZ(11)  ,["x","y"] );
+indeterminates := IndeterminatesOfPolynomialRing(rng);
+x := indeterminates[1];
+y := indeterminates[2];
+polynomial := (x^4-4)^3*(4*y^2+2);
+CoefficientOfPolynomial(polynomial, x^4*y^2);
+ConstantTerm(polynomial);  
+polynomial := 0*x^0;
+ConstantTerm(polynomial);    
+polynomial := x^0;
+ConstantTerm(polynomial);
+ 
+    
+
+
