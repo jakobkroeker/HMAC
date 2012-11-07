@@ -245,7 +245,8 @@ doc/chap0.html: doc/hmac.xml   gap/utils.gi gap/padicLift.gi gap/hurwitz.gi gap/
 
 	echo 'LoadPackage("hmac"); HMACDOC@HMAC();' | $(GAPPROG) -r -q
 
-
+cleandoc:
+	rm doc/chap0.html
 
 
 checkblocks:
@@ -258,6 +259,6 @@ tarballs: .version doc
 	rm -rf www/hmac
 	mkdir -p www
 	tar -c -f - --exclude '*~' --exclude 'config.[ls]*' --exclude 'hmac/Makefile*' --exclude .cvsignore --exclude autom4te.cache --exclude sandbox --exclude www --exclude bin --exclude 'extern/[a-z]*' --exclude CVS --exclude .version -C .. hmac | (cd www; tar -x -f -)
-	tar -c -f www/hmac-`cat .version`.tar.gz -z -C www fr
+	tar -c -f www/hmac-`cat .version`.tar.gz -z -C www hmac
 
 #E Makefile . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here
