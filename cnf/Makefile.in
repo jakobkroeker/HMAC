@@ -241,11 +241,11 @@ wwwdir: .version tarballs
 
 doc: doc/chap0.html
 
-hurwitzdoc:  doc/hurwitz.html
+doc/chap0.html: doc/hmac.xml   gap/utils.gi gap/padicLift.gi gap/hurwitz.gi gap/namespaceEmulation.g 
 
-doc/hurwitz.html: doc/hurwitz.xml  gap/utils.gi  gap/padicLift.gi  gap/hurwitz.gi
+	echo 'LoadPackage("hmac"); HMACDOC@HMAC();' | $(GAPPROG) -r -q
 
-	echo 'LoadPackage("fr"); HURWITZDOC@FR();' | $(GAPPROG) -r -q
+
 
 
 checkblocks:
