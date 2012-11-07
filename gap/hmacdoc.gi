@@ -9,7 +9,7 @@
 #############################################################################
 
 
-BindGlobal("HMACDOC", function() 
+BindGlobal("HMACDOC@HMAC", function() 
 #SetGAPDocTextTheme("ColorPrompt");
 MakeGAPDocDoc(Concatenation(PATH@HMAC,"/doc"),"hmac.xml",
   [ "../gap/utils.gi","../gap/padicLift.gi","../gap/hurwitz.gi",
@@ -18,7 +18,7 @@ MakeGAPDocDoc(Concatenation(PATH@HMAC,"/doc"),"hmac.xml",
 #"MathJax"
 end);
 
- BindGlobal("IHMACDOC", function() 
+ BindGlobal("IHMACDOC@HMAC", function() 
 #SetGAPDocTextTheme("ColorPrompt");
 MakeGAPDocDoc(Concatenation(PATH@HMAC,"/doc/internal"),"ihmac.xml",
   [ "../../gap/utils.gi","../../gap/padicLift.gi","../../gap/hurwitz.gi",
