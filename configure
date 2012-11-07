@@ -4127,7 +4127,7 @@ fi
 
 
     if test "$FLINTDIR" != yes; then
-    if test "$FLINTINCLUDE" == ""; then FLINTINCLUDE="$FLINTDIR/include"; fi
+    if test "$FLINTINCLUDE" == ""; then FLINTINCLUDE="$FLINTDIR/include/flint"; fi
     if test "$FLINTLIB" == ""; then FLINTLIB="$FLINTDIR/lib"; fi
     fi
 
@@ -4506,6 +4506,9 @@ LINKFLINT=""
 if test "$FLINTDIR" != ""; then
    WITHGMP="$WITHFLINT --with-flint=$FLINTDIR"
 fi
+
+#todo: trhrow error in situation where FLINTINCLUDE is defined but FLINTLIB not or the other way around.
+#todo: FLINTINCLUDE is also incorrect!
 
 if test "$FLINTINCLUDE" != "";  then
     INCLFLINT="-I$FLINTINCLUDE"
