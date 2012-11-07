@@ -1,0 +1,8 @@
+
+
+ the GAP Info object is
+ parametrizable in the sense that a user should be able to write into a log file instead of printing to terminal,
+see
+SetInfoHandler( infoclass, handler )	
+SetInfoOutput( infoclass, out )
+SetDefaultInfoOutput( out )
