@@ -1,10 +1,6 @@
-# is there a class of ideals ?
-# todo: - add blackbox functionality  - partly done
-# Q: does setFloats have global impact?  - YES 
 
-# arguments pro test functions instead of oly tests in .tst file:
-#  - it is possible to easily list them from a gap console.
-#
+# todo: - add blackbox functionality  - partly done
+
 
 
 
@@ -1654,13 +1650,13 @@ function( matrix, combinedRootsCount )
  
  # for each combined root there should be a existing compatibility:
   if Size(mathchedRoots)<>combinedRootsCount then
-         Info(InfoHMACRootPairing, 0, "---------root compatibility warning: Size(mathchedRoots)<>combinedRootsCount, problem with error tolerance?" );
+         Info(InfoHMACRootPairing, 1, "---------root compatibility warning: Size(mathchedRoots)<>combinedRootsCount, problem with error tolerance?" );
         return  false ;
     fi;
 
      if not RootCompatibilityMatrixRowsValid@HMAC( matrix, false) or   
         not RootCompatibilityMatrixRowsValid@HMAC( TransposedMat(matrix),false)  then
-               Info(InfoHMACRootPairing, 0,"-------------root compatibility warning: compatibility not given;  problem with error tolerance ?");
+               Info(InfoHMACRootPairing, 1,"-------------root compatibility warning: compatibility not given;  problem with error tolerance ?");
         return false ;
     fi;    
     return true;
@@ -1676,16 +1672,16 @@ function()
     logger := function(a,b) end;
    
     matrix:= [[1,2],[1,4],[5,6]];
-    Assert(0, false=IsValidRootCompatibility@HMAC(matrix,6,logger) );
+    Assert(0, false=IsValidRootCompatibility@HMAC(matrix,6) );
     matrix:= [[1,2],[3,4],[5,6]];
-    Assert(0, true=IsValidRootCompatibility@HMAC(matrix,6,logger) );
-    Assert(0, true=IsValidRootCompatibility@HMAC(matrix,6,logger) );
+    Assert(0, true=IsValidRootCompatibility@HMAC(matrix,6) );
+    Assert(0, true=IsValidRootCompatibility@HMAC(matrix,6) );
     
      matrix:= [[1,0],[3,0],[2,0]];
-     Assert(0, false=IsValidRootCompatibility@HMAC(matrix,3,logger) );
+     Assert(0, false=IsValidRootCompatibility@HMAC(matrix,3) );
      
       matrix:= [[1,0],[0,3],[2,0]];
-     Assert(0, true=IsValidRootCompatibility@HMAC(matrix,3,logger) );
+     Assert(0, true=IsValidRootCompatibility@HMAC(matrix,3) );
   
 end
 );
@@ -1743,7 +1739,7 @@ function( firstPolRoots, secondPolRoots, combinedPolRoots, operation, maxToleran
 
 
     if IsZero( localTolerance) then
-         Info(InfoHMACRootPairing, 0,   "ComputeWeakRootCompatibility@HMAC: pairing tolerance is zero ");
+         Info(InfoHMACRootPairing, 1,   "ComputeWeakRootCompatibility@HMAC: pairing tolerance is zero ");
          return fail;
     fi;
    
@@ -1828,7 +1824,7 @@ function( firstPolRoots, secondPolRoots, combinedPolRoots, operation, maxToleran
 
 
     if IsZero( localTolerance) then
-        Info(InfoHMACRootPairing, 0,   "ComputeRootCompatibility@HMAC: error tolerance is zero ");
+        Info(InfoHMACRootPairing, 1,   "ComputeRootCompatibility@HMAC: error tolerance is zero ");
         return fail;
     fi;
    
@@ -1849,7 +1845,7 @@ function( firstPolRoots, secondPolRoots, combinedPolRoots, operation, maxToleran
      Info(InfoHMACRootPairing, 2, String(compatibiltyMatrix) );
 
     if not IsValidRootCompatibility@HMAC( compatibiltyMatrix, Size(combinedPolRoots)  ) then 
-         Info(InfoHMACRootPairing, 0, "--------------ComputeRootCompatibility@HMAC:   probably a problem with error tolerance....." );
+         Info(InfoHMACRootPairing, 1, "--------------ComputeRootCompatibility@HMAC:   probably a problem with error tolerance....." );
         return fail;
     fi;
 

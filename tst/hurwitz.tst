@@ -19,13 +19,7 @@
 ## if the line is too long, '\' are added. => get rid of them :
 #  SetPrintFormattingStatus(of,false);;
 #  PrintTo(of,str);;
-#
-# Hurwitz@HMAC.Tests.TEST_RATIONAL_PAIR_TO_COMPLEX : 
-#
-gap>     Assert( 0, infinity = Hurwitz@HMAC.Internal.RationalPairToComplex( [ infinity, infinity ] ) );;
-gap>     Assert( 0, NewFloat( @FR.isc, "0.0" ) = Hurwitz@HMAC.Internal.RationalPairToComplex( [ 0, 0 ] ) );;
-gap>     Assert( 0, NewFloat( @FR.isc, "1.0" ) = Hurwitz@HMAC.Internal.RationalPairToComplex( [ 1, 0 ] ) );;
-#
+## Note: the test TestComputeTupleNormalizationMapEx is currently nonfunctional and is removed!
 #
 
 # Hurwitz@HMAC.Tests.TEST_RATIONAL_PAIR_TO_COMPLEX : 
@@ -41,6 +35,7 @@ gap>
 gap>     rng := PolynomialRing( Rationals, [ "x", "y" ] );;
 gap>     ind := IndeterminatesOfPolynomialRing( rng );;
 gap>     x := ind[1];;
+gap>     y := ind[2];;
 gap>     pol := 3 * (x + 1) * (x + 2) ^ 2;;
 gap>     shape := ComputeShape@HMAC( pol );;
 gap>     Assert( 0, shape.partition = [ 2, 1 ] );;
@@ -296,11 +291,11 @@ gap>     indeterminates := IndeterminatesOfPolynomialRing( rng );;
 gap>     x := indeterminates[1];;
 gap>     y := indeterminates[2];;
 gap>     polynomial := (x ^ 4 - 4) ^ 3 * (4 * x ^ 2 + 2);;
-gap>     prod := UNIQUE_PRODUCT@HMAC@Utils( polynomial );;
+gap>     prod := FactorsInPowerForm@HMAC@Utils( polynomial );;
 gap>     prod := REMOVE_CONSTANT_FACTORS@HMAC@Utils( prod );;
-gap>     normalizedPolynomial := PRODUCT_VALUE@HMAC@Utils( prod );;
-gap>     UNIQUE_PRODUCT@HMAC@Utils( normalizedPolynomial );;
-gap>     UNIQUE_PRODUCT@HMAC@Utils( polynomial );;
+gap>     normalizedPolynomial := ProductValue@HMAC@Utils( prod );;
+gap>     FactorsInPowerForm@HMAC@Utils( normalizedPolynomial );;
+gap>     FactorsInPowerForm@HMAC@Utils( polynomial );;
 gap>     dstRng := PolynomialRing( Integers, 14 );;
 gap>     prevIterWarnVal := ITER_POLY_WARN;;
 gap>     ITER_POLY_WARN := false;;
@@ -314,13 +309,13 @@ gap>         end );;
 gap>     commonVariable := postDstIndeterminates[1];;
 gap>     coeffVariableIterator := Iterator( coeffVariables );;
 gap>     idealTerm := Hurwitz@HMAC.Internal.CreateFactoredIdealTerm( normalizedPolynomial, coeffVariableIterator, postRng, commonVariable, [  ] );;
-gap>     Assert( 0, Degree( PRODUCT_VALUE@HMAC@Utils( idealTerm ) ) = 14 );;
+gap>     Assert( 0, Degree( ProductValue@HMAC@Utils( idealTerm ) ) = 14 );;
 gap>     coeffVariableIterator := Iterator( coeffVariables );;
 gap>     idealTerm := Hurwitz@HMAC.Internal.CreateFactoredIdealTerm( normalizedPolynomial, coeffVariableIterator, postRng, commonVariable, [ x + Z( 11 ) ^ 8 ] )
 gap>      ;;
 gap>     coeffVariableIterator := Iterator( coeffVariables );;
 gap>     idealTerm := Hurwitz@HMAC.Internal.CreateFactoredIdealTerm( normalizedPolynomial, coeffVariableIterator, postRng, commonVariable, [  ] );;
-gap>     Assert( 0, Degree( PRODUCT_VALUE@HMAC@Utils( idealTerm ) ) = 14 );;
+gap>     Assert( 0, Degree( ProductValue@HMAC@Utils( idealTerm ) ) = 14 );;
 #
 #
 # Hurwitz@HMAC.Tests.TEST_POLTUPLE_TO_IDEAL_POINT : 
@@ -357,7 +352,7 @@ gap>     complexCriticalValueRationalApprox := [ [ infinity, infinity ], [ 0, 0 
 gap>     reducedCriticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
 gap>     strictNormalization := true;;
 gap>     mapsModPrime := FindHurwitzMapModPrime@HMAC( finiteField, partitions, reducedCriticalValues, strictNormalization );;
-gap>     liftOptions := @PadicLift.LiftOptions(  );;
+gap>     liftOptions := @HMAC@PadicLift.LiftOptions(  );;
 gap>     liftOptions.setDecimalPrecision( 24 );;
 gap>     hurwitzMapSearchProblem := HurwitzMapSearchProblem@HMAC( partitions, complexCriticalValueRationalApprox, strictNormalization );;
 gap>     hurwitzMapCandidates := ApproxComplexHurwitzMaps@HMAC( hurwitzMapSearchProblem, mapsModPrime[1][2], finiteField, liftOptions );;
@@ -381,7 +376,7 @@ gap>     strictNormalization := true;;
 gap>     for reducedCriticalValues  in reducedCritivalValueLists  do
 gap>         mapsModPrime := FindHurwitzMapModPrime@HMAC( finiteField, partitions, reducedCriticalValues, strictNormalization );;
 gap>         if Size( mapsModPrime ) > 0  then
-gap>             liftOptions := @PadicLift.LiftOptions(  );;
+gap>             liftOptions := @HMAC@PadicLift.LiftOptions(  );;
 gap>             liftOptions.setDecimalPrecision( 24 );;
 gap>             for mapModPrime  in mapsModPrime  do
 gap>                 hurwitzMapSearchProblem := HurwitzMapSearchProblem@HMAC( partitions, approxBranchValues, strictNormalization );;
@@ -435,7 +430,6 @@ gap>     gens := GeneratorsOfTwoSidedIdeal( hurwitzMapLifter.ideal );;
 gap>     jac := Jacobian@HMAC@Utils( gens, hurwitzMapLifter.unknownVariables );;
 gap>     jacAt := EvalPolynomialTensor@HMAC@Utils( jac, hurwitzMapLifter.unknownVariables, hurwitzMapLifter.point );;
 gap>     Assert( 0, Rank( jacAt ) = 13 );;
-
 
 
 #E hurwitz.tst . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ends here

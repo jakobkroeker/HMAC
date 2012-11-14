@@ -1,0 +1,13 @@
+
+# Q: does setFloats have global impact?  - YES => do not use setFloats (DONE)
+
+
+ arguments pro test functions instead of only tests in .tst file:
+  - it is possible to easily list them from a gap console.
+
+
+#
+# todo: normalization: sometimes there exists different normalizations what makes mathematically no difference, but may influence lifting performance.
+#       currently the first appropriate normalization is used. Alternatively: try to lift finite field hurwitz maps with several normalizations
+
+

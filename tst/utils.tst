@@ -17,7 +17,7 @@
 #
 #
 #
-# @HMAC@Utils.Tests.TEST_FLATTEN_LIST : 
+#  @HMAC@Utils.Tests.TEST_FLATTEN_LIST : 
 #
 gap>     Assert( 0, [  ] = @HMAC@Utils.FlattenList( [  ] ) );;
 gap>     Assert( 0, [ 1, 2, 1 ] = @HMAC@Utils.FlattenList( [ 1, [ 2, 1 ] ] ) );;
@@ -220,21 +220,6 @@ gap>     Assert( 0, not IsIndeterminate@HMAC@Utils( 1 + x ) );;
 gap>     Assert( 0, not IsIndeterminate@HMAC@Utils( 2 * x ) );;
 #
 #
-#  @HMAC@Utils.Tests.TEST_DEHOMOGENIZE_POLYNOMIAL : 
-#
-gap> 
-gap>     rng := PolynomialRing( Rationals, [ "x", "y" ] );;
-gap>     ind := IndeterminatesOfPolynomialRing( rng );;
-gap>     x := ind[1];;
-gap>     y := ind[2];;
-gap>     pol := 2 * (2 * x ^ 2 - 3) ^ 2 * (x - 4);;
-gap>     hpol := HomogenizedPolynomial@HMAC@Utils( pol, y );;
-gap>     dhpol := DehomogenizedPolynomial@HMAC@Utils( hpol, y );;
-gap>     Assert( 0, dhpol = pol );;
-gap>     dhpol := DehomogenizedPolynomial@HMAC@Utils( hpol );;
-gap>     Assert( 0, dhpol = pol );;
-#
-#
 #  @HMAC@Utils.Tests.TEST_HOMOGENIZE_POLYNOMIAL : 
 #
 gap> 
@@ -260,6 +245,21 @@ gap>         Assert( 0, Degree@HMAC@Utils( monom ) = 5 );;
 gap>     od;;
 #
 #
+#  @HMAC@Utils.Tests.TEST_DEHOMOGENIZE_POLYNOMIAL : 
+#
+gap> 
+gap>     rng := PolynomialRing( Rationals, [ "x", "y" ] );;
+gap>     ind := IndeterminatesOfPolynomialRing( rng );;
+gap>     x := ind[1];;
+gap>     y := ind[2];;
+gap>     pol := 2 * (2 * x ^ 2 - 3) ^ 2 * (x - 4);;
+gap>     hpol := HomogenizedPolynomial@HMAC@Utils( pol, y );;
+gap>     dhpol := DehomogenizedPolynomial@HMAC@Utils( hpol, y );;
+gap>     Assert( 0, dhpol = pol );;
+gap>     dhpol := DehomogenizedPolynomial@HMAC@Utils( hpol );;
+gap>     Assert( 0, dhpol = pol );;
+#
+#
 #  @HMAC@Utils.Tests.TEST_DISTINCT_MONIC_FACTORS : 
 #
 gap> 
@@ -272,6 +272,9 @@ gap>     Assert( 0, result = [ x - 3, x - 8 ] );;
 gap>     pol := 4 * x ^ 0;;
 gap>     result := DistinctMonicFactors@HMAC@Utils( pol );;
 gap>     Assert( 0, Size( result ) = 0 );;
+gap>     pol := 0 * x;;
+gap>     result := DistinctMonicFactors@HMAC@Utils( pol );;
+gap>     Assert( 0, result = fail );;
 #
 #
 #  @HMAC@Utils.Tests.TEST_PRODUCT_VALUE : 
@@ -281,16 +284,16 @@ gap>     rng := PolynomialRing( ZmodnZ( 11 ), [ "x" ] );;
 gap>     indeterminates := IndeterminatesOfPolynomialRing( rng );;
 gap>     x := indeterminates[1];;
 gap>     product := [ [ 2, 3 ] ];;
-gap>     Assert( 0, 2 ^ 3 = PRODUCT_VALUE@HMAC@Utils( product ) );;
+gap>     Assert( 0, 2 ^ 3 = ProductValue@HMAC@Utils( product ) );;
 gap>     product := [ [ x - 3, 3 ] ];;
-gap>     Assert( 0, (x - 3) ^ 3 = PRODUCT_VALUE@HMAC@Utils( product ) );;
+gap>     Assert( 0, (x - 3) ^ 3 = ProductValue@HMAC@Utils( product ) );;
 gap>     product := [ [ x - 3, 3 ], [ x, 2 ] ];;
-gap>     Assert( 0, (x - 3) ^ 3 * x ^ 2 = PRODUCT_VALUE@HMAC@Utils( product ) );;
+gap>     Assert( 0, (x - 3) ^ 3 * x ^ 2 = ProductValue@HMAC@Utils( product ) );;
 gap>     product := [  ];;
-gap>     Assert( 0, 1 = PRODUCT_VALUE@HMAC@Utils( product ) );;
+gap>     Assert( 0, 1 = ProductValue@HMAC@Utils( product ) );;
 #
 #
-#  @HMAC@Utils.Tests.TEST_UNIQUE_PRODUCT : 
+#  @HMAC@Utils.Tests.TEST_FactorsInPowerForm : 
 #
 gap> 
 gap>     rng := PolynomialRing( ZmodnZ( 11 ), [ "x", "y" ] );;
@@ -298,33 +301,34 @@ gap>     indeterminates := IndeterminatesOfPolynomialRing( rng );;
 gap>     x := indeterminates[1];;
 gap>     y := indeterminates[2];;
 gap>     pol := (x - 3) ^ 3;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     Assert( 0, result = [ [ x - 3, 3 ] ] );;
 gap>     pol := 3 * (x - 3) ^ 3;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     Assert( 0, Set( result ) = Set( [ [ x - 3, 3 ], [ One( rng ) * 3, 1 ] ] ) );;
 gap>     pol := (x - 3) ^ 3 * x ^ 2;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ x, 2 ], [ x - 3, 3 ] ];;
 gap>     Assert( 0, Set( expectedProduct ) = Set( result ) );;
 gap>     pol := (x - 3) ^ 3 * x ^ 2;;
 gap>     pol := HomogenizedPolynomial@HMAC@Utils( pol, y, 6 );;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ x, 2 ], [ x - 3, 3 ], [ y, 1 ] ];;
 gap>     pol := x ^ 0;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ One( rng ), 1 ] ];;
 gap>     Assert( 0, expectedProduct = result );;
 gap>     pol := 0 * x ^ 0;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     expectedProduct := [  ];;
 gap>     Assert( 0, expectedProduct = result );;
 gap>     pol := 5 * x ^ 0;;
-gap>     result := UNIQUE_PRODUCT@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ One( rng ) * 5, 1 ] ];;
 gap>     Assert( 0, expectedProduct = result );;
 #
-#  @HMAC@Utils.Tests.TEST_UNIQUE_PRODUCT_1 : 
+#
+#  @HMAC@Utils.Tests.TEST_FactorsInPowerForm_1 : 
 #
 gap> 
 gap>     rng := PolynomialRing( ZmodnZ( 11 ), [ "x", "y" ] );;
@@ -332,29 +336,29 @@ gap>     indeterminates := IndeterminatesOfPolynomialRing( rng );;
 gap>     x := indeterminates[1];;
 gap>     y := indeterminates[2];;
 gap>     pol := (x - 3) ^ 3;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     Assert( 0, result = [ [ x - 3, 3 ] ] );;
 gap>     pol := 3 * (x - 3) ^ 3;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     Assert( 0, Set( result ) = Set( [ [ x - 3, 3 ], [ One( rng ) * 3, 1 ] ] ) );;
 gap>     pol := (x - 3) ^ 3 * x ^ 2;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ x, 2 ], [ x - 3, 3 ] ];;
 gap>     Assert( 0, Set( expectedProduct ) = Set( result ) );;
 gap>     pol := (x - 3) ^ 3 * x ^ 2;;
 gap>     pol := HomogenizedPolynomial@HMAC@Utils( pol, y, 6 );;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ x, 2 ], [ x - 3, 3 ], [ y, 1 ] ];;
 gap>     pol := x ^ 0;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ One( rng ), 1 ] ];;
 gap>     Assert( 0, expectedProduct = result );;
 gap>     pol := 0 * x ^ 0;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     expectedProduct := [  ];;
 gap>     Assert( 0, expectedProduct = result );;
 gap>     pol := 5 * x ^ 0;;
-gap>     result := UNIQUE_PRODUCT_1@HMAC@Utils( pol );;
+gap>     result := FactorsInPowerForm_1@HMAC@Utils( pol );;
 gap>     expectedProduct := [ [ One( rng ) * 5, 1 ] ];;
 gap>     Assert( 0, expectedProduct = result );;
 #
@@ -383,6 +387,7 @@ gap>     factors := LinearFactors@HMAC@Utils( pol, 3 );;
 gap>     Assert( 0, Size( factors ) = 1 );;
 gap>     factors := LinearFactors@HMAC@Utils( pol );;
 gap>     Assert( 0, Size( factors ) = 2 );;
+
 
 
 

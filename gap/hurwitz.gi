@@ -15,17 +15,11 @@
 
 
 
+######################## a hack to represent a linear factor with infinity root.
+
 # Notes: 'BindGlobal' will hide a function from GLOBAL_FUNCTION_LIST, 
 #
 # but the variable will appear in NamesGVars(); 
-
-
-#
-# todo: normalization: somtimes there exists different normalizations what makes mathematically no difference, but may influence lifting performance.
-#       currently the first appropriate normalization is used. Alternatively: try to lift finite field hurwitz maps with several normalizations
-
-
-######################## a hack to represent a linear factor with infinity root.
 
 DeclareRepresentation("IsInfinityPol@HMAC",IsList, [ ]);
 
@@ -45,6 +39,7 @@ end
 ######################### end hack
 
 
+# ReduceCriticalValuesApprox (undocumented)
 # parameter: (pairs of real and imaginary part of complex critival value approximations, destination finite field)
 #Hurwitz@HMAC.ReduceCriticalValuesApprox :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "ReduceCriticalValuesApprox", 
@@ -257,7 +252,7 @@ function()
 	rng := PolynomialRing(Rationals, ["x","y"] );
 	ind :=IndeterminatesOfPolynomialRing(rng);
 	x := ind[1];
-        y := ind[1];
+        y := ind[2];
 	pol := 3*(x+1)*(x+2)^2;
 	 
 	shape := ComputeShape@HMAC( pol );
