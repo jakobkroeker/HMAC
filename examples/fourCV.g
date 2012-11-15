@@ -1,18 +1,8 @@
 ################ loading
 
-LoadPackage("float");
-LoadPackage("fr");
+LoadPackage("hmac");
 
-RereadPackage("fr","hurwitz/gap/utils.gd");
-RereadPackage("fr","hurwitz/gap/utils.gi");
-
-RereadPackage("fr","hurwitz/gap/padicLift.gd");
-RereadPackage("fr","hurwitz/gap/padicLift.gi");
- 
-RereadPackage("fr","hurwitz/gap/hurwitz.gd");
-RereadPackage("fr","hurwitz/gap/hurwitz.gi");
-
-    
+   
     
 ################################ four CV example draft #################################################################################
 

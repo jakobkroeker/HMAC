@@ -589,10 +589,10 @@ if test "$MAKEFILE" != Makefile; then
     ln -sf "$MAKEFILE" Makefile
 fi
 
-if test "$GIVARODIR" == "$EXTERN"; then
-    echo -n "****** Remember to download:"
-    if test "$GIVARODIR" == "$EXTERN"; then echo -n " givaro-3.6.0.tar.gz"; fi
-    echo; echo "****** (instructions in extern/GET_LIBRARIES)"
-fi
+##if test "$GIVARODIR" == "$EXTERN"; then
+##    echo -n "****** Remember to download:"
+##    if test "$GIVARODIR" == "$EXTERN"; then echo -n " givaro-3.6.0.tar.gz"; fi
+##    echo; echo "****** (instructions in extern/GET_LIBRARIES)"
+##fi
 
 AC_OUTPUT

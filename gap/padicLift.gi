@@ -94,9 +94,9 @@ function( decimalPrecision )
          local localBitPrecision,  conversionFactor,
         controlDecimalPrecision, ten,two, one ;
 
-        ten:= NewFloat(@FR.isc,"10.0":bits:=100);
-        two:= NewFloat(@FR.isc,"2.0":bits:=100);
-        one:= NewFloat(@FR.isc,"1.0":bits:=100);
+        ten:= NewFloat(@hmac.isc,"10.0":bits:=100);
+        two:= NewFloat(@hmac.isc,"2.0":bits:=100);
+        one:= NewFloat(@hmac.isc,"1.0":bits:=100);
      
         conversionFactor :=  Log(RealPart(ten))/Log(RealPart(two));
     
@@ -157,9 +157,9 @@ function( decimalPrecision )
          local localBitPrecision,  conversionFactor,
         controlDecimalPrecision, ten,two, one ;
 
-        ten:= NewFloat(@FR.isc,"10.0":bits:=100);
-        two:= NewFloat(@FR.isc,"2.0":bits:=100);
-        one:= NewFloat(@FR.isc,"1.0":bits:=100);
+        ten:= NewFloat(@hmac.isc,"10.0":bits:=100);
+        two:= NewFloat(@hmac.isc,"2.0":bits:=100);
+        one:= NewFloat(@hmac.isc,"1.0":bits:=100);
      
         conversionFactor :=  Log(  RealPart(ten))/Log(  RealPart(two));
     
@@ -183,7 +183,7 @@ function( decimalPrecision )
     end;
 
 
-    complexUnivariatePolynomialRing := PolynomialRing( @FR.field, 1 ); # 1 indeterminate
+    complexUnivariatePolynomialRing := PolynomialRing( @hmac.field, 1 ); # 1 indeterminate
     fam := FamilyObj( One(complexUnivariatePolynomialRing) ); 
     
     rootCalculator.getDstPolynomialFam := function()
@@ -204,7 +204,7 @@ function( decimalPrecision )
         if not FamilyObj(One(complexPoly)) = fam then
             complexPoly := CoercePolynomialTensor@HMAC@Utils( polynomial, complexUnivariatePolynomialRing );
         else 
-            complexPoly := complexPoly * NewFloat(@FR.isc, "1.0" :bits := bitPrecision);
+            complexPoly := complexPoly * NewFloat(@hmac.isc, "1.0" :bits := bitPrecision);
         fi;
         PopOptions();
         return complexPoly;
@@ -222,7 +222,7 @@ function( decimalPrecision )
 end
 );
 
-#  complexUnivariatePolynomialRing := PolynomialRing( @FR.field, 1 ); # 1 indeterminate
+#  complexUnivariatePolynomialRing := PolynomialRing( @hmac.field, 1 ); # 1 indeterminate
 #  CoercePolynomialTensor@HMAC@Utils( polynomial, complexUnivariatePolynomialRing );
 # 
 
@@ -701,7 +701,7 @@ InstallGlobalFunction ( CREATE_LIFT_OPTIONS@HMAC ,
 	
 	liftOptions.maxPairingTolerance := function() return  privateData.maxPairingTolerance; end;
 	liftOptions.setMaxPairingTolerance := function( pairingTolerance )  
-		if not  IsFloat(pairingTolerance) or AbsoluteValue(pairingTolerance)<>pairingTolerance or IsZero(pairingTolerance) then 
+		if not  IsFloat(pairingTolerance) or AbsoluteValue(pairingTolerance)<>AbsoluteValue(pairingTolerance) or IsZero(pairingTolerance) then 
 			Error(" root pairing tolerance has to be a positive floating number ");	
 		fi;	
 		privateData.maxPairingTolerance :=pairingTolerance;
@@ -1552,8 +1552,8 @@ function ( tolerance, rootList )
     
   for row in [1..numRoots] do
     for col in [(row+1)..numRoots] do
-         if AbsoluteValue(   (rootList[row] - rootList[col]) )/3.0 < localTolerance then 
-            localTolerance := AbsoluteValue(rootList[row] - rootList[col])/3.0;
+         if AbsoluteValue(   (rootList[row] - rootList[col])/ NewFloat(@hmac.isc,"3.0") ) < AbsoluteValue(localTolerance) then 
+            localTolerance := AbsoluteValue( (rootList[row] - rootList[col])/ NewFloat(@hmac.isc,"3.0") );
         fi;
     od;
     od;
@@ -1747,7 +1747,7 @@ function( firstPolRoots, secondPolRoots, combinedPolRoots, operation, maxToleran
     for row in [1..numRoots] do
     for col in [1..Size(secondPolRoots)] do
     for i in [1..numRoots] do
-        if  AbsoluteValue( operation (firstPolRoots[row], secondPolRoots[col] )- combinedPolRoots[i] ) <localTolerance then
+        if  AbsoluteValue( operation (firstPolRoots[row], secondPolRoots[col] )- combinedPolRoots[i] ) <AbsoluteValue(localTolerance) then
             compatibiltyMatrix[row][col] := 1;
             extendedCompatibilityMatrix[row][col] := i;
         fi;
@@ -1832,7 +1832,7 @@ function( firstPolRoots, secondPolRoots, combinedPolRoots, operation, maxToleran
     for row in [ 1..Size(firstPolRoots)   ] do
     for col in [ 1..Size(secondPolRoots)  ] do
     for i   in [ 1..Size(combinedPolRoots)] do
-        if  AbsoluteValue( operation (firstPolRoots[row], secondPolRoots[col] )- combinedPolRoots[i] ) <localTolerance then
+        if  AbsoluteValue( operation (firstPolRoots[row], secondPolRoots[col] )- combinedPolRoots[i] ) < AbsoluteValue(localTolerance) then
             combinedRootsMatched[i] := 1;
             compatibiltyMatrix[row][col] := i;
             simpleCompatibiltyMatrix[row][col] := 1;
@@ -1859,7 +1859,7 @@ function()
     local firstPolRoots, secondPolRoots, combinedPolRoots, operation, opts, compatibility, one,convertFloat;
 
     convertFloat := function(inputfloat)
-	return NewFloat( @FR.isc, inputfloat : bits := 1000 );;
+	return NewFloat( @hmac.isc, inputfloat : bits := 1000 );;
      end;
 
     firstPolRoots := List( [ 0.03, 34.0, 10.0 ],convertFloat);
@@ -2277,12 +2277,12 @@ InstallGlobalRecordFunction@HMAC (["@HMAC@PadicLift","Tests"], "TEST_COERCE_POLY
     x := indeterminates[1];
     pol := x^+2+3;
 
-    dstrng := PolynomialRing( @FR.field , 1 ); # 1 indeterminate
+    dstrng := PolynomialRing( @hmac.field , 1 ); # 1 indeterminate
     
     coercedPol := CoercePolynomialTensor@HMAC@Utils(pol, dstrng);
     
     dstInd := IndeterminatesOfPolynomialRing(dstrng);
-    expectedResult := dstInd[1]^2+NewFloat(@FR.isc,"3.0");
+    expectedResult := dstInd[1]^2+NewFloat(@hmac.isc,"3.0");
     Assert(0, coercedPol=expectedResult);
     
 end

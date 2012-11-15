@@ -99,7 +99,7 @@ function( pair )
         return infinity;
     fi;
     Assert(0, pair[1] in Rationals and  pair[2] in Rationals );
-    return ( pair[1]*NewFloat(@FR.isc,"1.0") + pair[2]*NewFloat(@FR.isc,"1.0i"));
+    return ( pair[1]*NewFloat(@hmac.isc,"1.0") + pair[2]*NewFloat(@hmac.isc,"1.0i"));
 end
 );
 
@@ -108,8 +108,8 @@ end
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_RATIONAL_PAIR_TO_COMPLEX", 
 function()
     Assert (0, infinity = Hurwitz@HMAC.Internal.RationalPairToComplex([infinity,infinity]) );
-    Assert (0,       NewFloat(@FR.isc,"0.0") = Hurwitz@HMAC.Internal.RationalPairToComplex([0,0]) );
-    Assert (0,       NewFloat(@FR.isc,"1.0") = Hurwitz@HMAC.Internal.RationalPairToComplex([1,0]) );
+    Assert (0,       NewFloat(@hmac.isc,"0.0") = Hurwitz@HMAC.Internal.RationalPairToComplex([0,0]) );
+    Assert (0,       NewFloat(@hmac.isc,"1.0") = Hurwitz@HMAC.Internal.RationalPairToComplex([1,0]) );
 end
 );
 
@@ -1931,7 +1931,7 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
 	     
 	    ind := IndeterminatesOfPolynomialRing(polynomialRing);
 	    for pos in [1..Size(preimageList)] do
-		    currentPolynomial := NewFloat(@FR.isc,"1.0");
+		    currentPolynomial := NewFloat(@hmac.isc,"1.0");
 		    for preimageData in preimageList[pos] do
 			    if (preimageData[1]<>infinity) then 
 				    currentPolynomial := currentPolynomial*( ( ind[1] - preimageData[1] )^preimageData[2] );
@@ -2402,7 +2402,7 @@ function()
 	Assert(0, ForAll(hurwitzMapCandidates, function(mapCandidate) return mapCandidate.maxResidue < 1.0e-15; end) );
 	
     z := hurwitzMapCandidates[1].indeterminate;
-    Assert(0, Degree( (NewFloat(@FR.isc,"3.0")*z^2+(NewFloat(@FR.isc,"-2.0")*z^3)) /hurwitzMapCandidates[1].map ) =0);
+    Assert(0, Degree( (NewFloat(@hmac.isc,"3.0")*z^2+(NewFloat(@hmac.isc,"-2.0")*z^3)) /hurwitzMapCandidates[1].map ) =0);
 end
 );
 

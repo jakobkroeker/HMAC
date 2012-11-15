@@ -16,6 +16,10 @@ POSTHOOK@HMC := []; # to be processed at the end
 
 BindGlobal("@hmac", rec()); # a record to store locals in the package
 
+
+@hmac.isc := IsMPCFloat;
+@hmac.field := MPC_PSEUDOFIELD;
+
 #############################################################################
 ##
 #I Create info class to be able to debug loading

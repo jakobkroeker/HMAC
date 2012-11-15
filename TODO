@@ -2,27 +2,50 @@
 
 
 
-# link to libflint is not found; 
+##############################
+# build-system
 
-# bugs: DeclareGlobalFunction(""); is allowed. 
+# link to libflint is not found (partly fixed by a hack) there is no correct fix for al cases yet
+# flint is only found, in case it is configured as 'extern' and resides in the default directory
 
-# AdditiveInverse not working  for RationalFunction? 
+# gmp is probably not found, if it is installed but not compiled by GAP?
+# what means --with-gmp=gap? should it use the GAP-Settings for gap? 
+Currently for configure option '--with-gmp=gap' hmac only looks for gmp in $GAPDIR/bin/$TARGET/extern/gmp.
+
+# currently 'hurwitzMapSearch' is only correctly compiled in case libraries installed  in the default system folders 
+# or downloaded and compiled as extern (e.g. with-mpfr=extern)
+# - how should it be done?
+
+###############################
+
+##############################
+# documenation
+ <List> cannot have sublists?
+- cannot include GAPDOC in  subsections.
+-finish internal documentation
+################################
+
+
+# AdditiveInverse not working  for RationalFunction? (problem in fr-package?)
 
  numthread parameter for c++ program.
 
-- cannot include GAPDOC in  subsections.
--finish internal documentation
 -finish cleanup
 
 - improve the data format for the returned records  - introduce objects?
 
 - create object datatypes 'Power' ,  'Product' , 'Shape'?
-- Power object has properties 'Base' and 'Exponent'
-- Product has Property 'Factors'
+- 'Power' object should have properties 'Base' and 'Exponent'
+- 'Product' should have property 'Factors'
 
 
 - setup different Info loggers and their output target
 
- <List> cannot have sublists?
 
-# (GAP-related): is there a class of ideals ?
+#######################
+# (GAP-related): 
+
+# bugs: DeclareGlobalFunction(""); is allowed. 
+is there a class of ideals ?
+
+####################################

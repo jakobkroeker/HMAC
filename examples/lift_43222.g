@@ -1,23 +1,20 @@
 ################ loading
 
-LoadPackage("float");
-LoadPackage("fr");
+LoadPackage("hmac");
 
-RereadPackage("fr","hurwitz/gap/utils.gd");
-RereadPackage("fr","hurwitz/gap/utils.gi");
 
-RereadPackage("fr","hurwitz/gap/padicLift.gd");
-RereadPackage("fr","hurwitz/gap/padicLift.gi");
- 
-RereadPackage("fr","hurwitz/gap/hurwitz.gd");
-RereadPackage("fr","hurwitz/gap/hurwitz.gi");
+# set verbose level; from 0 to 3
+SetInfoLevel( InfoHMAC , 2 );
 
 
 ################################## [4,3,2,2,2]- example (lifting)  draft ################################## 
+bitPrecision := 240;
 
-SetFloats(MPC,5);
+# SetFloats(MPC,bitPrecision); #does not help anymore
+# PushOptions(rec(bits:=bitPrecision));
 
-hmsProblem := Hurwitz@FR.HurwitzMapSearchProblem( [[4,3,2,2,2], [3,4,2,2,2], [3,2,4,2,2]], 
+
+hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( [[4,3,2,2,2], [3,4,2,2,2], [3,2,4,2,2]], 
                                                 [[infinity,infinity], [0,0], [1,0]], 
                                                 true);
     
@@ -33,15 +30,25 @@ hmsProblem := Hurwitz@FR.HurwitzMapSearchProblem( [[4,3,2,2,2], [3,4,2,2,2], [3,
     Append( polTuple, [ (x-1)^4*(x-3)^3*(x^3         -2*x-3)^2] );   
                                                
     opts := @HMAC@PadicLift.LiftOptions();   
-    opts.setDecimalPrecision (60);  
-                                                    
+    opts.setDecimalPrecision ( Int(RealPart(bitPrecision*0.33)) );  
+    opts.setVerboseLevel(2);      
+    # a-priori knowledge for minimalPolynomialDegree is '72' ;
+    # a posteriori-knowledge is for this example =7
+    opts.setMaxLatticeDim( 7 ) ;
+    opts.setInitialLiftDepth( 6 ) ;
     ##### lift 
     
-    lifter := Hurwitz@FR.HurwitzMapLifter(polTuple, finiteField, hmsProblem);  
+    lifter := Hurwitz@HMAC.HurwitzMapLifter(polTuple, finiteField, hmsProblem);  
     approxHurwitzMaps := lifter.computeApproxHurwitzMaps(opts);  
     
+    Assert(0, Size(approxHurwitzMaps) =6 );
+
     ################ check result #########################
     for mapData in approxHurwitzMaps do    
-       Assert(0, mapData.maxResidue<1.0e-15);
+       Print( AbsoluteValue(mapData.maxResidue) );
+       Assert(0, AbsoluteValue(mapData.maxResidue)<AbsoluteValue(1.0e-15) );
     od;
-    
+
+    ################ check monodromy #########################
+    imgMachineResult := IMGMachine(mapData.map);
+

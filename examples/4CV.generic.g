@@ -1,19 +1,10 @@
 ################ loading
 
-LoadPackage("float");
-LoadPackage("fr");
+LoadPackage("hmac");
 
-RereadPackage("fr","hurwitz/gap/utils.gd");
-RereadPackage("fr","hurwitz/gap/utils.gi");
-
-RereadPackage("fr","hurwitz/gap/padicLift.gd");
-RereadPackage("fr","hurwitz/gap/padicLift.gi");
- 
-RereadPackage("fr","hurwitz/gap/hurwitz.gd");
-RereadPackage("fr","hurwitz/gap/hurwitz.gi");
 
     
-    SetInfoLevel(InfoFR,3);
+ SetInfoLevel(InfoHMAC,3);
 ################################ four CV example draft #################################################################################
 	
 	DeclareOperation("^",[IsDictionary,IsObject]);
@@ -59,7 +50,7 @@ RereadPackage("fr","hurwitz/gap/hurwitz.gi");
 	             allMapCandidates := []; # collect results here	         
 	
 	        # reduce critical values to finite field. TODO: pass minimal polynomials to c++ binary instead CV to avoid redundant computation.
-	        #reducedCriticalValues := Hurwitz@FR.ReduceCriticalValuesApprox( branchValuesApprox, finiteField );
+	        #reducedCriticalValues := Hurwitz@HMAC.ReduceCriticalValuesApprox( branchValuesApprox, finiteField );
 	
 	        reducedCriticalValues := [infinity,0*One(finiteField),One(finiteField)];
 	        liftedCriticalValues := [ [infinity,infinity], [0,0], [1,0] ] ;
@@ -91,15 +82,15 @@ RereadPackage("fr","hurwitz/gap/hurwitz.gi");
                 ########## finite field search #################################################      
 
 
-                mapsModPrime := Hurwitz@FR.FindHurwitzMapModPrime( finiteField  ,partitions, reducedCriticalValues, strictNormalization );
+                mapsModPrime := Hurwitz@HMAC.FindHurwitzMapModPrime( finiteField  ,partitions, reducedCriticalValues, strictNormalization );
                 
                 if Size(mapsModPrime)>0 then 
                 ########## lift #################################################
 
                     mapModPrime := mapsModPrime[1];
                     for mapModPrime  in mapsModPrime do 
-                        problem       := Hurwitz@FR.HurwitzMapSearchProblem( partitions , liftedCriticalValues,  strictNormalization );
-                        mapCandidates := Hurwitz@FR.ApproxComplexHurwitzMaps( problem, mapModPrime[2], finiteField, liftOptions );
+                        problem       := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions , liftedCriticalValues,  strictNormalization );
+                        mapCandidates := Hurwitz@HMAC.ApproxComplexHurwitzMaps( problem, mapModPrime[2], finiteField, liftOptions );
                         for mapCandidate in mapCandidates do
                             if mapCandidate.maxResidue<0.001_c then
                                 if not  mapCandidate.map in allMapCandidates then

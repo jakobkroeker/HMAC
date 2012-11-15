@@ -1,30 +1,24 @@
 ################ loading
 
-LoadPackage("float");
-LoadPackage("fr");
 
-RereadPackage("fr","hurwitz/gap/utils.gd");
-RereadPackage("fr","hurwitz/gap/utils.gi");
-
-RereadPackage("fr","hurwitz/gap/padicLift.gd");
-RereadPackage("fr","hurwitz/gap/padicLift.gi");
- 
-RereadPackage("fr","hurwitz/gap/hurwitz.gd");
-RereadPackage("fr","hurwitz/gap/hurwitz.gi");
-
- SetInfoLevel(InfoFR,2);
-
+LoadPackage("hmac");
 
 ################################## [4,3,2,2,2]- example (lifting)  draft ################################## 
+
+# Example with a-prioro correct order of the critical points infinity, zero and one
+# (no composition with Möbius map required)
+
+
+ SetInfoLevel(InfoHMAC,2);
 
     finiteField := GF(23);
     
  partitions:=  [ [2,3,4,2,2], [2,4,3,2,2], [2,3,4,2,2]];
  cvList := [[infinity,infinity], [0,0], [1,0]];
  
- reducedCritivalValueLists := Hurwitz@FR.ReduceCriticalValuesApprox( cvList, finiteField );
+ reducedCritivalValueLists := Hurwitz@HMAC.ReduceCriticalValuesApprox( cvList, finiteField );
  
-    hmsProblem := Hurwitz@FR.HurwitzMapSearchProblem( partitions,  cvList,  true);
+    hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions,  cvList,  true);
     
     #### init lift parameters 
 
@@ -32,15 +26,18 @@ RereadPackage("fr","hurwitz/gap/hurwitz.gi");
     indeterminates := IndeterminatesOfPolynomialRing(rng);
     x := indeterminates[1];
     polTuple := [];
-         
+
+    # finite field search part omitted here due to high runtime.    
+    # strictNormalization:=true;
+    # mapsModPrime := Hurwitz@HMAC.FindHurwitzMapModPrime( finiteField , partitions, reducedCritivalValueLists[1], strictNormalization );           
+    # polTuple :=  mapsModPrime[i][2] ; i in { 1..Size(mapsModPrime) }
+   
     Append( polTuple, [          (x+1)^3*(x-9)^4*(x^2-5*x+1)^2 ] );
     Append( polTuple, [ (x)^2*(x+11)^3*(x+3)^4*(x^2-x-8)^2 ] );
     Append( polTuple, [ (x-6)^4*(x-1)^2*(x-2)^3*(x^2+3*x-3)^2] );   
         
     
-    # strictNormalization:=true;
-  	# mapsModPrime := Hurwitz@FR.FindHurwitzMapModPrime( finiteField , partitions, reducedCritivalValueLists[1], strictNormalization );           
-    # polTuple :=  mapsModPrime[i][2] ; i in { 1..Size(mapsModPrime) }
+
     
     opts := @HMAC@PadicLift.LiftOptions();   
     opts.setDecimalPrecision (60);  
@@ -48,7 +45,7 @@ RereadPackage("fr","hurwitz/gap/hurwitz.gi");
     opts.setMaxLatticeDim(19);
     ##### lift 
     
-    lifter := Hurwitz@FR.HurwitzMapLifter(polTuple, finiteField, hmsProblem);  
+    lifter := Hurwitz@HMAC.HurwitzMapLifter(polTuple, finiteField, hmsProblem);  
     approxHurwitzMaps := lifter.computeApproxHurwitzMapsOptimized(opts);  
     
     ################ check result #########################
@@ -56,5 +53,7 @@ RereadPackage("fr","hurwitz/gap/hurwitz.gi");
        Assert(0, mapData.maxResidue<1.0e-15);
     od;
     
+
+
     
-    
+
