@@ -239,7 +239,7 @@ wwwdir: .version tarballs
 	cp doc/manual.css www/manual.css
 #	rsync -arvp --delete www/ laurent@rlaurent.uni-math.gwdg.de:public_html/FR/
 
-doc: doc/chap0.html
+doc: doc/chap0.html doc/manual.pdf
 
 doc/chap0.html: doc/hmac.xml   gap/utils.gi gap/padicLift.gi gap/hurwitz.gi gap/namespaceEmulation.g 
 
