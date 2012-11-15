@@ -32,7 +32,7 @@ hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( [[4,3,2,2,2], [3,4,2,2,2], [
     opts := @HMAC@PadicLift.LiftOptions();   
     opts.setDecimalPrecision ( Int(RealPart(bitPrecision*0.33)) );  
     opts.setVerboseLevel(2);      
-    # a-priori knowledge for minimalPolynomialDegree is '72' ;
+    # a-priori knowledge for minimalPolynomialDegree is '78' ;
     # a posteriori-knowledge is for this example =7
     opts.setMaxLatticeDim( 7 ) ;
     opts.setInitialLiftDepth( 6 ) ;

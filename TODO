@@ -19,6 +19,21 @@ Currently for configure option '--with-gmp=gap' hmac only looks for gmp in $GAPD
 ###############################
 
 ##############################
+-parallelize the lift step using ParGap 
+
+##############################
+###############################
+finite field search 
+- is there still a bug for some greater (>100) characteristic...?
+- add make target 'check' !
+- compute not only the search space size (it is the upper bound), but the more realistic value 
+(which slightly underestimates the real performed experiments)
+- to attack harder problems separate the search by  
+   -- the multiplicity combinatorics?
+
+
+###############################
+##############################
 # documenation
  <List> cannot have sublists?
 - cannot include GAPDOC in  subsections.
@@ -41,7 +56,13 @@ Currently for configure option '--with-gmp=gap' hmac only looks for gmp in $GAPD
 
 - setup different Info loggers and their output target
 
+#######################
 
+Applications
+- complete the example from Matthias Schuett
+- complete the example from L.B.
+
+#######################
 #######################
 # (GAP-related): 
 

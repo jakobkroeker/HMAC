@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?LaTeX ExtraPreamble="\usepackage{graphicx}"?>
+
+<!-- $Id$ -->
+
+<!DOCTYPE Book SYSTEM "gapdoc.dtd"
+ [ <!ENTITY see '<Alt Only="LaTeX">$\to$</Alt><Alt Not="LaTeX">--&tgt;</Alt>'>]>
+<Book Name="HURWITZ">
+
+<TitlePage>
+  <Title>Approximate construction of Hurwitz maps</Title>
+</TitlePage>
+
+<TableOfContents/>
+
+<Body>
+
+
+
+<Chapter>
+
+<Heading>Package description</Heading>
+
+Given a k-tuple of permutations
+representing the monodromy of a rational map, the implemented algorithm 
+constructs an arbitrarily precise floating-point complex approximation of that map.
+For detailed description of the method see our article: ...<Br/><Br/>
+The package also supports lifting of isolated smooth (polynomial)
+system solution over a prime field to an extension field of rationals
+and computing corresponding solution approximations over complex numbers.
+
+</Chapter>
+
+<Chapter>
+
+<Heading> Installation (Linux) </Heading>
+
+Since the HMAC package was created only recently,
+ there is no packaged version for any Linux distribution out there for now.
+Therefore parts of the installation has to be done manually by the user or by a system administrator
+or  it is possible to use a virtual machine image (TO BE CREATED) for nonproduction environment (due to to a considerable performance penalty).<Br/><Br/>
+
+For the setup by hand you have to install, if not already present
+<List>
+<Item>- a C++ compiler (e.g. GCC)</Item>
+<Item>- (GNU) Make</Item>
+<Item>- Bash shell </Item>
+
+<Item>-the GAP computer algebra system; release 4.5.6 or later from:<Br/>
+ <URL>http://www.gap-system.org/Releases/index.html </URL>
+</Item>
+</List>
+
+
+For example run in a terminal:<Br/><Br/>
+
+<C>wget ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/gap4r5p6_2012_11_04-18_46.tar.gz</C><Br/>
+<C>tar -xvf gap4r5p6_2012_11_04-18_46.tar.gz </C><Br/>
+<C>cd gap4r5</C>
+<C>./configure # (eventually pass parameters; see './configure --help'</C><Br/>
+<C>make</C><Br/><Br/>
+
+
+Also mandatory are the GAP packages
+<List>
+<Item>-'FLOAT' (  <URL>https://github.com/laurentbartholdi/float.git </URL> )</Item>
+<Item>-and 'FR' (   <URL>https://github.com/laurentbartholdi/fr.git </URL> )</Item>
+<Item>- and the package 'HMAC' itself</Item>
+</List>
+
+Please place them (not mandatory) in the subfolder <C>$GAPDIR/pkg</C>, e.g.:<Br/><Br/>
+
+<C>cd $GAPDIR/pkg </C><Br/>
+git checkout <URL>https://github.com/laurentbartholdi/float.git </URL> float<Br/>
+git checkout <URL>https://github.com/laurentbartholdi/fr.git </URL> fr<Br/><Br/><Br/>
+Then change to the float directory; <Br/>
+run <C>'./configure'</C> and <C>'make'</C><Br/>
+After that, build the fr package similarily.<Br/><Br/>
+
+If  building 'FR' or 'FLOAT' fails on your system, please report the observed issues.<Br/><Br/>
+
+You may also try alternatively FLOAT and FR from <Br/>
+<URL> https://github.com/jakobkroeker/float.git</URL><Br/>
+<URL>  https://github.com/jakobkroeker/fr.git</URL> 
+<Br/><Br/>
+
+The HMAC package is built by running<Br/>
+<C> &nbsp;&nbsp; ./configure </C><Br/>
+and <Br/>
+<C> &nbsp;&nbsp; make </C><Br/>
+<Br/>
+
+If the build processs fails due to a missing package, please install them on your system and retry.
+See also <C>'./configure --help'</C> for options on that. <Br/>
+For further support contact the package developers directly.
+
+</Chapter>
+
+<Chapter>
+
+<Heading>Quickstart</Heading>
+
+For the impatiend users who just want to compute some maps or
+to lift a smooth isolated point over a prime field to an extension field of rationals, 
+here are a couple of small examples:<Br/><Br/>
+
+- Example as in article ..( page 3). <Br/>
+ Expected result:  3z² − 2z³ <Br/>
+
+ <Example>
+gap>
+gap> finiteField := GF(5);;permutations := [(1,2,3),(2,3),(1,2)];;
+gap> complexCriticalValuesApprox := [ [infinity,infinity],  [0,0], [ 1/1, 0 ] ];;
+gap> modPCriticalValues := [ infinity, Zero(finiteField),  One(finiteField) ];;
+gap> hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( 
+> permutations , complexCriticalValuesApprox );;
+gap> 	
+gap> ############# finite field search
+gap> mapsModPrime := Hurwitz@HMAC.FindHurwitzMapModPrime( 
+> finiteField , permutations, modPCriticalValues );;
+gap> Size(mapsModPrime); # we have a hit
+1
+gap> ############# lift and approximate Hurwitz map candidates
+gap> mapModPrime :=    mapsModPrime[1];;
+gap> polynomialTuple := mapModPrime[2];; # the W_i's
+gap> mapCandidates := Hurwitz@HMAC.ApproxComplexHurwitzMaps( 
+>     hmsProblem, polynomialTuple, finiteField, @HMAC@PadicLift.LiftOptions() );;
+gap> mapCandidates[1].map;
+(-2._z)*z^3+3._z*z^2 
+gap> mapCandidates[1].maxResidue; ## approximation error
+0.
+ </Example>
+
+ComputeApproxIdealPoints: 
+<Example>
+gap> rng := PolynomialRing( Rationals  ,["x","y"] );
+gap> indeterminates := IndeterminatesOfPolynomialRing(rng);
+gap> x := indeterminates[1];
+gap> y := indeterminates[2];
+gap> FZ1 := 33*x^3+19*x^2-81*x-4;
+gap> FZ2 := y-1;
+gap> ideal := Ideal(rng,[FZ1,FZ2]);
+gap> pointOverPrimeField := [ Z(11)^0, Z(11)^0 ];  
+gap> options := LiftOptions@HMAC();
+gap> result := ComputeApproxIdealPoints@HMAC( ideal, pointOverPrimeField, options);
+</Example>
+
+Compute minimal polynomials for the unknowns from a prime field solution:
+<Example>
+gap> rng := PolynomialRing( Rationals  ,["x","y"] );
+gap> indeterminates := IndeterminatesOfPolynomialRing(rng);
+gap> x := indeterminates[1];
+gap> y := indeterminates[2];
+gap> FZ1 := 33*x^3+19*x^2-81*x-4;
+gap> FZ2 := y-1;
+gap> ideal := Ideal(rng,[FZ1,FZ2]);
+gap> solutionOverFiniteField := [ Z(11)^0, Z(11)^0 ];  
+gap> options := LiftOptions@HMAC();
+gap> unknown := indeterminates[1];
+gap> liftedSolutionData := ComputeMinimalPolynomial@HMAC 
+> ( ideal, solutionOverFiniteField, unknown, options );
+ </Example>
+
+P-adic lift:
+<Example>
+gap>  rng := PolynomialRing( Rationals  ,["x","y"] );;
+gap> indeterminates := IndeterminatesOfPolynomialRing(rng);;
+gap> x := indeterminates[1];; y := indeterminates[2];;
+gap> FZ1 := 33*x^3+19*x^2-81*x-4;
+gap> FZ2 := y-1;
+gap> ideal := Ideal(rng,[FZ1,FZ2]);
+gap> solutionOverFiniteField := [ One(Z(11)), One(Z(11)) ];;
+gap> lift := PadicLift@HMAC( ideal, solutionOverFiniteField, 2 );
+[ ZmodnZObj( 4148, 14641 ), ZmodnZObj( 1, 14641 ) ]
+gap> #check:
+gap> @HMAC@Utils.EvalPolynomialTensor
+> ( GeneratorsOfTwoSidedIdeal(ideal), indeterminates, lift );
+[ ZmodnZObj( 0, 14641 ), ZmodnZObj( 0, 14641 ) ] #ok!
+</Example>
+
+
+</Chapter>
+
+
+
+<Chapter> 
+<Heading>Package organisation</Heading>
+
+
+The package functions are separated into three (pseudo-)namespaces:
+<List>
+<Mark><C>@HMAC@Utils:</C></Mark>
+  <Item>
+ list and polynomial manipulation utils  </Item>
+<Mark><C>@HMAC@PadicLift:</C></Mark>
+  <Item> functions for lifting an isolated smooth solution over a finite field to an extension field of rationals
+and also compute approximations over complex numbers </Item>
+<Mark><C>@HMAC@Hurwitz:</C></Mark>
+  <Item> arbitrarily precise floating-point complex approximation of a Hurwitz ration map.  </Item>
+</List>
+The namespaces are simulated by using a GAP record object.
+Private functions are placed in a subrecord 'Internal'.
+With this setup it is easy to list all API functions of a specific purpose,
+e.g. by typing <Br/>
+<Example>
+gap> @HMAC@PadicLift.
+</Example>
+<Br/>
+into the console and using auto-completition (TAB key).
+All functions also present at the global function space,
+e.g. <C>@HMAC@Utils.ConstantTerm</C>
+is also callable by  <C>ConstantTerm@HMAC...</C>
+
+
+
+</Chapter>
+
+<Chapter>
+
+<Heading> List manipulation utils </Heading>
+The purpose of provided util functions is to extend the core GAP functionality
+for list manipulation.<Br/><Br/>
+
+The namespace prefix <B>"@HMAC@Utils."</B> or postfix <B>"@HMAC..."</B> is usually omitted, except in the example code.
+<Section> 
+<Heading> Flatten a list; first and last elements </Heading>
+<#Include Label="FlattenList">
+<#Include Label="FirstElement">
+<#Include Label="LastElement">
+
+
+</Section>
+
+
+</Chapter>
+<Chapter>
+<Heading> Polynomial manipulation utils </Heading>
+
+The purpose of provided util functions is to extend the core GAP functionality
+for polynomial manipulation. Performant implementation was not a goal,
+since it could require a complete redesign and a rewrite of existing structure and functions
+in the core of GAP. For users who need performant operations we refer to external C++ libraries
+like FLINT. <Br/><Br/>
+
+Following functions extend the core functionality to manipulate polynomials.<Br/>
+The namespace prefix <B>"@HMAC@Utils."</B> or postfix <B>"@HMAC..."</B> is usually omitted, except in the example code.
+<Section> 
+
+<Heading> Properties </Heading>
+
+<Index Subkey="polynomial ">degree</Index>
+<#Include Label="PolynomialDegree">
+<#Include Label="IsMonomial">
+<#Include Label="CoefficientOfPolynomial">
+<#Include Label="Coefficients">
+<#Include Label="CoefficientsEx">
+<#Include Label="MonomialCoefficient">
+<#Include Label="CountPolynomialVariables">
+<#Include Label="ConstantTerm">
+<#Include Label="IsIndeterminate">
+<#Include Label="IndeterminatesOfPolynomial">
+</Section>
+
+<Section> 
+
+<Heading> Derivative </Heading>
+<#Include Label="Jacobian">
+
+</Section>
+<Section> 
+<Heading> Coercion </Heading>
+
+<#Include Label="CoerceScalar">
+<#Include Label="CoercePolynomial">
+<#Include Label="CoerceTensor">
+</Section> 
+<Section> 
+<Heading> Evaluation </Heading>
+<#Include Label="EvalPolynomialTensor">
+</Section>
+
+<Section> 
+<Heading> Factorisation </Heading>
+
+<#Include Label="DistinctMonicFactors">
+<#Include Label="FactorsInPowerForm">
+<#Include Label="LinearFactors">
+</Section>
+
+<Section> 
+
+<Heading> Root computation </Heading>
+
+
+<#Include Label="DecimalToBitPrecision">
+<#Include Label="RootsByJenkinsTraub">
+<#Include Label="CreateJenkinsTraubWrapper">
+
+</Section>
+
+<Section> 
+<Heading> Miscellaneous </Heading>
+<#Include Label="IsPower">
+<#Include Label="CreatePower">
+<#Include Label="ProductValue">
+<#Include Label="HomogenizedPolynomial">
+<#Include Label="IsHomogenized">
+</Section>
+
+
+</Chapter>
+
+<Chapter>
+<Heading> P-adic lift </Heading>
+If an algebraic problem has a solution over the extension field of rational numbers
+that reduces to a smooth isolated point over a prime field,
+where the latter is found by smart brute force search, 
+the point can be lifted back using Hensel lifting
+and lattice basis reduction. 
+This result is the basis for the implemented lifting algorithm.
+
+
+<Section> 
+
+<Heading> P-adic lift functions </Heading>
+
+<#Include Label="PadicLift">
+<#Include Label="QuadraticLiftStep">
+<#Include Label="LiftOptions">
+<#Include Label="ComputeMinimalPolynomial">
+<#Include Label="ComputeMinimalPolynomials">
+<#Include Label="ComputeApproxIdealPoints">
+
+</Section>
+
+
+</Chapter>
+
+
+
+<Chapter>
+<Heading> Approximate Hurwitz map construction  </Heading>
+
+
+
+<Section> 
+
+<Heading>  Polynomial shape computation </Heading>
+
+<#Include Label="Shape">
+<#Include Label="IsShape">
+<#Include Label="ComputeShape">
+<#Include Label="RootMultiplicity">
+
+</Section>
+<Section> 
+
+<Heading>  Hurwitz map model prime field search </Heading>
+
+<#Include Label="FindHurwitzMapModPrime">
+<#Include Label="FindHurwitzMapModPrimeEx">
+<#Include Label="HurwitzMapSearchSpaceSize">
+<#Include Label="NormalizationRule">
+
+
+</Section>
+<Section> 
+
+<Heading> Map approximation from prime field model </Heading>
+
+
+<#Include Label="HurwitzMapSearchProblem">
+<#Include Label="ApproxComplexHurwitzMaps">
+
+
+</Section>
+</Chapter>
+
+
+
+<Chapter>
+<Heading> Sandbox </Heading>
+
+<Section>
+<Heading> Sandbox </Heading>
+<Subsection>Subsection
+<Heading> subsandbox </Heading>
+
+
+
+</Subsection>
+
+<Display>(v){a_x} = w \quad\textrm{if}\quad (xv)a =  x^{\pi_a}w.</Display>
+
+<Code>
+blabla;
+</Code>
+<Example>
+gap> 1+1;
+4
+</Example>
+
+&lt;A&gt;:<A>vec2</A><Br/>
+&lt;B&gt;:<B>vec2</B><Br/>
+&lt;C&gt;:<C>vec2</C><Br/>
+&lt;F&gt;:<F>vec2</F><Br/>
+&lt;K&gt;:<K>vec2</K><Br/>
+&lt;E&gt;:<E> vec2</E><Br/>
+&lt;Math&gt;:<Math>bla</Math> <Br/>
+&lt;Emph&gt;:<Emph>vec2</Emph> <Br/>
+&lt;Q&gt;:<Q>vec2</Q><Br/>
+
+
+<List>
+<Mark><C>name</C></Mark>
+  <Item>
+    a string or a list of strings, the latter meaning several preferences   which belong together,  </Item>
+</List>
+
+ &GAP;
+ 
+ 
+<ManSection>
+<Func Arg="[optrec]" Name="SetGAPDocTextTheme" />
+ <Meth Name="AsPermutation" Arg="o" Label="FR object"/>
+  <Description>
+
+    This method takes as argument an FR object <A>o</A>: machine, element, or
+    group, and produces an equivalent object whose outputs are
+    permutations. In particular, it converts Mealy machines from
+    domain representation to int representation.
+   
+    <P/> If this is not possible, the method returns <K>fail</K>.
+  </Description>
+</ManSection>
+
+</Section>
+
+
+&lt;Alt Only="HTML"&gt;:
+ <Alt Only="HTML">
+&lt;URL&gt;:
+<URL>http://www.uni-math.gwdg.de/laurent/FR/fr-1.1.2.tar.gz</URL> (tar, gzipped).
+  </Alt> <Br/>
+&lt;end Alt Only="HTML"&gt;:<Br/>
+&lt;Table&gt;:
+ <Table Align="r|cccccccccc">
+  <Caption>Table</Caption>
+  <Row>
+    <Item><M>n</M></Item>
+    <Item>1</Item><Item>2</Item><Item>3</Item><Item>4</Item><Item>5</Item>
+    <Item>6</Item><Item>7</Item><Item>8</Item><Item>9</Item><Item>10</Item>
+  </Row>
+  
+</Table>
+
+&lt;Package&gt;:<Package>HMAC</Package>
+</Chapter>
+
+</Body>
+
+
+<TheIndex/>
+
+</Book>
