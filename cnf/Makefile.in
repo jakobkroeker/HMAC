@@ -56,6 +56,7 @@ info:
 	echo "LINKMPFR=""@LINKMPFR@" 
 	echo "LINKMPIR=""@LINKMPIR@"
 	echo "INCLFLINT=""@INCLFLINT@"
+	echo "c_options=@c_options@"
 	
 
 lib:
@@ -211,7 +212,7 @@ $(LOCALBIN)/fr_dll.o: src/fr_dll.c src/cpoly.C src/fr_dll.h
 $(LOCALBIN)/findrat.o: src/findrat.c src/fr_dll.h
 	$(CC) -c $< -o $@ -I@GAPDIR@ -I@GAPDIR@/$(LOCALBIN) -DCONFIG_H
 
-$(LOCALBIN)/hmac_dll.so: $(LOCALBIN)/hmac_dll.o $(LOCALBIN)/findrat.o $(LOCALBIN)/rpoly.o $(LOCALBIN)/p1.o
+$(LOCALBIN)/hmac_dll.so: $(LOCALBIN)/hmac_dll.o $(LOCALBIN)/findrat.o $(LOCALBIN)/rpoly.o $(LOCALBIN)/p1.o  
 	$(GAC) -d -o $@ $+ @GACFLAGS@
 	
 

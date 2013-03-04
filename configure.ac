@@ -14,7 +14,8 @@
 AC_PREREQ([2.62])
 AC_INIT(hmac,,kroeker@math.uni-hannover.de)
 AC_CONFIG_SRCDIR([src/HurwitzMapFinder.h])
-AC_CONFIG_AUX_DIR(cnf)
+AC_CONFIG_AUX_DIR([cnf])
+AC_CONFIG_MACRO_DIR([cnf/m4])
 
 # Checks for programs.
 AC_PROG_CC
@@ -64,7 +65,7 @@ AC_PROG_CC
 AC_CACHE_CHECK([whether $CC accepts -fno-stack-protector],
     [ns_cv_cc__nostackprotector],
     [save_CFLAGS=$CFLAGS
-     CFLAGS="$CFLAGS -fno-stack-protector"
+     GACFLAGS="$CFLAGS -fno-stack-protector"
      AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])],
                     [ns_cv_cc__nostackprotector=yes],
                     [ns_cv_cc__nostackprotector=no])
@@ -81,6 +82,7 @@ AC_CHECK_HEADERS([float.h stdlib.h])
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_C_INLINE
+
 
 AC_ARG_VAR([GAPDIR], [Location of the GAP root directory, e.g. ../..])
 
@@ -125,6 +127,9 @@ AC_SUBST(TARGET)
 
 echo checking gap executable ... "$GAPPROG"
 
+
+
+
 if ! test -e "$GAPPROG"; then
     AC_WARN([Could not find GAP executable $GAPPROG; I won't compile the documentation])
 fi
@@ -139,10 +144,17 @@ if ! test -e "$GAC"; then
 fi
 AC_SUBST(GAC)
 
-eval `grep '^c_[[a-z_]]*=' $GAC`
+
+
+#eval `grep '^c_[[a-z_]]*=' $GAC`
+
+AC_SUBST(c_options)
+echo GAC... $GAC
 
 AC_SUBST(c_compiler)
 AC_SUBST(c_options)
+echo c_options... $c_options
+
 AC_SUBST(c_linker)
 AC_SUBST(c_link_options)
 AC_SUBST(c_libs)
@@ -213,8 +225,10 @@ AC_SUBST(c_addlibs)
 
     if test "$MPIRINCLUDE" != ""; then
         CPPFLAGS="$CPPFLAGS -I$MPIRINCLUDE"
-        CFLAGS="$CFLAGS -p -I$MPIRINCLUDE"
-        CXXFLAGS="$CXXFLAGS -p -I$MPIRINCLUDE"
+        GACFLAGS="$GACFLAGS -p -I$MPIRINCLUDE"
+        GACXXFLAGS="$GACXXFLAGS -p -I$MPIRINCLUDE"
+        CFLAGS="$CFLAGS -I$MPIRINCLUDE"
+        CXXFLAGS="$CXXFLAGS -I$MPIRINCLUDE"
     fi
 
     ################################################################
@@ -259,11 +273,22 @@ AC_SUBST(c_addlibs)
 
     if test "$MPFRINCLUDE" != ""; then
         CPPFLAGS="$CPPFLAGS -I$MPFRINCLUDE"
-        CFLAGS="$CFLAGS -p -I$MPFRINCLUDE"
-        CXXFLAGS="$CXXFLAGS -p -I$MPFRINCLUDE"
+        GACFLAGS="$GACFLAGS -p -I$MPFRINCLUDE"
+        GACXXFLAGS="$GACXXFLAGS -p -I$MPFRINCLUDE"
+        CFLAGS="$CFLAGS  -I$MPFRINCLUDE"
+        CXXFLAGS="$CXXFLAGS -I$MPFRINCLUDE"
     fi
 
     ################################################################
+
+HMAC_EXTERN_LIBS=''
+HMAC_EXTERN_LIBS+=' flintlib '
+
+
+
+#if test "$FLINT" != no; then HMAC_EXTERN_LIBS+=' flintlib '; fi
+
+
 
   ################################################################
     # flint configuration
@@ -305,14 +330,18 @@ AC_SUBST(c_addlibs)
 
     if test "$FLINTINCLUDE" != ""; then
         CPPFLAGS="$CPPFLAGS -I$FLINTINCLUDE"
-        CFLAGS="$CFLAGS -p -I$FLINTINCLUDE"
-        CXXFLAGS="$CXXFLAGS -p -I$FLINTINCLUDE"
+        GACFLAGS="$GACFLAGS -p -I$FLINTINCLUDE"
+        GACXXFLAGS="$GACXXFLAGS -p -I$FLINTINCLUDE"
+        CFLAGS="$CFLAGS  -I$FLINTINCLUDE"
+        CXXFLAGS="$CXXFLAGS -I$FLINTINCLUDE"
     fi
 
     ################################################################
 AC_SUBST(FLINTINCLUDE)
 AC_SUBST(FLINTLIB)
+ 
 
+AC_SUBST(HMAC_EXTERN_LIBS)
 
 ### end changes by jk
 ################################################################################################################################
@@ -357,7 +386,8 @@ echo using GMP directory... $GMPDIR
 
 if test "$GMPINCLUDE" != ""; then
     CPPFLAGS="$CPPFLAGS -I$GMPINCLUDE"
-    CFLAGS="$CFLAGS -p -I$GMPINCLUDE"
+    GACFLAGS="$GACFLAGS -p -I$GMPINCLUDE"
+    CFLAGS="$CFLAGS  -I$GMPINCLUDE"
 fi
 AC_CHECK_HEADER(gmp.h,[],[AC_MSG_ERROR([library gmp not found. Specify its location using --with-gmp])],[])
 
@@ -578,6 +608,12 @@ AC_SUBST(LINKFLINT)
 
 # end changes by jk
 ################################################################
+
+#AC_FIND_GAP
+
+echo checking GAP... "$GAP_ROOT"
+echo checking GMP... "$GMP_ROOT"
+echo checking SAGE... "$SAGE_ROOT"
 
 
 mkdir -p bin/$TARGET
