@@ -39,7 +39,7 @@ and install as described below.
 
 To build the 'FLOAT' package, change to $GAP_ROOT/pkg/float and run
 ./configure 
- make' 
+ make'
 
 If configure complains about missing packages, please install them first using the operating system 
 package manager e.g. yum or aptitude
@@ -49,7 +49,7 @@ Again, if they not available (see $GAP_ROOT/pkg/), they can be downloaded  from
 http://www.gap-system.org/Packages/ and simply extracted in the $GAP_ROOT/pkg/ folder.
 
 
-To build the 'FR' package, enshure that the dependencies above are installed, then 
+To build the 'FR' package, ensure that the dependencies above are installed, then 
 change to $GAP_ROOT/pkg/fr and run './configure && make'.
 
 
