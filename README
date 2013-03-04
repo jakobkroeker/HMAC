@@ -39,7 +39,7 @@ and install as described below.
 
 To build the 'FLOAT' package, change to $GAP_ROOT/pkg/float and run
 ./configure 
- make'
+ make
 
 If configure complains about missing packages, please install them first using the operating system 
 package manager e.g. yum or aptitude
