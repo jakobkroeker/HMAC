@@ -27,16 +27,30 @@ To use the package you have to install (or download and build)
 -the GAP computer algebra system, release 4.5.6 or later:
  http://www.gap-system.org/Releases/index.html 
 
-You may also install GAP as part of 'sagemath'
+You may also install GAP as part of 'sagemath' (http://www.sagemath.org/download.html)
 
 Then following  forked GAP packages are required:
 -'FLOAT' ( https://github.com/jakobkroeker/float.git )
 -'FR' (  https://github.com/jakobkroeker/fr.git )
 - and the package 'HMAC' 
 
+If they are not available, please download them to $GAP_ROOT/pkg/
+and install as described below.
+
+To build the 'FLOAT' package, change to $GAP_ROOT/pkg/float and run
+./configure 
+ make' 
+
+If configure complains about missing packages, please install them first using the operating system 
+package manager e.g. yum or aptitude
+
 FR depends on GAP packages 'Alnuth', 'autpgrp', 'polycyclic' and 'FGA'
-If not available (see $GAP_ROOT/pkg/), they can be downloaded  from 
-http://www.gap-system.org/Packages/ and extracted in the $GAP_ROOT/pkg/ folder.
+Again, if they not available (see $GAP_ROOT/pkg/), they can be downloaded  from 
+http://www.gap-system.org/Packages/ and simply extracted in the $GAP_ROOT/pkg/ folder.
+
+
+To build the 'FR' package, enshure that the dependencies above are installed, then 
+change to $GAP_ROOT/pkg/fr and run './configure && make'.
 
 
 If  building 'FR' or 'FLOAT' fails on your system, please report the observed issues.
@@ -77,7 +91,7 @@ You should have received a copy of the GNU General Public License
 along with this program, in the file COPYING.  If not, see
 <http://www.gnu.org/licenses/>.
 
-  Jakob Kröker, Hannover, 30.10.2012
+  Jakob Kröker, Hannover, 04.03.2013
 
 
 
