@@ -22,7 +22,50 @@
 #  PrintTo(of,str);;
 #
 #
-
+##
+# @HMAC@PadicLift.Tests.TEST_ROOTS_FLOAT : 
+#
+gap>  fieldType := MPC_PSEUDOFIELD;;
+gap>     floatType := IsMPCFloat;;
+gap>     rng := PolynomialRing( fieldType  ,["x"] );;
+gap>     indeterminates := IndeterminatesOfPolynomialRing(rng);;
+gap>     x := indeterminates[1];;
+gap>     oneFloat := NewFloat(floatType,"1.0");;
+gap>     complexPoly := x-oneFloat;;
+gap>     roots := RootsFloat(complexPoly);;
+#
+gap>     fieldType := MPFR_PSEUDOFIELD;;
+gap>     floatType := IsMPFRFloat;;
+gap>     rng := PolynomialRing( fieldType  ,["x"] );;
+gap>     indeterminates := IndeterminatesOfPolynomialRing(rng);;
+gap>     x := indeterminates[1];;
+gap>     oneFloat := NewFloat(floatType,"1.0");;
+gap>     complexPoly := x-oneFloat;;
+gap>     roots := RootsFloat(complexPoly);;
+#
+#
+gap>     fieldType := MPFI_PSEUDOFIELD;;
+gap>     floatType := IsMPFIFloat;;
+gap>     rng := PolynomialRing( fieldType  ,["x"] );;
+gap>     indeterminates := IndeterminatesOfPolynomialRing(rng);;
+gap>     x := indeterminates[1];;
+gap>     oneFloat := NewFloat(floatType,"1.0");;
+gap>     complexPoly := x-oneFloat;;
+gap>     complexPoly := x;;
+gap>     roots := RootsFloat(complexPoly);;
+#
+#
+gap>     fieldType := CXSC_PSEUDOFIELD;;
+gap>     floatType := IsCXSCFloat;;
+gap>     rng := PolynomialRing( fieldType  ,["x"] );;
+gap>     indeterminates := IndeterminatesOfPolynomialRing(rng);;
+gap>     x := indeterminates[1];;
+gap>     oneFloat := NewFloat(floatType,"1.0");;
+gap>     complexPoly := x-oneFloat;;
+gap>     complexPoly := x;;
+gap>     roots := RootsFloat(complexPoly);;
+#
+##
 #
 #
 #

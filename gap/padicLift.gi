@@ -252,6 +252,66 @@ function ( polynomial, decimalPrecision)
 end
 );
 
+InstallGlobalRecordFunction@HMAC ( ["@HMAC@PadicLift","Tests"], "TEST_ROOTS_FLOAT", 
+function()
+    local rng, indeterminates, x, oneFloat, roots, complexPoly,fieldType,floatType;
+  
+    fieldType := MPC_PSEUDOFIELD;
+    floatType := IsMPCFloat;
+
+    rng := PolynomialRing( fieldType  ,["x"] );
+    indeterminates := IndeterminatesOfPolynomialRing(rng);
+    x := indeterminates[1];
+
+    oneFloat := NewFloat(floatType,"1.0");
+    complexPoly := x-oneFloat;
+
+    roots := RootsFloat(complexPoly);
+
+    fieldType := MPFR_PSEUDOFIELD;
+    floatType := IsMPFRFloat;
+
+    rng := PolynomialRing( fieldType  ,["x"] );
+    indeterminates := IndeterminatesOfPolynomialRing(rng);
+    x := indeterminates[1];
+
+    oneFloat := NewFloat(floatType,"1.0");
+    complexPoly := x-oneFloat;
+
+    roots := RootsFloat(complexPoly);
+
+
+    fieldType := MPFI_PSEUDOFIELD;
+    floatType := IsMPFIFloat;
+
+    rng := PolynomialRing( fieldType  ,["x"] );
+    indeterminates := IndeterminatesOfPolynomialRing(rng);
+    x := indeterminates[1];
+
+    oneFloat := NewFloat(floatType,"1.0");
+    complexPoly := x-oneFloat;
+    complexPoly := x;
+
+    roots := RootsFloat(complexPoly);
+
+
+    fieldType := CXSC_PSEUDOFIELD;
+    floatType := IsCXSCFloat;
+
+    rng := PolynomialRing( fieldType  ,["x"] );
+    indeterminates := IndeterminatesOfPolynomialRing(rng);
+    x := indeterminates[1];
+
+    oneFloat := NewFloat(floatType,"1.0");
+    complexPoly := x-oneFloat;
+    complexPoly := x;
+
+    roots := RootsFloat(complexPoly);
+
+end
+);
+
+
 InstallGlobalRecordFunction@HMAC ( ["@HMAC@PadicLift","Tests"], "TEST_JENKINS_TRAUB_USAGE", 
 function()
     local rng, indeterminates, x, y, FZ1, bitPrecision, roots, rootCalculator;
