@@ -1727,6 +1727,25 @@ function()
 end
 );
 
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "mapMatchesMonodromy",
+function( map, permutations )
+  local permGroupSize,imgMachine, actions, action;
+  permGroupSize := Size( ListPerm(permutations[1]) );
+  imgMachine  := IMGMachine( map );
+  actions := List([1..permGroupSize], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
+  Print("\n");
+  for action in actions do
+   Print(action);
+   if (action<>actions[1]) then 
+     return false;
+   fi;
+    if ( action=fail ) then 
+     return false;
+   fi;
+ od;
+ return true;
+end
+);
 
 # todo:  what happens, if the polynomialRing of hurwitzMapLifter.poltuple entries has more than one variable?
 # todo: problem due to the fact that 
