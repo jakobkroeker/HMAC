@@ -30,7 +30,7 @@ To use the package you have to install (or download and build)
 You may also install GAP as part of 'sagemath' (http://www.sagemath.org/download.html)
 
 Then following  forked GAP packages are required:
--'FLOAT' ( https://github.com/jakobkroeker/float.git )
+-'FLOAT' ( https://github.com/laurentbartholdi/float.git )
 -'FR' (  https://github.com/jakobkroeker/fr.git )
 - and the package 'HMAC' 
 
@@ -44,10 +44,11 @@ To build the 'FLOAT' package, change to $GAP_ROOT/pkg/float and run
 If configure complains about missing packages, please install them first using the operating system 
 package manager e.g. yum or aptitude
 
-FR depends on GAP packages 'Alnuth', 'autpgrp', 'polycyclic' and 'FGA'
+FR depends on GAP packages 'Alnuth', 'autpgrp', 'polycyclic', 'FGA' and 'io'
 Again, if they not available (see $GAP_ROOT/pkg/), they can be downloaded  from 
 http://www.gap-system.org/Packages/ and simply extracted in the $GAP_ROOT/pkg/ folder.
 
+To build the 'io' package,  change to $GAP_ROOT/pkg/io and run './configure && make'.
 
 To build the 'FR' package, ensure that the dependencies above are installed, then 
 change to $GAP_ROOT/pkg/fr and run './configure && make'.
