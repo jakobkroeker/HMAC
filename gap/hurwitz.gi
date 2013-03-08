@@ -1733,7 +1733,7 @@ function( map, permutations )
   permGroupSize := Size( ListPerm(permutations[1]) );
   imgMachine  := IMGMachine( map );
   actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
-  for actionId in Size[1..Size(actions)] do
+  for actionId in [1..Size(actions)] do
     Info(InfoHMAC, 1, Concatenation("computed RepresentativeAction[",String(actionId),"] : " , String( actions[actionId] ) ) );
     if (actions[actionId]<>actions[1]) then 
       return false;
