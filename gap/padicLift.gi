@@ -1380,7 +1380,7 @@ function( ideal, solution, unknown, minimalPolynomialVariable, liftOptions  )
 
     # increase lift depth and perform LLL until a solution is found or maxLiftDepth is reached.
     while currLiftDepth <= liftOptions.maxLiftDepth()  do 
-        liftOptions.logger(1, Concatenation("\n #I currLiftDepth: ", String(currLiftDepth) ));
+        liftOptions.logger(1, Concatenation("\n#I currLiftDepth: ", String(currLiftDepth) ));
         
         # perform LLL only if (currLiftDepth >= startingLiftDepth ). 
         # The condition is useful in case minimalLiftDepth (=startingLiftDepth ) is known (e.g. from similar previous computations )

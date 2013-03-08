@@ -1732,14 +1732,13 @@ function( map, permutations )
   local permGroupSize,imgMachine, actions, action;
   permGroupSize := Size( ListPerm(permutations[1]) );
   imgMachine  := IMGMachine( map );
-  actions := List([1..permGroupSize], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
-  Print("\n");
-  for action in actions do
-   Print(action);
-   if (action<>actions[1]) then 
-     return false;
-   fi;
-    if ( action=fail ) then 
+  actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
+  for actionId in Size[1..Size(actions)] do
+    Info(InfoHMAC, 1, Concatenation("computed RepresentativeAction[",String(actionId),"] : " , String( actions[actionId] ) ) );
+    if (actions[actionId]<>actions[1]) then 
+      return false;
+    fi;
+    if ( actions[actionId] = fail ) then 
      return false;
    fi;
  od;

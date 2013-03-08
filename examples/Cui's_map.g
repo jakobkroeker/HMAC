@@ -8,12 +8,14 @@ LoadPackage("hmac");
 
 bitPrecision := 240;
 
+
+
+############# formulate the problem
+
 permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13), 
                    (1, 3, 12, 4)(5, 9)(6, 7)(10, 13, 11)(2, 8),
                    (1, 5, 13, 6)(7, 10)(2, 3)(8, 11, 12)(4, 9)  ]; 
-    
-    
-   ############# init parameters
+
    
    finiteField := GF(11); 
 
@@ -53,10 +55,14 @@ permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13),
     ################ drop imprecise or false solutions:  #########################
     for mapData in approxHurwitzMapCandidates do    
       if AbsoluteValue(mapData.maxResidue)<AbsoluteValue(1.0e-15) then 
-       Append( presolutions, mapData );
+       Append( presolutions, [mapData] );
+      fi;
     od;   
 
     solutions := [];
+
+    # todo : map  ( a (2,2) , b(2,3) , c(2,2) ) to (∞, 0, 1) 
+
 
     ################ check monodromy ##############################################
     for mapData in presolutions do   
@@ -67,4 +73,3 @@ permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13),
     od;
 
  
-

@@ -8,8 +8,16 @@ LoadPackage("hmac");
 # Example with a-prioro correct order of the critical points infinity, zero and one
 # (no composition with Möbius map required)
 
+bitPrecision := 240;
+
 
  SetInfoLevel(InfoHMAC,2);
+
+permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13), 
+                   (1, 3, 12, 4)(5, 9)(6, 7)(10, 13, 11)(2, 8),
+                   (1, 5, 13, 6)(7, 10)(2, 3)(8, 11, 12)(4, 9)  ]; 
+
+
 
     finiteField := GF(23);
     
@@ -40,7 +48,9 @@ LoadPackage("hmac");
 
     
     opts := @HMAC@PadicLift.LiftOptions();   
-    opts.setDecimalPrecision (60);  
+ 
+    opts.setDecimalPrecision ( Int(RealPart(bitPrecision*0.33)) );  
+
     opts.setVerboseLevel(2);                                                
     opts.setMaxLatticeDim(19);
     ##### lift 
@@ -52,7 +62,16 @@ LoadPackage("hmac");
     for mapData in approxHurwitzMaps do    
        Assert(0, mapData.maxResidue<1.0e-15);
     od;
-    
+
+   solutions:=[];
+   SetP1Points( MPC, bitPrecision );    
+   ################ check monodromy #########################
+   for mapData in approxHurwitzMaps do   
+       Print("check next map's monodromy:"); 
+       if Hurwitz@HMAC.mapMatchesMonodromy( mapData.map, permutations ) then 
+         Append( solutions,[mapData] ) ;
+      fi;
+    od;
 
 
     
