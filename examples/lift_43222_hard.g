@@ -8,10 +8,10 @@ LoadPackage("hmac");
 # Example with a-prioro correct order of the critical points infinity, zero and one
 # (no composition with Möbius map required)
 
-bitPrecision := 240;
+bitPrecision := 840;
 
 
- SetInfoLevel(InfoHMAC,2);
+ SetInfoLevel(InfoHMAC,1);
 
 permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13), 
                    (1, 3, 12, 4)(5, 9)(6, 7)(10, 13, 11)(2, 8),
@@ -54,7 +54,7 @@ permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13),
     opts.setVerboseLevel(2);                                                
     opts.setMaxLatticeDim(19);
     ##### lift 
-    
+   
     lifter := Hurwitz@HMAC.HurwitzMapLifter(polTuple, finiteField, hmsProblem);  
     approxHurwitzMaps := lifter.computeApproxHurwitzMapsOptimized(opts);  
     
@@ -62,6 +62,14 @@ permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13),
     for mapData in approxHurwitzMaps do    
        Assert(0, mapData.maxResidue<1.0e-15);
     od;
+
+   SetInfoLevel(InfoFR,3);
+
+   one := NewFloat(@hmac.isc,"1.0");
+   ind :=  IndeterminatesOfPolynomial@HMAC@Utils(NumeratorOfRationalFunction(mapData.map));
+   z := IndeterminatesOfPolynomial@HMAC@Utils(NumeratorOfRationalFunction(mapData.map))[1];
+
+  oneImage := Value( mapData.map,ind, [ one ] );
 
    solutions:=[];
    SetP1Points( MPC, bitPrecision );    

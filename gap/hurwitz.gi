@@ -1729,7 +1729,7 @@ end
 
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "mapMatchesMonodromy",
 function( map, permutations )
-  local permGroupSize,imgMachine, actions, action;
+  local permGroupSize,imgMachine, actions, action,actionId;
   permGroupSize := Size( ListPerm(permutations[1]) );
   imgMachine  := IMGMachine( map );
   actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
@@ -1745,6 +1745,25 @@ function( map, permutations )
  return true;
 end
 );
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "machineMatchesMonodromy",
+function( imgMachine, permutations )
+  local permGroupSize, actions, action,actionId;
+  permGroupSize := Size( ListPerm(permutations[1]) );
+  actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
+  for actionId in [1..Size(actions)] do
+    Info(InfoHMAC, 1, Concatenation("computed RepresentativeAction[",String(actionId),"] : " , String( actions[actionId] ) ) );
+    if (actions[actionId]<>actions[1]) then 
+      return false;
+    fi;
+    if ( actions[actionId] = fail ) then 
+     return false;
+   fi;
+ od;
+ return true;
+end
+);
+
 
 # todo:  what happens, if the polynomialRing of hurwitzMapLifter.poltuple entries has more than one variable?
 # todo: problem due to the fact that 
@@ -1963,14 +1982,23 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
  
 
     createRationalMaps := function ( preimages, scalingVals, polynomialRing )
-	    local polynomialList,rationalMapList, currPos,scalingFactor, num , denom ;
+	    local polynomialList,rationalMapList, currPos,scalingFactor, num , denom,numExtRep, denomExtRep ,rfam,rmap ;
 	    polynomialList := createPolynomialList( preimages, polynomialRing ) ;
 	    rationalMapList := [];
 	    currPos := 3;
+        rfam := RationalFunctionsFamily(FamilyObj(One(CoefficientsRing( polynomialRing ))));
 	    for scalingFactor in scalingVals do
 		    num := polynomialList[2];
 		    denom := polynomialList[1]*scalingFactor;
-		    Append(rationalMapList,[ num/denom ]);
+
+            numExtRep   := ExtRepNumeratorRatFun(num);
+            denomExtRep := ExtRepNumeratorRatFun(denom);
+            rmap :=  RationalFunctionByExtRep(rfam,  numExtRep, denomExtRep );
+            rmap := num/denom ;
+            SetIsUnivariateRationalFunction( rmap, true );
+            SetIsPolynomial( rmap, false );
+		    Append(rationalMapList, [ rmap ] );
+		    #Append(rationalMapList,[ num/denom ]);
 		    #Append(rationalMapList,[ rec( numerator:=num , denominator:=denom ) ] );
 		    currPos := currPos+1;
 	    od;
