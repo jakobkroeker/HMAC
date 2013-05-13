@@ -1555,6 +1555,7 @@ function( solutionIdeal,  solutionPoint, unknowns,  computeOptions )
         
         liftResult := ComputeMinimalPolynomialEx@HMAC( solutionIdeal,  solutionPoint, unknown, minPolVar, optsCopy );
         if liftResult=fail then
+           Info(InfoHMAC,3, Concatenation("------------------lifting variable ", String(unknownIdx),"(",String(Size(unknowns)),")  failed -----------------------") );
 	        return fail;	
         fi;
           if not mergedLiftInfo = Null@HMAC then

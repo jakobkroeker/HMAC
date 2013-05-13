@@ -1727,42 +1727,33 @@ function()
 end
 );
 
+ 
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "machineMatchesMonodromy",
+function( imgMachine, permutations )
+  local permGroupSize, actions, action,actionId,computedPermList;
+  permGroupSize := Size( ListPerm(permutations[1]) );
+  if not Size(permutations) = 3 then
+     Error("only implemented for three elements");
+  fi;
+   computedPermList := List([1..Size(permutations)], j-> PermList(Output( imgMachine,j))  );
+   if fail= RepresentativeAction( SymmetricGroup( permGroupSize ), permutations , computedPermList , OnTuples ) then
+     return false;
+   fi;
+ return true;
+end
+);
+
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "mapMatchesMonodromy",
 function( map, permutations )
   local permGroupSize,imgMachine, actions, action,actionId;
   permGroupSize := Size( ListPerm(permutations[1]) );
   imgMachine  := IMGMachine( map );
-  actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
-  for actionId in [1..Size(actions)] do
-    Info(InfoHMAC, 1, Concatenation("computed RepresentativeAction[",String(actionId),"] : " , String( actions[actionId] ) ) );
-    if (actions[actionId]<>actions[1]) then 
-      return false;
-    fi;
-    if ( actions[actionId] = fail ) then 
-     return false;
-   fi;
- od;
- return true;
+  return Hurwitz@HMAC.machineMatchesMonodromy(imgMachine);
 end
 );
 
-InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "machineMatchesMonodromy",
-function( imgMachine, permutations )
-  local permGroupSize, actions, action,actionId;
-  permGroupSize := Size( ListPerm(permutations[1]) );
-  actions := List([1..Size(permutations)], j-> RepresentativeAction( SymmetricGroup( permGroupSize ), permutations[j], PermList(Output( imgMachine,j))) );
-  for actionId in [1..Size(actions)] do
-    Info(InfoHMAC, 1, Concatenation("computed RepresentativeAction[",String(actionId),"] : " , String( actions[actionId] ) ) );
-    if (actions[actionId]<>actions[1]) then 
-      return false;
-    fi;
-    if ( actions[actionId] = fail ) then 
-     return false;
-   fi;
- od;
- return true;
-end
-);
+
 
 
 # todo:  what happens, if the polynomialRing of hurwitzMapLifter.poltuple entries has more than one variable?
@@ -1950,6 +1941,134 @@ end
 
 
 
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "RationalFunctionByPolynomials",
+function( rfam, num, denom ) 
+
+     local numExtRep, denomExtRep, rmap;
+     Assert(0, IsPolynomial(num));
+     Assert(0, IsRationalFunction(num));
+     Assert(0, IsPolynomial(denom));
+     Assert(0, IsRationalFunction(denom));
+
+     numExtRep   := ExtRepNumeratorRatFun(num);
+     denomExtRep := ExtRepNumeratorRatFun(denom);
+     rmap :=  RationalFunctionByExtRep(rfam,  numExtRep, denomExtRep );
+     #      rmap := num/denom ; 
+     SetIsPolynomial( rmap, false );
+     return rmap;
+end
+);
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "UnivariateRationalFunctionByPolynomials",
+function( rfam, num, denom ) 
+
+     local numExtRep, denomExtRep, rmap;
+     Assert(0, IsPolynomial(num));
+     Assert(0, IsUnivariateRationalFunction(num));
+     Assert(0, IsPolynomial(denom));
+     Assert(0, IsUnivariateRationalFunction(denom));
+
+     numExtRep   := ExtRepNumeratorRatFun(num);
+     denomExtRep := ExtRepNumeratorRatFun(denom);
+     rmap :=  RationalFunctionByExtRep(rfam,  numExtRep, denomExtRep );
+     #    rmap := num/denom ;
+     SetIsUnivariateRationalFunction( rmap, true );
+     SetIsPolynomial( rmap, false );
+     return rmap;
+end
+);
+
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "PolynomialFromZeroes",
+function( RootDataList ) 
+
+     local rfam, polynomial, ind,RootData;
+     rfam := RationalFunctionsFamily(FamilyObj(RootDataList[1][1]) );
+     polynomial := PolynomialByExtRep(rfam,[ [1,1], RootDataList[1][1]  ]);
+     ind := IndeterminatesOfPolynomial@HMAC@Utils(polynomial);
+
+     polynomial := One(rfam);
+     #polynomial := 1;
+     for RootData in RootDataList do
+         if (RootData[1]<>infinity) then 
+	    polynomial := polynomial*( ( ind[1] - RootData[1] )^RootData[2] );
+	 fi;
+     od;
+     return polynomial;
+end
+);
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "MoebiusTransformValue",
+function( value,   moebiusTransformMatrix ) 
+     local a,b,c,d;
+     a :=  moebiusTransformMatrix[1][1];
+     b :=  moebiusTransformMatrix[1][2];
+     c :=  moebiusTransformMatrix[2][1];
+     d :=  moebiusTransformMatrix[2][2];
+     Assert(0, not IsInfinity(a));      Assert(0, not IsInfinity(b));
+     Assert(0, not IsInfinity(c));     Assert(0, not IsInfinity(d));
+         if ( value = infinity) then 
+	    return One(value)*a/c;
+         else
+            if ( IsZero( value*c+d ) ) then 
+               if (  AbsoluteValue(value*a+b) >0 ) then 
+         	   return infinity ;
+                   else          	 
+                       return -infinity ;
+               fi;
+            else
+                return (a*value+b)/(c*value+d);
+            fi;
+	 fi;
+end
+);
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "MoebiusTransformZeroes",
+function( RootDataList,   moebiusTransformMatrix ) 
+     local newRootDataList,RootData;
+     
+     newRootDataList := [];
+     for RootData in RootDataList  do
+        Append( newRootDataList, 
+                [ [ Hurwitz@HMAC.MoebiusTransformValue( RootData[1], moebiusTransformMatrix) , RootData[2] ] ]);
+     od;
+     return newRootDataList;
+end
+);
+
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "MoebiusTransformZeroLists",
+function( RootDataLists,   moebiusTransformMatrix ) 
+     local newRootDataLists,RootDataList; 
+     
+     newRootDataLists := [];
+     for RootDataList in RootDataLists  do
+         Append( newRootDataLists, 
+                 [  Hurwitz@HMAC.MoebiusTransformZeroes(RootDataList,moebiusTransformMatrix)  ]);
+     od;
+     return newRootDataLists;
+end
+);
+
+# introduce property snd zeroData object?
+InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC"], "ZeroesByMultiplicity",
+function( RootDataList,   multiplicity ) 
+     local roots,RootData;     
+     roots := [];
+     for RootData  in RootDataList   do
+        if (RootData[2] = multiplicity ) then
+            Append(roots, [ RootData[1] ] );
+        fi;
+     od;
+     return roots;
+end
+);
+
+   # RationalFunctionsFamily(MPC_PSEUDOFIELD) 
+   #  ind := IndeterminatesOfPolynomialRing(polynomialRing);
+   #  ExtRepNumeratorRatFun(ind[1]);
+
+
+
 # critical values: expect rational 
 #Hurwitz@HMAC.Internal.HurwitzMapData := 
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "HurwitzMapData",
@@ -1968,7 +2087,7 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
 	     
 	    ind := IndeterminatesOfPolynomialRing(polynomialRing);
 	    for pos in [1..Size(preimageList)] do
-		    currentPolynomial := NewFloat(@hmac.isc,"1.0");
+		    currentPolynomial := NewFloat(@hmac.isc,"1.0")*(ind[1])^0;
 		    for preimageData in preimageList[pos] do
 			    if (preimageData[1]<>infinity) then 
 				    currentPolynomial := currentPolynomial*( ( ind[1] - preimageData[1] )^preimageData[2] );
@@ -1982,21 +2101,24 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
  
 
     createRationalMaps := function ( preimages, scalingVals, polynomialRing )
-	    local polynomialList,rationalMapList, currPos,scalingFactor, num , denom,numExtRep, denomExtRep ,rfam,rmap ;
+	    local coeffFam,polynomialList,rationalMapList, currPos,scalingFactor, num , denom,numExtRep, denomExtRep ,rfam,rmap ;
 	    polynomialList := createPolynomialList( preimages, polynomialRing ) ;
 	    rationalMapList := [];
 	    currPos := 3;
-        rfam := RationalFunctionsFamily(FamilyObj(One(CoefficientsRing( polynomialRing ))));
+        coeffFam := RationalFunctionsFamily(FamilyObj(One(CoefficientsRing( polynomialRing ))));
+
+       rfam := RationalFunctionsFamily(FamilyObj(One( polynomialRing )));
 	    for scalingFactor in scalingVals do
 		    num := polynomialList[2];
 		    denom := polynomialList[1]*scalingFactor;
 
             numExtRep   := ExtRepNumeratorRatFun(num);
             denomExtRep := ExtRepNumeratorRatFun(denom);
-            rmap :=  RationalFunctionByExtRep(rfam,  numExtRep, denomExtRep );
-            rmap := num/denom ;
+            #rmap :=  RationalFunctionByExtRep(rfam,  numExtRep, denomExtRep );
+            # todo: getting invalid ciefficient from lift_43222.g;
+            rmap := num/denom ; # why the hell this is working, and the other stuff not?
             SetIsUnivariateRationalFunction( rmap, true );
-            SetIsPolynomial( rmap, false );
+            if Degree(denom)>0 then  SetIsPolynomial( rmap, false ); fi;
 		    Append(rationalMapList, [ rmap ] );
 		    #Append(rationalMapList,[ num/denom ]);
 		    #Append(rationalMapList,[ rec( numerator:=num , denominator:=denom ) ] );

@@ -9,7 +9,7 @@ LoadPackage("hmac");
     
    ############# init parameters
    
-	finiteField := GF(5);  permutations := [(1,2,3),(2,3),(1,2)]; 
+	finiteField := GF(5);  permutations := [(1,2,3),(1,2),(2,3)]; 
 
 	complexCriticalValuesApprox := [ [infinity,infinity],     [0,0],           [ 1/1, 0 ]     ]; 
 	modPrimeCriticalValues      := [      infinity,      Zero(finiteField),  One(finiteField) ];
@@ -36,7 +36,19 @@ LoadPackage("hmac");
     # geht nicht: Assert(0, Degree( ( 3*z^2+(-2.0*z^3) ) / approxHurwitzMapCandidates[1].map ) =0);
     # geht:
     Assert(0, Degree( ( 3*z^2+(-2*z^3) ) / approxHurwitzMapCandidates[1].map ) =0);    
-   
+    mapCandidate:=approxHurwitzMapCandidates[1].map;
+
+bitPrecision := 240;
+SetP1Points( MPC, bitPrecision );
+MAKEP1EPS@FR();
+ SetInfoLevel( InfoFR , 3 );
+
+   imgPMap := IMGMachine(mapCandidate);
+
+SetFloats(MPFR,bitPrecision);
+
+   s := Spider(imgPMap);
+   Draw( s:julia:=1000 );
 #################################################################################################################################
 
 
