@@ -214,10 +214,10 @@ void simpleCommandLineInterface(int argc, char* argv[])
   
 
 
-    bool  logStructure;
+    bool  logStructure,semiCounting;
 
     const  RationalMapSearch::SearchOptions   searchOptions= 
-                                            RationalMapSearch::SearchOptions( dryRun, 
+                                            RationalMapSearch::SearchOptions( dryRun,  semiCounting=false,
                                                                               logStructure=false,     
                                                                               strictNormalization, 
                                                                               RationalMapSearch::OutputMode::GAPOutput );

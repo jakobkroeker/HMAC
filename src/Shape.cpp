@@ -245,8 +245,9 @@ namespace RationalMapSearch
         assert( refReducedShape==refReducedShape );      
 
         //Shape shapeN = { 4,4,3,3,2,2,2 };
-
-        int  Nar[]={ 4,3,2,2 };
+    
+        //int  Nar[]={ 4,3,2,2 };
+        int  Nar[]={ 4,4,3,3,2,2,2 };
         const int TotalItemsNar = sizeof(Nar)/sizeof(Nar[0]);
         std::vector< Shape::ScalarType >    preShapeN(Nar, Nar+TotalItemsNar);
         Shape shapeN(preShapeN);

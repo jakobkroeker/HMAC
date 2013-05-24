@@ -158,8 +158,11 @@ $(LOCALBIN)/DebugLogger.o: src/DebugLogger.cpp
 $(LOCALBIN)/rationalMapSearchForGAP.o: src/rationalMapSearchForGAP.cpp
 	$(CXX) -c $< -o $@ -I$(EXTERN)/include/$(FLINTINSTALLDIR)/			
 
+$(LOCALBIN)/test.o: src/test.cpp
+	$(CXX) -c $< -o $@ -I$(EXTERN)/include/$(FLINTINSTALLDIR)/	
 
-HurwitzMapSearchOBJ = $(LOCALBIN)/timer.o \
+
+HurwitzMapSearchCommonOBJ = $(LOCALBIN)/timer.o \
                               $(LOCALBIN)/xyMonom.o \
                               $(LOCALBIN)/random.o \
                               $(LOCALBIN)/HurwitzMapFinder.o \
@@ -167,11 +170,20 @@ HurwitzMapSearchOBJ = $(LOCALBIN)/timer.o \
                               $(LOCALBIN)/NormalizationRules.o \
                               $(LOCALBIN)/Shape.o \
                               $(LOCALBIN)/OutputMode.o \
-                              $(LOCALBIN)/DebugLogger.o \
-                              $(LOCALBIN)/rationalMapSearchForGAP.o 
+                              $(LOCALBIN)/DebugLogger.o  
+
+HurwitzMapSearchOBJ = $(HurwitzMapSearchCommonOBJ) \
+                              $(LOCALBIN)/rationalMapSearchForGAP.o
+
+HurwitzMapSearchTestOBJ = $(HurwitzMapSearchCommonOBJ) \
+                              $(LOCALBIN)/test.o  
 		
 $(LOCALBIN)/hurwitzMapSearch: flintlib $(HurwitzMapSearchOBJ) 
 	$(CXX) -o $@  $(HurwitzMapSearchOBJ) @LDFLAGS@ @LINKFLINT@ @LINKMPFR@ @LINKMPIR@ -lflint -lmpir -lmpfr 
+
+$(LOCALBIN)/testHurwitzMapSearch: flintlib $(HurwitzMapSearchTestOBJ) 
+	$(CXX) -o $@  $(HurwitzMapSearchTestOBJ)  @LDFLAGS@ @LINKFLINT@ @LINKMPFR@ @LINKMPIR@ -lflint -lmpir -lmpfr 
+
 
 
 extern/$(GIVAROLIB).tar.gz:

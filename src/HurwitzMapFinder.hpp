@@ -82,10 +82,14 @@ namespace RationalMapSearch
                      outputHandler_m = new GAPOutputHandler<PolynomialSet<TPolRingTypePar> >();
                 else if (searchOptions_m.outputMode()==OutputMode::M2Output)  //requires nested enumerators
                       outputHandler_m = new M2OutputHandler<PolynomialSet<TPolRingTypePar> >();
-                //else
-                //    outputHandler_m= new EmptyOutputHandler<PolynomialSet<TPolRingTypePar> >();
+                else
+                {
+
+                    std::cerr << "warning, empty output handler!" << std::endl;
+                    outputHandler_m= new EmptyOutputHandler<PolynomialSet<TPolRingTypePar> >();
+                }
                 assert( outputHandler_m != NULL);
-		DebugLogger::logStream() << " FiniteFieldSearch initialized!" << std::endl;
+		        DebugLogger::logStream() << " FiniteFieldSearch initialized!" << std::endl;
               }
 
             /// convention: polRep is a vector with polynomial coefficients and polrep[i] is the coefficient of monomial x^i .
@@ -1053,7 +1057,7 @@ namespace RationalMapSearch
                     
                     #pragma omp critical
                     {
-                        if (searchOptions_m.dryRun())
+                        if (searchOptions_m.dryRun() ) // or searchOptions_m.semiCount()
                         {
                             mpz_add( counter_m, counter_m, counterMpz );
                             if ( mpz_cmp(counter_m , counterMod_m )   >0)

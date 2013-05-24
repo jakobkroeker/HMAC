@@ -104,6 +104,7 @@ namespace RationalMapSearch
       private:
             bool dryRun_m;
             bool logStructure_m;
+            bool semiCounting_m;
     
             bool strictNormalization_m;
 
@@ -113,16 +114,19 @@ namespace RationalMapSearch
 
         public:
             SearchOptions():    dryRun_m(false),
+                                semiCounting_m(true),
                                 logStructure_m(false),
                                 outputMode_m( OutputMode::defaultOutput ), //   requires c++0x
                                 bAllNormalizations_m(false)
             {};
 
              SearchOptions(bool dryRun, 
+                           bool semiCounting,
                             bool logStructure, 
                             bool strictNormalization,
                             OutputMode outputMode=OutputMode::defaultOutput ): //requires c++0x
                                             dryRun_m(dryRun),
+                                            semiCounting_m(semiCounting),
                                             logStructure_m(logStructure),
                                             strictNormalization_m(strictNormalization),
                                             outputMode_m(outputMode),
@@ -133,6 +137,8 @@ namespace RationalMapSearch
             inline OutputMode outputMode()  const {   return outputMode_m;    }
             inline bool logStructure() const {   return logStructure_m;  }
             inline  bool dryRun()       const {   return dryRun_m;  }
+
+            inline  bool semiCount()       const {   return (dryRun_m or semiCounting_m);  }
     
             inline  bool strictNormalization()       const {   return strictNormalization_m;  }
 
@@ -555,10 +561,10 @@ namespace RationalMapSearch
 
                 assert(hurwitzMapSearchProblem.getNormalizationRuleList().getNormalizationRuleListAsVector().size()>0);
     
-                bool dryRun,logStructure,strictNormalization;
+                bool dryRun,semiCounting,logStructure,strictNormalization;
 
-                const SearchOptions   searchOptions=SearchOptions( dryRun=false, logStructure=true, strictNormalization=false);
-                //const SearchOptions   searchOptions=SearchOptions( dryRun=false, logStructure=false, strictNormalization=false);
+                const SearchOptions   searchOptions=SearchOptions( dryRun=false, semiCounting=true, logStructure=true, strictNormalization=false);
+                //const SearchOptions   searchOptions=SearchOptions( dryRun=false,  semiCounting=true, logStructure=false, strictNormalization=false);
                 HurwitzMapFinder    hmf;
                 int characteristic = 7;
                 
@@ -574,9 +580,16 @@ namespace RationalMapSearch
 
                 ffs.run();
 
-                assert( ffs.getCounter() == 1280160 );
+            
 
-             
+           std::cerr  << "ffs.getCounter()" <<   ffs.getCounter() << std::endl;              
+ 
+                const SearchOptions   searchOptionsCount = SearchOptions( dryRun=true, semiCounting=true, logStructure=true, strictNormalization=false);
+                  FiniteFieldSearch<TPolRingType> ffsCount= FiniteFieldSearch<TPolRingType>(hurwitzMapSearchProblem, searchOptionsCount, *ring);
+
+                 ffsCount.run();
+   std::cerr  << "ffsCount.getCounter()" <<   ffsCount.getCounter() << std::endl;
+                  assert( ffsCount.getCounter() == 1280160 );
                 
                 hmf.finiteFieldSearch(hurwitzMapSearchProblem, searchOptions, *ring);
                 //hmf.finiteFieldSearch(hurwitzMapSearchProblem, searchOptions, characteristic=7 );
@@ -602,15 +615,15 @@ namespace RationalMapSearch
 
                 assert(hurwitzMapSearchProblem.getNormalizationRuleList().getNormalizationRuleListAsVector().size()>0);
     
-                bool dryRun,logStructure,strictNormalization;
+                bool dryRun,semiCounting,logStructure,strictNormalization;
 
-                const SearchOptions   searchOptions=SearchOptions( dryRun=false, 
+                const SearchOptions   searchOptions=SearchOptions( dryRun=false,  semiCounting=false,
                                                                     logStructure=true, 
                                                                     strictNormalization=false, 
                                                                      RationalMapSearch::OutputMode::M2Output   
                                                               
                                                                 );
-                //const SearchOptions   searchOptions=SearchOptions( dryRun=false, logStructure=false, strictNormalization=false);
+                //const SearchOptions   searchOptions=SearchOptions( dryRun=false,  semiCounting=false, logStructure=false, strictNormalization=false);
                 HurwitzMapFinder    hmf;
                 int characteristic = charac;
                   
@@ -705,14 +718,14 @@ namespace RationalMapSearch
 
                 assert(hurwitzMapSearchProblem.getNormalizationRuleList().getNormalizationRuleListAsVector().size()>0);
     
-                bool dryRun,logStructure,strictNormalization;
+                bool dryRun,semiCounting,logStructure,strictNormalization;
 
-                 const SearchOptions   searchOptions=SearchOptions( dryRun=true,
+                 const SearchOptions   searchOptions=SearchOptions( dryRun=true,  semiCounting=false,
                                                                      logStructure=false, 
                                                                      strictNormalization=false, 
                                                                      RationalMapSearch::OutputMode::M2Output  // requires  nested enumerators 
                                                                    );
-                // const SearchOptions   searchOptions=SearchOptions( dryRun=false, logStructure=false, strictNormalization=false);
+                // const SearchOptions   searchOptions=SearchOptions( dryRun=false,  semiCounting=false, logStructure=false, strictNormalization=false);
                 HurwitzMapFinder    hmf;          // 4,3,2,2,2 char =23 :  103347928992
                                                                  
                 //int characteristic = 7;                         //   scharf: 130 Std., keine Beispiele...

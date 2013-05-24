@@ -6,12 +6,12 @@
 Folgender Plan:
 stat isIrred nur pseudo is irred.
 Dann für deg>3 ein iterator über (pseudo)irreduzible Polynome
-beim Ersten durchgang (pseudo)irreducible test und eine  Liste aufbauen.
+beim Ersten Durchgang (pseudo)irreducible test und eine  Liste aufbauen.
 Es koennte aber auch sein, dass aufgrund der Speicherbeschaffenheit die Liste zu gross
 ist, nicht in den Cache passt und ein test/ Pseudo-test schneller ist. Also zumindest beide Varianten ausprobieren.
 
-Problem: je mehr faktoren vom gleichen irred-Grad in den ersten beiden Polynomen vorkommen können,
-desto eher lohnt es sich, die echte irreduzible liste anzulegen.
+Problem: je mehr Faktoren vom gleichen irred-Grad in den ersten beiden Polynomen vorkommen können,
+desto eher lohnt es sich, die echte irreduzible Liste anzulegen.
 
 - bereits verwendete Polynome aus den Listen nur für Grad 1 -2  streichen, ansonsten lohnt es sich nicht mehr
 (es sei denn, es gibt zu viele 'false positives' )
