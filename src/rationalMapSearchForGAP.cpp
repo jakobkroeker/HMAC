@@ -7,7 +7,7 @@
 
 #include "DebugLogger.h"
 
-
+  
 template<class TPolynomial>
 std::ostream& printUnivarPolynomial(std::ostream& os, const TPolynomial &pol, std::string varName = std::string("a") )
 {

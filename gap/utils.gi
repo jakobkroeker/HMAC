@@ -1975,6 +1975,65 @@ InstallGlobalRecordFunction@HMAC (["@HMAC@Utils"], "SORT_POWERS_BY_EXPONENT",
     return result;
 end 
 );
+#######################################################################################################
+
+
+# checks if poly has a factor with infinity as root. 
+# prerequisites: polynomial knows its Expected Degree 
+InstallGlobalRecordFunction@HMAC ( ["@HMAC@Utils"], "hasInfinityRoot", 
+function( poly )
+  return Degree(poly)< ExpectedDegree(poly);
+end
+);
+
+# checks if polynomial has the given root .
+# what should happen if pol is the zero polynomial?
+InstallGlobalRecordFunction@HMAC ( ["@HMAC@Utils"], "hasRoot", 
+function( pol, root )
+   local ind, result;
+
+   if IsZero(pol) then return false; fi;
+   ind := IndeterminateOfUnivariateRationalFunction( pol  ) ;
+   result := @HMAC@Utils.EvalPolynomialTensor(pol, [ind], [root] );
+   return IsZero(result);
+end
+);
+
+# extract the factor with smallest degree and highest multiplicity such that rootVal is the root of this factor
+# returns  a pair [factor, multiplicity] . 
+InstallGlobalRecordFunction@HMAC ( ["@HMAC@Utils"], "extractFactorByRoot", 
+ function( pol, rootVal )
+   local factors, factor ;
+   if rootVal=infinity then 
+      if @HMAC@Utils.hasInfinityRoot(pol) then 
+        return [infinity,ExpectedDegree(pol)- Degree(pol)];
+      fi;
+      return fail; 
+   fi;
+
+   factors := @HMAC@Utils.FactorsInPowerForm( pol );
+   factors := REMOVE_CONSTANT_FACTORS@HMAC@Utils( factors );
+   for factor in factors do
+      if @HMAC@Utils.hasRoot(factor[1], rootVal) then
+         return factor;
+      fi;
+   od;
+   return fail;
+end
+);
+
+# get the multiplicity of the root rootVal of the given polynomial
+# returns rootVal's multiplicity or 0 if rootVal is not a root of the polynomial.
+InstallGlobalRecordFunction@HMAC ( ["@HMAC@Utils"], "getRootMultiplicity", 
+function( pol, rootVal )
+  local factor ;
+  factor := @HMAC@Utils.extractFactorByRoot(pol,rootVal);
+  if not factor=fail then
+    return factor[2];
+  fi;
+  return 0;
+end
+);
 
 
 InstallGlobalRecordFunction@HMAC ( ["@HMAC@Utils","Tests"], "TEST_SORT_POWERS_BY_EXPONENT", 

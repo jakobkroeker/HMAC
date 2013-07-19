@@ -667,7 +667,7 @@ end
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "FindHurwitzMapModPrime", 
 function( field, partitions, criticalValues,  strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula )
     local convayPolynomial, flags, input, output, degree, i, mat, p, poly, rat, f,
-          criticalValuesHom, criticalValuesHomTrans, polynomials,postError;
+          criticalValuesHom, criticalValuesHomTrans, polynomials,postError, polynomial,degreesum;
 
     postError := "\nArguments should be '<field>, <partitions>, <critical values>, <strictNormalization>, <onlyComputeSearchSpaceSize>' ";    
     if not IsDuplicateFree(criticalValues) then Error(Concatenation("critical values not distinct!",postError ) );  fi;
@@ -683,8 +683,9 @@ function( field, partitions, criticalValues,  strictNormalization, onlyComputeSe
     degree := Sum( partitions[1] );
     Info(InfoHMAC,1, String(  List(partitions,x->Sum(x-1) ) ) );
     if not ignoreHurwitzFormula then
+    degreesum:=Sum(List(partitions,x->Sum(x-1)));
     while Sum(List(partitions,x->Sum(x-1)))<>2*degree-2 do
-        Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
+        Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2, "but to ",degreesum);
     od;
     fi;
     input := "";
@@ -740,7 +741,9 @@ function( field, partitions, criticalValues,  strictNormalization, onlyComputeSe
         p := poly[i];
 
         polynomials := List(p, polynomialCoeffs->UnivariatePolynomialByCoefficients( FamilyObj(One(field)), polynomialCoeffs ));
-             
+        for polynomial in polynomials do 
+          SetExpectedDegree(polynomial,degree);
+        od;
         rat := mat^-1*[p[2],p[1]];
         poly[i] := [UnivariateRationalFunctionByCoefficients(FamilyObj(One(field)),rat[1],rat[2],0), polynomials ];
     od;
@@ -2074,7 +2077,7 @@ end
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "HurwitzMapData",
 function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing ) 
     # creates polynomials [A,B,C,...] from single rootData with  B-lambdaA = C, B-mueA = D, etc.
-    local createPolynomialList, createRationalMaps, hurwitzMapData, computeResiduesEx, computeMaxResidue;
+    local createPolynomialList, createRationalMaps, hurwitzMapData, computeResiduesEx, computeMaxResidue, expectedDegree;
     
     hurwitzMapData := rec();
     
@@ -2087,12 +2090,15 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
 	     
 	    ind := IndeterminatesOfPolynomialRing(polynomialRing);
 	    for pos in [1..Size(preimageList)] do
+            expectedDegree := 0;
 		    currentPolynomial := NewFloat(@hmac.isc,"1.0")*(ind[1])^0;
 		    for preimageData in preimageList[pos] do
+                expectedDegree:= expectedDegree+preimageData[2];
 			    if (preimageData[1]<>infinity) then 
 				    currentPolynomial := currentPolynomial*( ( ind[1] - preimageData[1] )^preimageData[2] );
 			    fi;
 		    od;
+            SetExpectedDegree( currentPolynomial, expectedDegree ) ; 
 		    Append(polynomialList,[currentPolynomial]);
 	    od;
 	    return polynomialList; 

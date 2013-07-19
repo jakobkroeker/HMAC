@@ -237,7 +237,7 @@ namespace RationalMapSearch
                                 if ((*it).getValue()== NormalizationValue::one )
                                 {
                                     degOneVecIterator = std::find(degreeOneRootList.begin(),degreeOneRootList.end(), 1 );
-                                    //std::cerr << "irredVecList[1] = " << irredVecList[1] << std::endl;
+                                    std::cerr << "irredVecList[1] = " << irredVecList[1] << std::endl;
                                     assert( polynomialRing_m.evalAt( *(irredVecList[1]), field_m.Convert(1))== TPolRingTypePar::RingType::ElementType::Zero);
                                 }
                                 if ((*it).getValue()== NormalizationValue::zero )
@@ -281,6 +281,11 @@ namespace RationalMapSearch
                      else
                         it++;
                 }
+                std::cerr << "nrlvec.size()" << nrlvec.size() << "\n";
+                if ( nrlvec.size()<3) return true; 
+                else return false;
+
+                // @TODO the following tests are not correct.
                 if ( ! hurwitzMapSearchProblem_m.strictNormalization() || nrlvec.size()==0 )
                     return true;
                 if ( hurwitzMapSearchProblem_m.strictNormalization() && nrlvec.size()==1 )
