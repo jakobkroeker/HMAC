@@ -17,9 +17,9 @@ namespace RationalMapSearch
 
     struct PolynomialFactorBluePrint
     {
-        uint multiplicity_m;
-        uint degree_m;   
-        uint polynomialId_m;   
+        uint multiplicity_m; ///< multiplicity of the polynomial factor
+        uint degree_m;       ///< degree of the monic polynomial
+        uint polynomialId_m; ///< polynomial index to which this factor belongs
         PolynomialFactorBluePrint  (uint multiplicity, uint degree,uint polynomialId) : multiplicity_m(multiplicity), 
                                                                                 degree_m(degree),
                                                                                 polynomialId_m(polynomialId)
@@ -70,11 +70,10 @@ namespace RationalMapSearch
         
         private:
 
-            // problem: can't be const when using assignment...
+            // problem: shape_m and dual_m can't be const when using assignment...
             //const ShapeRepType    shape_m;
             //const ShapeRepType    dual_m;
 
-          // problem: can't be const when using assignment...
             ShapeRepType    shape_m;
             ShapeRepType    dual_m;
 
@@ -134,9 +133,10 @@ namespace RationalMapSearch
 
             const ShapeRepType &   getDualShapeRepRef() const {   return dual_m;    }            
 
-            
+            /// removes exponent exp from the Shape
             Shape   removeExponent(ScalarType   exp) const;
 
+            /// checks, if the shape has an entry 'exp'
             bool   hasExponent(ScalarType   exp) const;
             
             static MultiplicityDegreeHashType  createMultiplicityDegreeRep(const     ShapeRepType & vec);
@@ -145,7 +145,7 @@ namespace RationalMapSearch
 
             bool    hasNaturalNormalizableFactor() const;
 
-    
+            //compute the dual permutation 
             static ShapeRepType         conjugate(const    ShapeRepType& vec);
 
             static ShapeRepType     initShapeRep(const    ShapeRepType& vec)  ; 
