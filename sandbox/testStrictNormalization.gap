@@ -1,4 +1,4 @@
-     fieldSize := 13;;
+     fieldSize := 23;;
      finiteField := GF( fieldSize );;
      permutations := [ (1,2), (2,3), (1,2,3) ];;
      degree := Maximum( List( permutations, LargestMovedPoint ) );;
@@ -24,9 +24,9 @@
     map := maps[1];
 
    
-    Assert(0, getRootMultiplicity(map[2][1],infinity)=2);
-    Assert(0, getRootMultiplicity(map[2][2],0)=1);
-    Assert(0, getRootMultiplicity(map[2][3],1)=3);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=2);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=1);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
 
      partitions := [ [ 2, 1 ], [ 2, 1 ], [ 3 ] ];;
      criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
@@ -35,9 +35,9 @@
 
      map := maps[1];
 
-    Assert(0, getRootMultiplicity(map[2][1],infinity)=2);
-    Assert(0, getRootMultiplicity(map[2][2],0)=2);
-    Assert(0, getRootMultiplicity(map[2][3],1)=3);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=2);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=2);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
 
 
      partitions := [ [ 1, 2 ], [ 2, 1 ], [ 3 ] ];;
@@ -47,9 +47,9 @@
 
     for map in maps do
 
-    Assert(0, getRootMultiplicity(map[2][1],infinity)=1);
-    Assert(0, getRootMultiplicity(map[2][2],0)=2);
-    Assert(0, getRootMultiplicity(map[2][3],1)=3);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=1);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=2);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
    od ;
 
 # upper examples do not find the bug.
@@ -61,9 +61,9 @@
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
     for map in maps do
 
-    Assert(0, getRootMultiplicity(map[2][1],infinity)=3);
-    Assert(0, getRootMultiplicity(map[2][2],0)=1);
-    Assert(0, getRootMultiplicity(map[2][3],1)=2);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=3);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=1);
+    Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=2);
    od ;
 
      partitions := [ [4], [ 1, 1, 2 ], [ 3, 1 ] ];;
@@ -72,9 +72,9 @@
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
 
      for map in maps do
-       Assert(0, getRootMultiplicity(map[2][1],infinity)=4);
-       Assert(0, getRootMultiplicity(map[2][2],0)=1);
-       Assert(0, getRootMultiplicity(map[2][3],1)=3);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=4);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=1);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
      od ;
 
 
@@ -83,9 +83,9 @@
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
    for map in maps do
-       Assert(0, getRootMultiplicity(map[2][1],infinity)=1);
-       Assert(0, getRootMultiplicity(map[2][2],0)=3);
-       Assert(0, getRootMultiplicity(map[2][3],1)=4);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=1);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=3);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=4);
      od ;
 
      partitions := [  [ 3, 1 ], [ 1, 1, 2 ],  [4] ];;
@@ -93,16 +93,18 @@
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
 
-
+     # this is the one !!! (where two normalization rules were left.)
+     fieldSize := 7;; # is 7 not too small? - no! 
+     finiteField := GF( fieldSize );;
      partitions := [  [ 3, 3 ,2,2] ,  [ 3, 3,2,2 ], [  3,3,2,2 ]];;
      criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
 
      for map in maps do
-       Assert(0, getRootMultiplicity(map[2][1],infinity)=2);
-       Assert(0, getRootMultiplicity(map[2][2],0)=2);
-       Assert(0, getRootMultiplicity(map[2][3],1)=1);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=3);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=3);
+       Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
      od ;
 
      partitions := [  [ 2,6,1,1] , [ 2,6,1,1],[ 2,6,1,1] ];;
@@ -126,7 +128,7 @@
        Assert(0, @HMAC@Utils.getRootMultiplicity(map[2][3],1)=1);
      od ;
 
- partitions := [  [ 2,1,4] , [ 2,1,4],[ 2,1,4] ];;
+     partitions := [  [ 2,1,4] , [ 2,1,4],[ 2,1,4] ];;
      criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
@@ -170,6 +172,22 @@
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
    Sum(List(partitions,x->Sum(x-1)));
+
+
+     fieldSize := 11;;
+     finiteField := GF( fieldSize );;
+    partitions := [  [ 2,4,3,2,2] , [ 2,3,4,2,2],[ 2,3,4,2,2] ];;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     strictNormalization := true;;
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
+
+   for map in maps do
+       Assert(0, @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=2);
+       Assert(0, @HMAC@Utils.getRootMultiplicity(map[2][2],0)=2);
+       Assert(0, @HMAC@Utils.getRootMultiplicity(map[2][3],1)=2);
+     od ;
+
+
 #
 # ok, maybe check the long test?
 
