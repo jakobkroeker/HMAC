@@ -83,6 +83,8 @@ namespace RationalMapSearch
 
         bool    strictNormalization()     const     {  return normRuleList_m.strictNormalization();   };
 
+        // bool    optimizedConstruction()     const     {  return normRuleList_m.optimizedConstruction();   };
+
         int getMapDegree() const
         {
             return shapeList_m.getDegree() ;
@@ -107,6 +109,8 @@ namespace RationalMapSearch
     
             bool strictNormalization_m;
 
+            bool bOptimizeConstruction_m;
+
             OutputMode  outputMode_m;
 
             bool bAllNormalizations_m;
@@ -115,7 +119,8 @@ namespace RationalMapSearch
             SearchOptions():    dryRun_m(false),
                                 logStructure_m(false),
                                 outputMode_m( OutputMode::defaultOutput ), //   requires c++0x
-                                bAllNormalizations_m(false)
+                                bAllNormalizations_m(false),
+                                bOptimizeConstruction_m(true)
             {};
 
              SearchOptions(bool dryRun, 
@@ -126,7 +131,8 @@ namespace RationalMapSearch
                                             logStructure_m(logStructure),
                                             strictNormalization_m(strictNormalization),
                                             outputMode_m(outputMode),
-                                            bAllNormalizations_m(false)
+                                            bAllNormalizations_m(false),
+                                            bOptimizeConstruction_m(true)
             {};
 
       
@@ -137,6 +143,8 @@ namespace RationalMapSearch
             inline  bool strictNormalization()       const {   return strictNormalization_m;  }
 
             inline  bool allNormalizations()       const {   return bAllNormalizations_m;  }
+
+            inline  bool optimizeConstruction()       const {   return bOptimizeConstruction_m;  }
     
             void    print(std::ostream & os) const
             {
@@ -407,7 +415,7 @@ namespace RationalMapSearch
                                     const ShapeList & shapeList,
                                     std::vector< std::pair<int, const BPVecTYPE * > >::const_reverse_iterator    vecIterator,
                                     PolSetType & polSet,
-                                    mpz_t tmpCounter ,   mpz_t retCounter );
+                                    mpz_t tmpCounter ,   mpz_t  retCounter );
 
             void second_search_level(std::list< PolynomialFactorBluePrint> polFactorConstructRules);
 
@@ -443,12 +451,16 @@ namespace RationalMapSearch
                     #ifdef VERBOSE
                     //    std::cerr << "# count:= " << counter_m << ";" << std::endl;   
                     #endif
-                    char*  str= mpz_get_str( NULL, 10, counter_m);
+                     //gmp_printf ("%Zd\n", counter_m);
+                     char*  str= NULL; // needs to be initialized with NULL!
+                      str= mpz_get_str( NULL, 10, counter_m);
                 
                     std::string counterStr  (str);
                     
-                    std::cout << counterStr << ";" << std::endl;   
-                    delete[] str;
+                    std::cout << counterStr << ";" << std::endl;
+                 
+                   // fixed: delete str fails   ( caused by improper compiled mpir ?)
+                   delete[] str;
             };
 
             void  printMpz(mpz_t num)   const   
@@ -456,7 +468,8 @@ namespace RationalMapSearch
                     #ifdef VERBOSE
                     //    std::cerr << "# count:= " << counter_m << ";" << std::endl;   
                     #endif
-                    char*  str= mpz_get_str( NULL, 10, num);
+                    char*  str= NULL; // needs to be initialized with NULL!
+                    str= mpz_get_str( NULL, 10, num);
                 
                     std::string counterStr  (str);
                     

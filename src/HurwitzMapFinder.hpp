@@ -7,6 +7,9 @@
 namespace RationalMapSearch 
 {
 
+
+    /// creates a list with entries ( exponent, multiplicity, polynomialId )
+    /// for (4,3,2,2,2), (4,3,2,2,2) it would create (4,1,0),(3,1,0),(2,3,0),(4,1,1),(3,1,1),(2,3,1)
     template <class TPolRingTypePar>
     std::list< PolynomialFactorBluePrint>     FiniteFieldSearch<TPolRingTypePar>::createPolFactorBlueprintList(  )
             {   
@@ -36,7 +39,7 @@ namespace RationalMapSearch
                                                                                      const TPolRingTypePar &  polynomialRing): hurwitzMapSearchProblem_m( hms_),
                                                                                                             searchOptions_m( so ),
                                                                                                             outputHandler_m(NULL),
-                                                                                                            characteristic_m( polynomialRing.getCoeffRing().getCharacteristic() ),
+                                                                                                             characteristic_m( polynomialRing.getCoeffRing().getCharacteristic() ),
                                                                                                           
                                                                                                             //polynomialRing_m( getPolRingRef(characteristic ) ),
                                                                                                             polynomialRing_m(polynomialRing),
@@ -48,6 +51,12 @@ namespace RationalMapSearch
                 mpz_init(counterMod_m);
                 mpz_set_ui(counter_m,0);
                 mpz_set_ui(counterMod_m,1);
+                #ifdef DEBUG
+                  gmp_printf ("%Zd counter_m\n", counter_m);
+                     char*  str= NULL; // needs to be initialized with NULL!
+                      str= mpz_get_str( NULL, 10, counter_m);
+                  std::cerr << str << std::endl;
+                #endif
    
                 setPolRingRef( & polynomialRing );
 
@@ -59,9 +68,9 @@ namespace RationalMapSearch
                 irredPolTablePtr = getIrredPolTablePtr( field_m.getCharacteristic() );           
 
 
-		DebugLogger::logStream() << "# constructionMaxFactorDegree " << hurwitzMapSearchProblem_m.getShapeList().getConstructionMaxFactorDegree() << std::endl;
+                DebugLogger::logStream() << "# constructionMaxFactorDegree " << hurwitzMapSearchProblem_m.getShapeList().getConstructionMaxFactorDegree() << std::endl;
 
-		// todo: print for HMSProblem.
+                // todo: print for HMSProblem.
                 //std::cerr << "constructionMaxFactorDegree " << hurwitzMapSearchProblem_m.getShapeList().getConstructionMaxFactorDegree() << std::endl;
 
                 if ( not   searchOptions_m.dryRun() )
@@ -85,12 +94,13 @@ namespace RationalMapSearch
                 //else
                 //    outputHandler_m= new EmptyOutputHandler<PolynomialSet<TPolRingTypePar> >();
                 assert( outputHandler_m != NULL);
-		DebugLogger::logStream() << " FiniteFieldSearch initialized!" << std::endl;
+                DebugLogger::logStream() << " FiniteFieldSearch initialized!" << std::endl;
               }
 
             /// convention: polRep is a vector with polynomial coefficients and polrep[i] is the coefficient of monomial x^i .
             template <class TPolRingTypePar>
-            typename TPolRingTypePar::ElementType   FiniteFieldSearch<TPolRingTypePar>::convertPolRepToRingElem(const typename  HMSProblem::PolynomRepType & polRep) const
+             typename TPolRingTypePar::ElementType   
+            FiniteFieldSearch<TPolRingTypePar>::convertPolRepToRingElem(  const typename  HMSProblem::PolynomRepType   & polRep ) const
             {
                     typename TPolRingTypePar::ElementType pol( polRep.size() -1 );
                     for (size_t pos=0; pos< polRep.size(); pos ++)
@@ -101,7 +111,8 @@ namespace RationalMapSearch
             }
  
             template <class TPolRingTypePar>
-            std::list< PolynomialFactorBluePrint>   FiniteFieldSearch<TPolRingTypePar>::createPolFactorConstructionRules(std::vector<int > partition, uint exponent, uint destpolynomial)
+             std::list< PolynomialFactorBluePrint>   
+            FiniteFieldSearch<TPolRingTypePar>::createPolFactorConstructionRules(std::vector<int > partition, uint exponent, uint destpolynomial)
             {
                 std::list< PolynomialFactorBluePrint> polFactorConstructionRuleList;
         
@@ -114,7 +125,9 @@ namespace RationalMapSearch
 
             // extract a PolynomialFactorBluePrint to which is is possible to apply the Normalization rule.
             template <class TPolRingTypePar>
-            PolynomialFactorBluePrint*  FiniteFieldSearch<TPolRingTypePar>::extractMatchingRule(std::list< PolynomialFactorBluePrint> &polFactorConstructRules, NormalizationRule rule)
+              PolynomialFactorBluePrint*  
+            FiniteFieldSearch<TPolRingTypePar>::extractMatchingRule(  std::list< PolynomialFactorBluePrint> &polFactorConstructRules,
+                                                                      NormalizationRule rule  )
             {
                     //std::cerr << "extractMatchingRule" << std::endl;
 
@@ -151,7 +164,9 @@ namespace RationalMapSearch
             }
 
             template <class TPolRingTypePar>
-            bool     FiniteFieldSearch<TPolRingTypePar>::computeScalingFactors(const PolSetType &  polSet,   std::vector<  typename TPolRingTypePar::CoeffRingType::ElementType > & scalingFactors)
+            bool     FiniteFieldSearch<TPolRingTypePar>::computeScalingFactors (
+                         const PolSetType &  polSet,   
+                         std::vector<  typename TPolRingTypePar::CoeffRingType::ElementType > & scalingFactors  )
             {
                 
                 assert( polSet.size()>2 );
@@ -164,7 +179,11 @@ namespace RationalMapSearch
                     computed=false;
                     for (int coeff = 1; coeff< field_m.getCharacteristic(); coeff++)
                     {
-                        typename TPolRingTypePar::ElementType pol= polynomialRing_m.add(polSet[1], polynomialRing_m.scalarMultiply( field_m.Convert(coeff), polSet[0] ));
+                        typename TPolRingTypePar::ElementType pol= polynomialRing_m.add ( 
+                                                                                polSet[1], 
+                                                                               polynomialRing_m.scalarMultiply( field_m.Convert(coeff), 
+                                                                                                                polSet[0]               )  
+                                                                              );
                         if (pol==polSet[pos])
                         {
                             scalingFactors[pos-2] = field_m.addInv(field_m.Convert(coeff));
@@ -192,6 +211,7 @@ namespace RationalMapSearch
             
 
             /// @todo: polSetBlueprint wird nur gebraucht, wenn man auch eine Liste der Faktoren mitführen will
+            /// 
             template <class TPolRingTypePar>
             bool    FiniteFieldSearch<TPolRingTypePar>::processNormalizationRules( PolSetBlueprintType & polsetblueprint, 
                                                                                     std::list< PolynomialFactorBluePrint> &polFactorConstructRules,
@@ -215,32 +235,55 @@ namespace RationalMapSearch
                 while (  it != nrlvec.end() )
                 {
                     //overwrite polynomialId if polynomialId>=2)
-                    if ( (*it).getPolynomialId()>=2 || ! hurwitzMapSearchProblem_m.strictNormalization() )
-                    {
-                        (*it).clearPolynomialId(  );
-                        (*it).clearExponent(  );
-                    }
+                
                     it++;
                 }
                 it = nrlvec.begin();
             
+                // TODO: ensure, that the first applied rules are rules where polynomialId is given.
                 while (  it != nrlvec.end() )
                 {
-                     PolynomialFactorBluePrint * polFactorBlueprint_p = extractMatchingRule( polFactorConstructRules, (*it) );
+
+                     NormalizationRule currentRuleCopy = (*it);
+                    if ( hurwitzMapSearchProblem_m.strictNormalization()  )
+                    {
+                        //now, I have an idea what could fail: 
+                        if (searchOptions_m.optimizeConstruction() and currentRuleCopy.getPolynomialId()>=2 )
+                        {
+                            currentRuleCopy.clearPolynomialId(  );
+                            currentRuleCopy.clearExponent(  );
+                        }
+                    }
+                    else  //we have no strict normalization => polynomialId and factor to normalize is chosen by the algorithm
+                    {
+                        // nothing should happen here, since in principle all normalizatino rules could be predescribed.
+                        // except that we want again to optimize the search and 
+                        // renormalize at the end in a way that ther rules matches the predefined ones.
+                        // in summary: same behaviour if we have strictNormalization
+                        if (searchOptions_m.optimizeConstruction() and currentRuleCopy.getPolynomialId()>=2 )
+                        {
+                            currentRuleCopy.clearPolynomialId(  );
+                            currentRuleCopy.clearExponent(  );
+                        }
+                    }
+          
+                     PolynomialFactorBluePrint * polFactorBlueprint_p = extractMatchingRule( polFactorConstructRules, currentRuleCopy );
                      if ( polFactorBlueprint_p !=NULL)
                      {
                             const size_t polynomialId = (* polFactorBlueprint_p).polynomialId_m;
-                            if ((*it).getValue() != NormalizationValue::infinity) 
+                            if (currentRuleCopy.getValue() != NormalizationValue::infinity) 
                             {    
-                                const typename IrreduciblePolTableType::IrredVecListType &  irredVecList =  irredPolTableRef.getIrredPolList((* polFactorBlueprint_p).degree_m);
+                                const typename IrreduciblePolTableType::IrredVecListType &  
+                                  irredVecList =  irredPolTableRef.getIrredPolList((* polFactorBlueprint_p).degree_m);
+
                                 std::vector<int>::iterator degOneVecIterator = degreeOneRootList.end();
-                                if ((*it).getValue()== NormalizationValue::one )
+                                if (currentRuleCopy.getValue()== NormalizationValue::one )
                                 {
                                     degOneVecIterator = std::find(degreeOneRootList.begin(),degreeOneRootList.end(), 1 );
-                                    std::cerr << "irredVecList[1] = " << irredVecList[1] << std::endl;
+                                    //std::cerr << "irredVecList[1] = " << irredVecList[1] << std::endl;
                                     assert( polynomialRing_m.evalAt( *(irredVecList[1]), field_m.Convert(1))== TPolRingTypePar::RingType::ElementType::Zero);
                                 }
-                                if ((*it).getValue()== NormalizationValue::zero )
+                                if (currentRuleCopy.getValue()== NormalizationValue::zero )
                                 {
                                     degOneVecIterator = std::find(degreeOneRootList.begin(),degreeOneRootList.end(), 0 );
                                     assert( polynomialRing_m.evalAt( *(irredVecList[0]), field_m.Convert(0))== TPolRingTypePar::RingType::ElementType::Zero);
@@ -251,15 +294,15 @@ namespace RationalMapSearch
                                typename  TPolRingTypePar::Element ringElem(typename  TPolRingTypePar::Element(1) ) ;
                                 assert(ringElem.getDegree()>0);
                                 // todo: problem: degree von polynomial
-                                assert((*it).getValue()== NormalizationValue::one || (*it).getValue()==  NormalizationValue::zero );
+                                assert( currentRuleCopy.getValue()== NormalizationValue::one || currentRuleCopy.getValue()==  NormalizationValue::zero );
                                
                                 ringElem.setCoeff(0,   TPolRingTypePar::RingType::ElementType::Zero );
-                                if ((*it).getValue()== NormalizationValue::one )
+                                if ( currentRuleCopy.getValue()== NormalizationValue::one )
                                     ringElem.setCoeff(0, field_m.addInv( TPolRingTypePar::RingType::ElementType::One ));
                                 ringElem.setCoeff(1, TPolRingTypePar::RingType::ElementType::One );
-                                if ((*it).getValue() == NormalizationValue::one )
+                                if ( currentRuleCopy.getValue() == NormalizationValue::one )
                                     assert(ringElem == *(irredVecList[1]) );
-                                if ((*it).getValue() == NormalizationValue::zero )
+                                if ( currentRuleCopy.getValue() == NormalizationValue::zero )
                                     assert(ringElem == *(irredVecList[0]) );
 
                                 TPolFactorPowerType powfactor( ringElem, (* polFactorBlueprint_p).multiplicity_m );
@@ -267,7 +310,8 @@ namespace RationalMapSearch
                                 assert(polynomialId>=0 && polynomialId<polsetblueprint.size());
                                 polsetblueprint[ polynomialId].push_back( powfactor );
                           
-                                polSet[ polynomialId ] = polynomialRing_m.multiply( polSet[ polynomialId ], polynomialRing_m.pow(ringElem, (* polFactorBlueprint_p).multiplicity_m )  );
+                                polSet[ polynomialId ] = polynomialRing_m.multiply( polSet[ polynomialId ],  
+                                                                                    polynomialRing_m.pow(ringElem, (* polFactorBlueprint_p).multiplicity_m )  );
                             }
                             else
                             {
@@ -281,11 +325,33 @@ namespace RationalMapSearch
                      else
                         it++;
                 }
-                std::cerr << "nrlvec.size()" << nrlvec.size() << "\n";
-                if ( nrlvec.size()<3) return true; 
-                else return false;
+                #ifdef DEBUG // todo: use a logger.
+                std::cerr << "nrlvec.size() = " << nrlvec.size() << "\n" << std::fflush;
+                #endif
+                // if ( nrlvec.size()<3) return true; 
+
+                // well and what is with the case, that all normalization rules apply tho the third polynomial (id=2) ?
+                // ok, so my variant is: if optimizeConstruction() is on or not: all rules with polynomial id =0 or =1 should be applied so far, 
+                // otherwise return false:
+
+                it = nrlvec.begin();           
+                // TODO: ensure, that the first applied rules are rules where polynomialId is given.
+                while (  it != nrlvec.end() )
+                {
+                     // if (  hurwitzMapSearchProblem_m.strictNormalization() ) 
+                     {  
+                         // at least rules for first two polynomials should be applied, otherwise something is fishy.  
+                        if ( not (  ( (*it).getPolynomialId() == NormalizationRule::dontcare ) or ( (*it).getPolynomialId() >= 2) ) )
+                        {
+                            std::cerr << "warning: not all  rules for first and second polynomial are applied"   << std::cerr;
+                            return false;  
+                        }                      
+                     }
+                }
+                return true;
 
                 // @TODO the following tests are not correct.
+                /*
                 if ( ! hurwitzMapSearchProblem_m.strictNormalization() || nrlvec.size()==0 )
                     return true;
                 if ( hurwitzMapSearchProblem_m.strictNormalization() && nrlvec.size()==1 )
@@ -296,6 +362,7 @@ namespace RationalMapSearch
                         return true;
                 }
                 return false;
+                */
             }
 
 
@@ -496,7 +563,7 @@ namespace RationalMapSearch
                                     for (size_t minPolPos=0; minPolPos<minimalPolynomials_m.size(); minPolPos++)
                                     {   
                                         /// todo: eigentlich weiss nur ein Ring, ob ein Element=0 ist oder nicht ...bisher falsch umgesetzt...
-                                        if (not polynomialRing_m.evalAt(minimalPolynomials_m[minPolPos], 
+                                        if (not polynomialRing_m.evalAt( minimalPolynomials_m[minPolPos], 
                                                                         field_m.multiply(scalingRelations[minPolPos+1] ,
                                                                                                     field_m.multInv(scalingRelations[0] )
                                                                                                 )
@@ -515,7 +582,7 @@ namespace RationalMapSearch
                                 #pragma omp critical    
                                 {
 
-                                    //localCounter++ ;
+                                    //returnedCounter++ ;
                                     #ifdef VERBOSE
                                     std::cerr << "found solution : " << std::endl;
                                     std::cerr << secondCopy[0] << std::endl;
@@ -744,7 +811,19 @@ namespace RationalMapSearch
                 return;
             }
 
-
+            // the paramaters localCounter and tmpCounterPar currently are onle used in case of a dry run 
+            //  in that case 1. no parallelization takes place (in the search part)
+            // todo : rename localCounter to 'returnedCounter'
+            //  2. the 'returnedCounter' is only updated when the function finishes. 
+            //     since in the dry case run in each recursion the 'third_search_level' is called only once (no branching)
+            //     the result returned in returnedCounter needs not to be accumulated, and the returnedCounter is initialized only at one place, 
+            //     namely in 'second_search_level'.
+            // 
+            //    now here is missing the description, how tmpCounterPar is updated and how it works.
+            //    In each depth of the self-'third_search_level'-call the tmpCounterPar is copied into a local variable ,
+            //      updated and passed to the next 'third_search_level'-call
+            //    
+            //   
             //weitere idee: die sortedPolFactorConstructRules so sortieren, dass oben die Liste mit dem größten grad ist und nur das erste mal parallelisieren.
             template <class TPolRingTypePar>
             void    FiniteFieldSearch<TPolRingTypePar>::third_search_level( const std::vector< std::pair<int,const BPVecTYPE * > > &  sortedPolFactorConstructRules,
@@ -752,36 +831,73 @@ namespace RationalMapSearch
                                                                             const ShapeList & shapeList,
                                                                             std::vector< std::pair<int, const BPVecTYPE * > >::const_reverse_iterator    mapIterator,
                                                                             FiniteFieldSearch<TPolRingTypePar>::PolSetType & polSet,
-                                                                            mpz_t tmpCounterPar, mpz_t localCounter)
+                                                                            mpz_t tmpCounterPar, mpz_t returnedCounter)
             {   
-                    //std::cerr << "third_Search_Level" << std::endl;
-		   mpz_t tmpCounter;
+
+                  mpz_t tmpCounter;
+
+                  if (   searchOptions_m.dryRun() )
+                  {
+                    // std::cerr << "third_Search_Level" << std::endl; // a logger should be used here 
+                  
             
-    
+                    #ifdef  DEBUG
+                        std::cerr << " entry; returnedCounter : " << std::endl;
+                        char*  str= mpz_get_str( NULL, 10, returnedCounter);
+                      
+                        std::cerr <<  str << std::endl;
+
+                        std::cerr << " tmpCounterPar: " << std::endl;   
+                        str= mpz_get_str( NULL, 10, tmpCounterPar);
+                        std::cerr << str << std::endl;
+                        std::cerr << " tmpCounterPar: " << std::endl;   
+                        str= mpz_get_str( NULL, 10, tmpCounterPar);
+                        std::cerr << str << std::endl;
+                    #endif
+                    mpz_init( tmpCounter );
+                    mpz_set(tmpCounter, tmpCounterPar);
+
+                  }
+
                     if ( mapIterator==sortedPolFactorConstructRules.rend() )
                     {
                         //#pragma omp critical
                        
 
                         if (   searchOptions_m.dryRun() )
-                        {
-			     
-			      mpz_init( tmpCounter );
-			      mpz_set(tmpCounter, tmpCounterPar);
+                        {                
+                            #ifdef  DEBUG
+                               std::cerr << " returnedCounter before set to tmpCounter : " << std::endl;   
+                               str= mpz_get_str( NULL, 10, returnedCounter);
+                               std::cerr << str << std::endl;
+                            #endif
 
-			    {
-			      mpz_init( localCounter );
-			    }
-                            mpz_set( localCounter, tmpCounter );
+                            mpz_set( returnedCounter, tmpCounter );
+
+                            #ifdef  DEBUG
+                               std::cerr << " returnedCounter after set  to tmpCounter: " << std::endl;   
+                               str= mpz_get_str( NULL, 10, returnedCounter);
+                               std::cerr << str << std::endl;
+                            #endif
                             size_t mid = shapeList.size()-2; 
                             mpz_t tmpMpz;
                             mpz_init( tmpMpz );
-                        
+
+                            #ifdef  DEBUG
+                               std::cerr << " returnedCounter before for loop  : " << std::endl;   
+                               char*  str= mpz_get_str( NULL, 10, returnedCounter);
+                               std::cerr << str << std::endl;
+                            #endif
                             for (size_t tmp =field_m.getCardinality()-1; tmp> field_m.getCardinality()-1 - mid ;tmp--)
                             {
                                  mpz_set_ui( tmpMpz,tmp );
-                                 mpz_mul(localCounter, localCounter, tmpMpz);
+                                 mpz_mul(returnedCounter, returnedCounter, tmpMpz);
                             }
+                            #ifdef  DEBUG
+                               std::cerr << " returnedCounter before return  : " << std::endl;   
+                               str= mpz_get_str( NULL, 10, returnedCounter);
+                              std::cerr << str << std::endl;
+                            #endif
                             return;
                             
                         }
@@ -803,10 +919,6 @@ namespace RationalMapSearch
 
                         if (   searchOptions_m.dryRun() )
                         {
-			      
-			      mpz_init( tmpCounter );
-			      mpz_set(tmpCounter, tmpCounterPar);
-			      
                                 mpz_t irredListSizeMpz;
                                 mpz_init( irredListSizeMpz );
                                 getIrredCount( degree, field_m.getCardinality(), irredListSizeMpz );
@@ -834,7 +946,18 @@ namespace RationalMapSearch
 
                                 if ( mpz_cmp(midMpz,irredListSizeMpz)>0 ) 
                                 {
-                                    mpz_init( localCounter );
+                                    #ifdef  DEBUG
+                                        std::cerr << " mpz_cmp(midMpz,irredListSizeMpz)>0 " << std::endl;
+                                        std::cerr << " setting and printing counter before returning : " << std::endl;
+                                    #endif
+
+                                    mpz_set_ui( returnedCounter,0 );
+
+                                    #ifdef  DEBUG
+                                        str= mpz_get_str( NULL, 10, returnedCounter);
+                                        std::cerr << " returnedCounter : " << str << std::endl;
+                                    #endif
+
                                     return;
                                 }
                                 
@@ -864,11 +987,31 @@ namespace RationalMapSearch
                                     mpz_mul(tmpCounter, tmpCounter,tmpMpz);   
                                 }*/
 
+                                 #ifdef  DEBUG
+                                   std::cerr << " tmpCounter  before call  : "  << std::endl;   
+                                   str= mpz_get_str( NULL, 10, returnedCounter);
+                                   std::cerr << str << std::endl;
+                                 #endif
+
                                 mpz_t tmpCounterCopy;
                                 mpz_init(tmpCounterCopy);
                                 mpz_set(tmpCounterCopy,tmpCounter);
 
-                                third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSet, tmpCounterCopy, localCounter);        
+                                 #ifdef  DEBUG
+                                    std::cerr << " tmpCounterCopy  before call  : "  << std::endl;   
+                                    str= mpz_get_str( NULL, 10, returnedCounter);
+                                    std::cerr << str << std::endl;
+                                 #endif
+                                    /* mpz_t returnedCounterCopy;
+                                    mpz_init(returnedCounterCopy);
+                                    mpz_set(returnedCounterCopy, returnedCounter);*/
+
+                                third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSet, tmpCounterCopy, returnedCounter);        
+                                #ifdef  DEBUG
+                                   std::cerr << " returnedCounter after return  : "  << std::endl;   
+                                   str= mpz_get_str( NULL, 10, returnedCounter);
+                                   std::cerr << str << std::endl;
+                                #endif
                                 return;
                         }
  
@@ -924,7 +1067,7 @@ namespace RationalMapSearch
 
                         
                             //#ifdef OPENMP
-                            //    #pragma omp parallel for  reduction(+: localCounter)
+                            //    #pragma omp parallel for  reduction(+: returnedCounter)
                             //#endif
                             #ifdef OPENMP
                                 #pragma omp parallel for 
@@ -954,16 +1097,18 @@ namespace RationalMapSearch
                                             #endif
                                             typename TPolRingTypePar::ElementType & polRef = polSetCopy[ polFactorConstRuleList[rulePos].polynomialId_m ];
                                             if (degree==1)
-                                                polRef =  polynomialRing_m.multiply(  polRef ,polynomialRing_m.pow( *(irredVecList[ degreeOneRootList[permutation[rulePos ]] ]), polFactorConstRuleList[rulePos].multiplicity_m)  )  ;
+                                                polRef =  polynomialRing_m.multiply(  polRef ,polynomialRing_m.pow( *(irredVecList[ degreeOneRootList[ permutation[  rulePos  ] ] ]),
+                                                                                                                     polFactorConstRuleList[rulePos].multiplicity_m)  )  ;
                                             else
-                                                polRef =  polynomialRing_m.multiply(  polRef ,polynomialRing_m.pow( *(irredVecList[permutation[rulePos ] ]), polFactorConstRuleList[rulePos].multiplicity_m)  )  ;
+                                                polRef =  polynomialRing_m.multiply(  polRef ,polynomialRing_m.pow( *(irredVecList[permutation[rulePos ] ]), 
+                                                                                                                     polFactorConstRuleList[rulePos].multiplicity_m)  )  ;
                                             
                                         }
-                                          third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSetCopy, tmpCounter,localCounter );    
+                                          third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSetCopy, tmpCounter,returnedCounter );    
                                     }
                                     else
                                     {
-                                        third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSet, tmpCounter,localCounter);    
+                                        third_search_level(sortedPolFactorConstructRules, degreeOneRootList, shapeList, mapIterator, polSet, tmpCounter,returnedCounter);    
                                     }
     
                                 } while (next_permutation (permutation, permutation + mid ) );
@@ -1016,7 +1161,7 @@ namespace RationalMapSearch
                         #ifdef VERBOSE
                         std::cerr << (*it) << std::endl;
                         #endif
-			DebugLogger::logStream() << (*it) << std::endl;
+                        DebugLogger::logStream() << (*it) << std::endl;
                     }
                 
                     std::list< PolynomialFactorBluePrint>::iterator it;
@@ -1035,24 +1180,53 @@ namespace RationalMapSearch
           
                     std::vector< std::pair<int, const BPVecTYPE *> >  sortedPolFactorConstructRulesVec;
 
-                DegSortedConstructionRuleTableType::iterator dit = sortedPolFactorConstructRules.begin();
-                while (dit!=sortedPolFactorConstructRules.end())
-                {
+                    DegSortedConstructionRuleTableType::iterator dit = sortedPolFactorConstructRules.begin();
+                    while (dit!=sortedPolFactorConstructRules.end())
+                    {
 
-                    int degree = (*dit).first;
-                    const BPVecTYPE * vecbp = &((*dit).second);
-                    std::pair<int, const BPVecTYPE* > pp (degree, vecbp);
-                     //sortedPolFactorConstructRulesVec.push_back( std::pair<int,BPVecTYPE > (degree, vecbp ) );
-                    sortedPolFactorConstructRulesVec.push_back( pp );
-                    dit++;
-                }
+                        int degree = (*dit).first;
+                        const BPVecTYPE * vecbp = &((*dit).second);
+                        std::pair<int, const BPVecTYPE* > pp (degree, vecbp);
+                         //sortedPolFactorConstructRulesVec.push_back( std::pair<int,BPVecTYPE > (degree, vecbp ) );
+                        sortedPolFactorConstructRulesVec.push_back( pp );
+                        dit++;
+                    }
 
                     std::vector< std::pair<int, const BPVecTYPE * > >::const_reverse_iterator mapIterator = sortedPolFactorConstructRulesVec.rbegin();
-                
+                    #ifdef DEBUG
+                       std::cerr << " before first third_search_level call : "  << std::endl;
+                    #endif
                     mpz_t tmpCounter;
                     mpz_init(tmpCounter); 
-                    mpz_set_ui(tmpCounter,1);
+                     char*     str = NULL;
+
+                    #ifdef DEBUG
+                        str= mpz_get_str( NULL, 10, tmpCounter);
+                        std::cerr << "  tmpCounter : " << str << std::endl;
+                    #endif
+
+                    mpz_set_ui(tmpCounter,1); // crashed here...
+
+                    #ifdef DEBUG                 
+                        str = NULL;
+                        str= mpz_get_str( NULL, 10, tmpCounter);
+                        std::cerr << "  tmpCounter : " << str << std::endl;
+                    #endif
+
                     mpz_t counterMpz;
+                    mpz_init(counterMpz); 
+                    mpz_set_ui(counterMpz,0);
+
+                    #ifdef DEBUG
+                       str = NULL;
+                        str= mpz_get_str( NULL, 10, counterMpz);
+                        std::cerr << "  counterMpz : " << str << std::endl;
+                        str = NULL;
+                         str= mpz_get_str( NULL, 10, tmpCounter);
+                        std::cerr << "  tmpCounter : " << str << std::endl;
+                     #endif
+
+
                     third_search_level( sortedPolFactorConstructRulesVec , degreeOneRootList, modifiedShapeList, mapIterator, polSet ,tmpCounter, counterMpz );
 
                     
@@ -1060,7 +1234,25 @@ namespace RationalMapSearch
                     {
                         if (searchOptions_m.dryRun())
                         {
+                            #ifdef DEBUG
+                                gmp_printf ("%Zd counter_m\n", counter_m);
+                                str= NULL; // needs to be initialized with NULL!
+                                str= mpz_get_str( NULL, 10, counter_m);
+                                std::cerr  << "counter_m : " << str << std::endl;
+
+                                gmp_printf ("%Zd counter_m\n", counterMpz);
+                                str= NULL; // needs to be initialized with NULL!
+                                str= mpz_get_str( NULL, 10, counterMpz);
+                                std::cerr << "counterMpz : " << str << std::endl;
+                            #endif   
                             mpz_add( counter_m, counter_m, counterMpz );
+
+                            #ifdef DEBUG
+                                gmp_printf ("%Zd counter_m\n", counter_m);
+                                str= NULL; // needs to be initialized with NULL!
+                                str= mpz_get_str( NULL, 10, counter_m);
+                                std::cerr << str << std::endl;
+                            #endif
                             if ( mpz_cmp(counter_m , counterMod_m )   >0)
                             {
                                 #ifdef VERBOSE
@@ -1074,9 +1266,19 @@ namespace RationalMapSearch
                         }
                     }
                 }
-                else
-                    assert(false);
+                else    
+                {
+                    return;
+                    //     assert(false);
+                }
             }
+
+            // recursive;
+            // takes an entry from polfactorBlueprintList, e,g, (rootMultiplicity=2,numberOfFactorsWithRootMultiplicity=3,polynomialId=0) 
+            // and for all partitions of degree:=numberOfFactorsWithRootMultiplicity 
+            //  1. creates polynomial construction rules.
+            //  2. recursive call itself
+            // calls second level if all entries of polfactorBlueprintList are processed.
 
             template <class TPolRingTypePar>
             void    FiniteFieldSearch<TPolRingTypePar>::first_search_level( std::list< PolynomialFactorBluePrint>     polfactorBlueprintList,  
@@ -1110,11 +1312,20 @@ namespace RationalMapSearch
            
             }
            
+            // @TODO optional : the output handler(s) could be hooked somehow instead of explicit call. 
             template <class TPolRingTypePar>
             void    FiniteFieldSearch<TPolRingTypePar>::run()   
             {
                 //counter_m = 0;  
                 mpz_set_ui(counter_m,0);
+
+                #ifdef DEBUG
+                  gmp_printf ("%Zd counter_m\n", counter_m);
+                     char*  str= NULL; // needs to be initialized with NULL!
+                      str= mpz_get_str( NULL, 10, counter_m);
+                  std::cerr << str << std::endl;
+                #endif
+
                 #ifdef VERBOSE
                 std::cerr << "run()" << std::endl;
                 #endif
