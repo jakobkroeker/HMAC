@@ -1,5 +1,5 @@
 
-
+ 
 #include "hmfTypedefs.h"
 #include "HurwitzMapFinder.h"
 
@@ -79,8 +79,8 @@ void simpleCommandLineInterface(int argc, char* argv[])
     unsigned int modPolDegree = 0;
     std::vector<int>    modPolCoeffs;
     int currCoeff = 0;
-
-
+   
+  
     int branchValueCount = 0;
     int polDegree = 0; // todo: variablennamen verbessern
 
@@ -110,7 +110,7 @@ void simpleCommandLineInterface(int argc, char* argv[])
     DebugLogger::logStream() << "#I prime :  " << prime << std::endl;
 
     DebugLogger::logStream() << "#I extension degree  :  " << extensionDegree << std::endl;
-
+  
    
 
     if ( extensionDegree != 1 )
@@ -161,6 +161,7 @@ void simpleCommandLineInterface(int argc, char* argv[])
         do
         {
               std::cin >> std::ws >> exponent;
+              //std::cerr << "reading exponent " << exponent << std::endl << std::fflush;
               if (exponent!=0)
                 partition.push_back(exponent);
               expSum += exponent;
@@ -200,8 +201,8 @@ void simpleCommandLineInterface(int argc, char* argv[])
      
 
  
-    std::vector <int > reducedBranchValues;
- 
+    std::vector <int > reducedBranchValues; 
+  
     for (int currShapePos=3; currShapePos< branchValueCount; currShapePos++)
     {
             RationalMapSearch::HMSProblem::PolynomRepType     minimalPolynomial;
@@ -237,7 +238,7 @@ void simpleCommandLineInterface(int argc, char* argv[])
        std::vector <    RationalMapSearch::HMSProblem::PolynomRepType  > minimalPolynomials;
 
         for (int currReducedBranchValuePos=0; currReducedBranchValuePos< reducedBranchValues.size() ; currReducedBranchValuePos++)
-            {
+            {   
                     RationalMapSearch::HMSProblem::PolynomRepType     minimalPolynomial;
                     assert(   reducedBranchValues[currReducedBranchValuePos] < field->getCardinality() &&  reducedBranchValues[currReducedBranchValuePos] >0 );
                     // set minimal polynomial to 'x-reducedBranchPoint';
