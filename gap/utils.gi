@@ -1977,6 +1977,8 @@ end
 );
 #######################################################################################################
 
+## TODO all this getRootMultiplicity potentially depends on hurwitz.g and 
+# "RootMultiplicity" is already present in hurwitz.g (however, the implementation differs)
 
 # checks if poly has a factor with infinity as root. 
 # prerequisites: polynomial knows its Expected Degree 
