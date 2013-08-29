@@ -1,0 +1,122 @@
+
+
+# examples:
+#   http://homepages.warwick.ac.uk/~masjaf/belyi/
+
+
+     LoadPackage ("HMAC");
+     fieldSize := 13;;
+
+     finiteField := GF( fieldSize );;
+     permutations := [ (1,2), (2,3), (1,2,3) ];;
+     degree := Maximum( List( permutations, LargestMovedPoint ) );;
+     partitions := List( permutations, function ( p )
+             return CycleLengths( p, [ 1 .. degree ] );;
+        end );;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, permutations, criticalValues );;
+
+
+     hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions, 
+                                                [[infinity,infinity], [0,0], [1,0]], 
+                                                true);
+
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+
+
+
+    fieldSize := 17;;
+
+     finiteField := GF( fieldSize );;
+
+     partitions := [ [4], [ 1, 1, 2 ], [ 3, 1 ] ];;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     strictNormalization := true;;
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
+ 
+     hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions, 
+                                                [[infinity,infinity], [0,0], [1,0]], 
+                                                true);
+
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+
+
+    fieldSize := 17;; # is 7 not too small? - no! 
+     finiteField := GF( fieldSize );;
+     partitions := [  [ 3,2] ,  [3,2], [  2,2,1]];;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     strictNormalization := true;;
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
+
+     hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions, 
+                                                [[infinity,infinity], [0,0], [1,0]], 
+                                                true);
+
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+
+
+
+     fieldSize := 11;; # is 7 not too small? - no! 
+     finiteField := GF( fieldSize );;
+     partitions := [  [ 3,3] ,  [2,2,2], [ 2,2,2]];;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     strictNormalization := true;;
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
+
+     hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions, 
+                                                [[infinity,infinity], [0,0], [1,0]], 
+                                                true);
+
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+
+ SetInfoLevel( InfoHMAC , 2 );
+ SetInfoLevel( InfoFR , 3 );
+
+     fieldSize := 11;; # is 7 not too small? - no! 
+     finiteField := GF( fieldSize );;
+     partitions := [  [ 3,2,2] ,  [3,2,2], [  3,2,2]];;
+     criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
+     strictNormalization := true;;
+ 
+      # bug?
+      searchSpaceSize := HurwitzMapSearchSpaceSize@HMAC( finiteField,partitions, criticalValues);
+     
+     maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
+
+
+called with:
+
+3 11 1
+9 1
+7 3
+3 2 2 0
+3 2 2 0
+3 2 2 0
+
+
+
+
