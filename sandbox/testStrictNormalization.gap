@@ -1,4 +1,13 @@
+     
+     LoadPackage ("HMAC");
+
+    fieldSize := 13;;
+
      fieldSize := 23;;
+  
+
+  fieldSize := 13;;
+
      finiteField := GF( fieldSize );;
      permutations := [ (1,2), (2,3), (1,2,3) ];;
      degree := Maximum( List( permutations, LargestMovedPoint ) );;
@@ -77,6 +86,15 @@
        Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][3],1)=3);
      od ;
 
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+
+
 
      partitions := [  [ 2, 2 ], [ 3, 1 ],[ 2, 2 ] ];;
      criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
@@ -101,6 +119,18 @@
      strictNormalization := true;;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
 
+     hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( partitions, 
+                                                [[infinity,infinity], [0,0], [1,0]], 
+                                                true);
+
+     map := maps[1];
+    
+     hmc := HurwitzMapLifter@HMAC (maps[1][2], finiteField, hmsProblem);
+
+    
+     ord := MonomialLexOrdering(hmc.unknownVariables);
+     GroebnerBasis(hmc.ideal,ord);
+     
      for map in maps do
        Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][1],infinity)=3);
        Assert(0,  @HMAC@Utils.getRootMultiplicity(map[2][2],0)=3);
@@ -110,6 +140,7 @@
      partitions := [  [ 2,6,1,1] , [ 2,6,1,1],[ 2,6,1,1] ];;
      criticalValues := [ infinity, 0 * Z( fieldSize ), Z( fieldSize ) ^ 0 ];;
      strictNormalization := true;;
+     checkNormalization:=false;
      maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );;
 
     Sum(List(partitions,x->Sum(x-1)));
