@@ -665,7 +665,7 @@ end
 
 #Hurwitz@HMAC.Internal.FindHurwitzMapModPrime :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "FindHurwitzMapModPrime", 
-function( field, partitions, criticalValues,  strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula )
+function( field, partitions, criticalValues,  strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization )
     local convayPolynomial, flags, input, output, degree, i, mat, p, poly, rat, f, map,
           criticalValuesHom, criticalValuesHomTrans, criticalValuesTrans, polynomials,postError, polynomial,degreesum;
 
@@ -749,10 +749,12 @@ function( field, partitions, criticalValues,  strictNormalization, onlyComputeSe
     od;
 
     # check result; separate it from FindHurwitzMapModPrime? 
-    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, field );
-    for map in poly do
-      Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  map, partitions, criticalValues, criticalValuesTrans, strictNormalization );
-    od;
+    if checkNormalization then 
+        criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, field );
+        for map in poly do
+          Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  map, partitions, criticalValues, criticalValuesTrans, strictNormalization );
+        od;
+    fi;
     return poly;
 end
 );
@@ -798,7 +800,19 @@ end
 ## <#/GAPDoc>
 InstallOtherMethod( FindHurwitzMapModPrime@HMAC, "", [ IsPrimeField, IsList, IsList, IsBool ],
 function( field, partitions, criticalValues, strictNormalization )
-    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, criticalValues, strictNormalization, false, false );
+
+    local onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization;
+
+    onlyComputeSearchSpaceSize := false;
+    ignoreHurwitzFormula := false;
+    checkNormalization := true;
+
+    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, 
+                                                        criticalValues, 
+                                                        strictNormalization, 
+                                                        onlyComputeSearchSpaceSize, 
+                                                        ignoreHurwitzFormula, 
+                                                        checkNormalization);
 end
 );
 
@@ -833,7 +847,7 @@ DeclareSynonym("FindHurwitzMapModPrimeEx@HMAC",FindHurwitzMapModPrime@HMAC);
 ## <#/GAPDoc>
 InstallOtherMethod( FindHurwitzMapModPrime@HMAC, "", [IsPrimeField, IsList, IsList ],
 function( field, perms, criticalValues )
-    local degree, partitions, postError;
+    local degree, partitions, postError, strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization;
     
     postError := "\nArguments should be '<field>, <permutations>, <critical values>' ";    
         
@@ -859,7 +873,20 @@ function( field, perms, criticalValues )
     while Sum( List(partitions,x->Sum(x-1)))<>2*degree-2 do
         Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
     od;
-    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, criticalValues, false ,false, false );
+
+    strictNormalization:= false;
+    onlyComputeSearchSpaceSize:= false;
+    ignoreHurwitzFormula :=false;
+    checkNormalization := true;
+
+    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field,
+                                                         partitions,  
+                                                         criticalValues, 
+                                                         strictNormalization , 
+                                                         onlyComputeSearchSpaceSize, 
+                                                         ignoreHurwitzFormula, 
+                                                         checkNormalization 
+                                                       );
 end 
 );
 
@@ -898,7 +925,13 @@ DeclareSynonym("FindHurwitzMapModPrimeByPermutations@HMAC",FindHurwitzMapModPrim
 ## <#/GAPDoc>
 InstallMethod( HurwitzMapSearchSpaceSize@HMAC, "", [IsPrimeField, IsList, IsList, IsBool ],
 function( field, permsOrShapes, criticalValues, ignoreHurwitzFormula )
-   local degree, shapes;
+   local degree, shapes,strictNormalization,onlyComputeSearchSpaceSize,checkNormalization;
+
+
+   strictNormalization:= false;
+    onlyComputeSearchSpaceSize:= true;
+    checkNormalization := true;
+
    
    if IsPerm( permsOrShapes[1] ) then
         while Length(criticalValues)<>Length(permsOrShapes) do
@@ -913,9 +946,23 @@ function( field, permsOrShapes, criticalValues, ignoreHurwitzFormula )
         while Sum( List(shapes,x->Sum(x-1)))<>2*degree-2 do
             Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
         od; 
-        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, shapes, criticalValues,  false, true, ignoreHurwitzFormula );
+        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, 
+                                                             shapes, 
+                                                             criticalValues,  
+                                                             strictNormalization, 
+                                                             onlyComputeSearchSpaceSize,
+                                                             ignoreHurwitzFormula,
+                                                             checkNormalization  
+                                                            );
    else
-        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, permsOrShapes, criticalValues, false, true, ignoreHurwitzFormula );     
+        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, 
+                                                             permsOrShapes, 
+                                                             criticalValues, 
+                                                             strictNormalization, 
+                                                             onlyComputeSearchSpaceSize,
+                                                             ignoreHurwitzFormula ,
+                                                             checkNormalization
+                                                            );     
    fi;
  end
  );
@@ -936,7 +983,7 @@ end
 #Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "CHECK_FINITE_FIELD_MAP",
 function( mapData, partitions, criticalValues, criticalValuesTrans, strictNormalization )
-    local  degree, polynomial, shape, i, polSetData, fam, rm, map, W1, W2, Wi, expected;
+    local  rationalMapDegree, polynomial, shape, i, polSetData, fam, rm, map, W1, W2, Wi, expected;
     
     rationalMapDegree := Sum( partitions[1] ); # degree of the rationalMap
     map := mapData[1];
@@ -974,7 +1021,7 @@ function( mapData, partitions, criticalValues, criticalValuesTrans, strictNormal
     # check shapes and critical values.
     for i in [3..Size(polSetData)] do
         Wi  :=  polSetData[i] ;
-        Assert(0,  ComputeShape@HMAC(Wi,degree )= Shape@HMAC( partitions[i] ) );
+        Assert(0,  ComputeShape@HMAC(Wi,rationalMapDegree )= Shape@HMAC( partitions[i] ) );
         
         expected := W2 - criticalValuesTrans[i]*W1;
         Assert(0, expected = Wi );
