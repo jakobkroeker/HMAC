@@ -240,7 +240,7 @@ namespace RationalMapSearch
             
                 while (  it != nrlvec.end() )
                 {
-                    //overwrite polynomialId if polynomialId>=2)
+                    //std::cerr << "//overwrite polynomialId if polynomialId>=2)\n";
                 
                     it++;
                 }
@@ -350,10 +350,13 @@ namespace RationalMapSearch
                         if ( not (  ( (*it).getPolynomialId() == NormalizationRule::dontcare ) or ( (*it).getPolynomialId() >= 2) ) )
                         {
                             std::cerr << "warning: not all  rules for first and second polynomial are applied"   << std::cerr;
+		            //std::cerr << "return false \n";
                             return false;  
                         }                      
                      }
+	             it++;
                 }
+                //std::cerr << "return true \n";
                 return true;
 
                 // @TODO the following tests are not correct.
@@ -1296,6 +1299,9 @@ namespace RationalMapSearch
                     second_search_level(polFactorConstructRules);
                     printStructureMap(singleStructureHashmap_m);
                     singleStructureHashmap_m.clear();
+			#ifdef DEBUG
+                             std::cerr << "first level ok" ;
+                        #endif
                 }
                 else
                 {
@@ -1312,6 +1318,13 @@ namespace RationalMapSearch
 
                         polFactorConstructRulesCopy.splice( polFactorConstructRulesCopy.end(), currentPolFactorConstructRules);
                         first_search_level(polfactorBlueprintList, polFactorConstructRulesCopy );
+			#ifdef DEBUG
+                            std::copy(	partition.begin(),
+					partition.end(),
+            		  		std::ostream_iterator<int>(std::cout,",")
+          			   );
+  				  std::cout << "\n";
+                        #endif
                     }
                     while (next_partition_desc( & partition )) ;
                 }
