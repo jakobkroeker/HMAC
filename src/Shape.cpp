@@ -96,6 +96,7 @@ namespace RationalMapSearch
         return conjugateVec;
     }
 
+    /// check, if a shape has an entry 'exp'
     bool  Shape::hasExponent(ScalarType   exp) const
     {
         for (size_t pos =0;pos!=shape_m.size();pos++)
@@ -106,7 +107,8 @@ namespace RationalMapSearch
         return false;
     }
 
-    //removes given exponent from the Shape, if possible and returns the result as new shape.
+    /// removes given exponent from the Shape, if possible.
+    /// returns the result as new shape(!)
     Shape   Shape::removeExponent(ScalarType   exp) const
     {
         if ( ! hasExponent(exp))
@@ -146,6 +148,7 @@ namespace RationalMapSearch
         return retval;
     }
 
+    /// creates a hashtable with entries <degree,multiplicity>, e.g. if Shape is [4,3,2,2,2] the entries will be (4,1), (3,1), (2,3)
     Shape::MultiplicityDegreeHashType  Shape::createMultiplicityDegreeRep(const Shape::ShapeRepType &ShapeRepType) 
     {
         //std::vector<std::pair> result;
@@ -164,6 +167,9 @@ namespace RationalMapSearch
         return multiplicityDegreeMap;
     }
 
+    /// checks, if the shape has at least one degree entry with single multiplicity . 
+    /// Example for (4,3,2,2,2)  natural normalizable factors are '4' and '3'
+    ///
     bool    Shape::hasNaturalNormalizableFactor() const
     {
         Shape::MultiplicityDegreeHashType::const_iterator it;
@@ -175,7 +181,11 @@ namespace RationalMapSearch
         return false;
     }
 
+    /// returns max possible degree of a factor polynomial . 
+    /// Example for Shape(4,3,2,2,2) it would be 3 , since three roots
+    /// of multiplicity 2 could be realized over a prime field in a irreduzible polynomial of degree 3 with multiplicity 2.
     // Todo: move computation to constructor and a member variable? 
+    // 
     Shape::ScalarType   Shape::getMaxFactorDegree() const
     {
         Shape::MultiplicityDegreeHashType::const_iterator it;

@@ -47,38 +47,38 @@ function(critivalValueApproxList, finiteField)
     
     local polRing, variable, minpoly, minpolynomials, reducedValueList, tmpReducedValueList, point, newPoint,element;
     polRing := PolynomialRing(Rationals,["z"]);
-	variable := IndeterminatesOfPolynomialRing(polRing)[1];
-	#minpoly := RationalMinPolyFromRootApprox@HMAC(critivalValueApproxList[1], variable);
-	
-	minpolynomials :=  List( critivalValueApproxList, elem->RationalMinPolyFromRootApprox@HMAC (elem, variable ));
-	
+    variable := IndeterminatesOfPolynomialRing(polRing)[1];
+    #minpoly := RationalMinPolyFromRootApprox@HMAC(critivalValueApproxList[1], variable);
+    
+    minpolynomials :=  List( critivalValueApproxList, elem->RationalMinPolyFromRootApprox@HMAC (elem, variable ));
+    
     reducedValueList := [ [] ];
-	for minpoly in minpolynomials do 
-	    tmpReducedValueList := [ ];
-	    
-	    if minpoly=InfinityRootPolynomial@HMAC then
-	      for point in reducedValueList do
- 	               newPoint := Concatenation(point, [infinity] );
-	           Append(tmpReducedValueList, [newPoint ] );
-	      od;
+    for minpoly in minpolynomials do 
+        tmpReducedValueList := [ ];
+        
+        if minpoly=InfinityRootPolynomial@HMAC then
+          for point in reducedValueList do
+                    newPoint := Concatenation(point, [infinity] );
+               Append(tmpReducedValueList, [newPoint ] );
+          od;
           reducedValueList :=  tmpReducedValueList;
-	      continue;
-	   fi;
-	            
-	    for element in Elements(finiteField) do
-	        
-	        if IsZero( Value(minpoly,[variable], [element] )) then
-	            for point in reducedValueList do
-	                newPoint := Concatenation(point, [element] );
-	                Append(tmpReducedValueList, [ newPoint ] );
-	            od;
-	        fi;
-	    od;
-	    reducedValueList :=  tmpReducedValueList;
-	   
-	od;
+          continue;
+       fi;
+                
+        for element in Elements(finiteField) do
+            
+            if IsZero( Value(minpoly,[variable], [element] )) then
+                for point in reducedValueList do
+                    newPoint := Concatenation(point, [element] );
+                    Append(tmpReducedValueList, [ newPoint ] );
+                od;
+            fi;
+        od;
+        reducedValueList :=  tmpReducedValueList;
+       
+    od;
     tmpReducedValueList := reducedValueList ;
-	reducedValueList := [ ];
+    reducedValueList := [ ];
     for point in tmpReducedValueList do
         if IsDuplicateFree(point) then 
             Append(reducedValueList, [point] );
@@ -128,18 +128,18 @@ end
 
 InstallGlobalFunction( Shape@HMAC, 
 function( partition )
-	local shape, shapeRec;
- 	if not  IsList( partition ) or not ForAll( partition, IsPosInt) then
- 		Error("constructing shape: expected a list of positive integers");
- 	fi;
+    local shape, shapeRec;
+     if not  IsList( partition ) or not ForAll( partition, IsPosInt) then
+         Error("constructing shape: expected a list of positive integers");
+     fi;
         shape := ShallowCopy(partition);
-	Sort(shape);
-	shape := Reversed(shape);
-	shapeRec := rec();
-	shapeRec.partition := Immutable(shape);
-	shapeRec.degree := Sum(shape) ;
-	shapeRec.dataType := "Shape";
-	return Immutable(shapeRec);
+    Sort(shape);
+    shape := Reversed(shape);
+    shapeRec := rec();
+    shapeRec.partition := Immutable(shape);
+    shapeRec.degree := Sum(shape) ;
+    shapeRec.dataType := "Shape";
+    return Immutable(shapeRec);
 end
 );
 
@@ -160,18 +160,18 @@ end
 ## <#/GAPDoc>
 InstallGlobalFunction( IsShape@HMAC, 
 function( shape )
-	if not IsRecord(shape) 
-	or not "dataType"  in RecNames(shape)
-	or not shape.dataType="Shape" 
-	or not "partition"  in RecNames(shape)
-	or not "degree" in RecNames(shape)
-	or not IsPosInt(shape.degree)
-	or not IsList(shape.partition)
-	or not ForAll(shape.partition, IsPosInt)
-	or not shape= Shape@HMAC(shape.partition) then
-		return false;
-	fi;	
-	return true;
+    if not IsRecord(shape) 
+    or not "dataType"  in RecNames(shape)
+    or not shape.dataType="Shape" 
+    or not "partition"  in RecNames(shape)
+    or not "degree" in RecNames(shape)
+    or not IsPosInt(shape.degree)
+    or not IsList(shape.partition)
+    or not ForAll(shape.partition, IsPosInt)
+    or not shape= Shape@HMAC(shape.partition) then
+        return false;
+    fi;    
+    return true;
 end
 );
 
@@ -199,40 +199,40 @@ InstallOtherMethod( ComputeShape@HMAC,
 "compute the shape of an univariate polynomial. Parameters: polynomial, [expected degree] ",  [ IsPolynomial, IsInt ],
 function( polynomial, expectedDegree )
   
-	local shape, factors, factor, i, multiplicity, tmp;
-	if not IsUnivariatePolynomial(polynomial) and 
-	   not (IsHomogenized@HMAC@Utils(polynomial) and IndeterminateNumber@HMAC@Utils(polynomial)=2 ) then
- 		Error("ComputeShape@HMAC: fist parameter is not an univariate or homogenized polynomial");
- 	fi;
- 	if not IsInt(expectedDegree) or IsNegInt(expectedDegree) then
- 		Error("ComputeShape@HMAC: second parameter is not a nonnegative integer");
- 	fi;
- 	if IsHomogenized@HMAC@Utils(polynomial) then
-     	polynomial := DehomogenizedPolynomial@HMAC@Utils(polynomial);
+    local shape, factors, factor, i, multiplicity, tmp;
+    if not IsUnivariatePolynomial(polynomial) and 
+       not (IsHomogenized@HMAC@Utils(polynomial) and IndeterminateNumber@HMAC@Utils(polynomial)=2 ) then
+         Error("ComputeShape@HMAC: fist parameter is not an univariate or homogenized polynomial");
+     fi;
+     if not IsInt(expectedDegree) or IsNegInt(expectedDegree) then
+         Error("ComputeShape@HMAC: second parameter is not a nonnegative integer");
+     fi;
+     if IsHomogenized@HMAC@Utils(polynomial) then
+         polynomial := DehomogenizedPolynomial@HMAC@Utils(polynomial);
     fi;
- 	# todo: only accept polynomials over rationals, integers or over finite fields. How to check?
-	shape := [];
-	factors := DistinctMonicFactors@HMAC@Utils( polynomial) ;
-	Degree@HMAC@Utils(polynomial);
-	for factor in factors do
-		tmp:=polynomial;
-		multiplicity := 0;
-		tmp:=tmp/factor;
-		while Degree( DenominatorOfRationalFunction(tmp) )<=0 do
-			tmp := tmp/factor;
-			multiplicity:=multiplicity+1;
-		od;
-		
-		for i in [ 1..Degree(factor) ] do
-			Append( shape, [multiplicity] );
-		od;
-	od;
-	if Sum(shape)<expectedDegree then
-		Append( shape,  [expectedDegree- Sum(shape)] );
-	fi;
-	return Shape@HMAC(shape);
-	#Sort(shape);
-	#return Reversed(shape);
+     # todo: only accept polynomials over rationals, integers or over finite fields. How to check?
+    shape := [];
+    factors := DistinctMonicFactors@HMAC@Utils( polynomial) ;
+    Degree@HMAC@Utils(polynomial);
+    for factor in factors do
+        tmp:=polynomial;
+        multiplicity := 0;
+        tmp:=tmp/factor;
+        while Degree( DenominatorOfRationalFunction(tmp) )<=0 do
+            tmp := tmp/factor;
+            multiplicity:=multiplicity+1;
+        od;
+        
+        for i in [ 1..Degree(factor) ] do
+            Append( shape, [multiplicity] );
+        od;
+    od;
+    if Sum(shape)<expectedDegree then
+        Append( shape,  [expectedDegree- Sum(shape)] );
+    fi;
+    return Shape@HMAC(shape);
+    #Sort(shape);
+    #return Reversed(shape);
 end 
 );
 
@@ -240,7 +240,7 @@ end
  InstallOtherMethod( ComputeShape@HMAC,
   "compute the shape of an univariate polynomial. Parameters: polynomial, [expected degree]", [ IsPolynomial  ], 
 function( polynomial )
- 	return ComputeShape@HMAC(polynomial, Degree@HMAC@Utils(polynomial)) ;
+     return ComputeShape@HMAC(polynomial, Degree@HMAC@Utils(polynomial)) ;
  end
 );
 
@@ -248,56 +248,56 @@ function( polynomial )
 #Hurwitz@HMAC.Tests.TEST_COMPUTE_SHAPE :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_COMPUTE_SHAPE", 
 function()
-	local rng, ind, x,y,  pol, hpol, shape;
-	rng := PolynomialRing(Rationals, ["x","y"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
+    local rng, ind, x,y,  pol, hpol, shape;
+    rng := PolynomialRing(Rationals, ["x","y"] );
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
         y := ind[2];
-	pol := 3*(x+1)*(x+2)^2;
-	 
-	shape := ComputeShape@HMAC( pol );
-	Assert(0, shape.partition= [2,1] );
-	hpol := HomogenizedPolynomial@HMAC@Utils(pol,y);
+    pol := 3*(x+1)*(x+2)^2;
+     
+    shape := ComputeShape@HMAC( pol );
+    Assert(0, shape.partition= [2,1] );
+    hpol := HomogenizedPolynomial@HMAC@Utils(pol,y);
     shape := ComputeShape@HMAC( hpol );
-	Assert(0, shape.partition= [2,1] );
-	
-	hpol := HomogenizedPolynomial@HMAC@Utils(pol,y,6);
+    Assert(0, shape.partition= [2,1] );
+    
+    hpol := HomogenizedPolynomial@HMAC@Utils(pol,y,6);
     shape := ComputeShape@HMAC( hpol );
-	Assert(0, shape.partition= [3,2,1] );
-	
-	
-	rng := PolynomialRing( Integers, ["x"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	pol := (x+1)*(x+2)^2;
-	 
-	shape := ComputeShape@HMAC( pol );
-	Assert(0, shape.partition= [2,1] );
-	
-	rng := PolynomialRing( GF(11), ["x"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	pol := 5*(x+1)*(x+2)^2;
-	 
-	shape := ComputeShape@HMAC( pol );
-	Assert(0, shape.partition= [2,1] );
+    Assert(0, shape.partition= [3,2,1] );
+    
+    
+    rng := PolynomialRing( Integers, ["x"] );
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    pol := (x+1)*(x+2)^2;
+     
+    shape := ComputeShape@HMAC( pol );
+    Assert(0, shape.partition= [2,1] );
+    
+    rng := PolynomialRing( GF(11), ["x"] );
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    pol := 5*(x+1)*(x+2)^2;
+     
+    shape := ComputeShape@HMAC( pol );
+    Assert(0, shape.partition= [2,1] );
 
     rng := PolynomialRing( GF(121), ["x"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	pol := (x+1)*(x+2)^2;
-	 
-	shape := ComputeShape@HMAC( pol );
-	Assert(0, shape.partition= [2,1] );
-	
-	
-	rng := PolynomialRing( ZmodnZ(121), ["x"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	pol := (x+1)*(x+2)^2;
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    pol := (x+1)*(x+2)^2;
+     
+    shape := ComputeShape@HMAC( pol );
+    Assert(0, shape.partition= [2,1] );
+    
+    
+    rng := PolynomialRing( ZmodnZ(121), ["x"] );
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    pol := (x+1)*(x+2)^2;
 
-	# shape := ComputeShape@HMAC( pol );    # fails !
-	#Assert(0, shape.partition= [2,1] );	
+    # shape := ComputeShape@HMAC( pol );    # fails !
+    #Assert(0, shape.partition= [2,1] );    
 end
 );
 
@@ -327,34 +327,34 @@ end
 InstallOtherMethod( RootMultiplicity@HMAC, "", [IsUnivariatePolynomial, IsObject, IsInt ],
 
 function( polynomial,root, poldegree ) 
-	local mapFactors, rootMultiplicity, factor;
-	if not IsUnivariatePolynomial(polynomial) then
- 		Error("RootMultiplicity: first parameter is not a univatiate polynomial");
- 	fi;
- 	Assert(0 , poldegree >= Degree(polynomial));
- 	
- 	if root=infinity then
-		if Degree(polynomial)<=poldegree and root=infinity then 
-			return poldegree-Degree(polynomial);
-		fi;
-		Assert(0, false);
-	fi;
-	
-	mapFactors := Factors( polynomial );	 
-	rootMultiplicity := 0;
-	for factor in mapFactors do	
-		if IsZero(Value(factor, root)) then
-			rootMultiplicity := rootMultiplicity+Degree(factor);	
-		fi;
-	od;	 
-	return rootMultiplicity;
+    local mapFactors, rootMultiplicity, factor;
+    if not IsUnivariatePolynomial(polynomial) then
+         Error("RootMultiplicity: first parameter is not a univatiate polynomial");
+     fi;
+     Assert(0 , poldegree >= Degree(polynomial));
+     
+     if root=infinity then
+        if Degree(polynomial)<=poldegree and root=infinity then 
+            return poldegree-Degree(polynomial);
+        fi;
+        Assert(0, false);
+    fi;
+    
+    mapFactors := Factors( polynomial );     
+    rootMultiplicity := 0;
+    for factor in mapFactors do    
+        if IsZero(Value(factor, root)) then
+            rootMultiplicity := rootMultiplicity+Degree(factor);    
+        fi;
+    od;     
+    return rootMultiplicity;
 end
 );
 
 
 InstallOtherMethod( RootMultiplicity@HMAC, "", [ IsUnivariatePolynomial, IsObject ],
 function( polynomial,  root ) 
-	 return RootMultiplicity@HMAC(polynomial, root, Degree( polynomial) );
+     return RootMultiplicity@HMAC(polynomial, root, Degree( polynomial) );
 end
 );
 
@@ -362,19 +362,19 @@ end
 # Hurwitz@HMAC.Tests.TEST_ROOT_MULTIPLICITY :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_ROOT_MULTIPLICITY", 
 function()
-	local rng, ind, x, pol,polDegree; 
-	
-	rng := PolynomialRing( GF(121), ["x"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	pol := (x+1)*(x+2)^2;
+    local rng, ind, x, pol,polDegree; 
+    
+    rng := PolynomialRing( GF(121), ["x"] );
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    pol := (x+1)*(x+2)^2;
 
-	Assert(0, 0= RootMultiplicity@HMAC( pol, -3 ));
-		
-	Assert(0, 2= RootMultiplicity@HMAC( pol, -2 ));
-	Assert(0, 1= RootMultiplicity@HMAC( pol, -1 ));
-	polDegree := 4;
-	Assert(0, 1= RootMultiplicity@HMAC( pol, infinity, polDegree ) );
+    Assert(0, 0= RootMultiplicity@HMAC( pol, -3 ));
+        
+    Assert(0, 2= RootMultiplicity@HMAC( pol, -2 ));
+    Assert(0, 1= RootMultiplicity@HMAC( pol, -1 ));
+    polDegree := 4;
+    Assert(0, 1= RootMultiplicity@HMAC( pol, infinity, polDegree ) );
 end
 );
 
@@ -398,17 +398,17 @@ end
 ## <#/GAPDoc>
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "HomogenizeValues", 
 function( values, field )
-	local ValuesHom,i;
-	 ValuesHom := List ( [1..Size(values)],n->0 );
-	    for i in [1..Length(values)] do
-		if values[i]=infinity then       	
-			 ValuesHom[i] := [One(field), Zero(field)]; 
-		else 
-			ValuesHom[i] := [values[i], One(field)]; 
-		fi;
-			
-	    od;
-	    return ValuesHom;
+    local ValuesHom,i;
+     ValuesHom := List ( [1..Size(values)],n->0 );
+        for i in [1..Length(values)] do
+        if values[i]=infinity then           
+             ValuesHom[i] := [One(field), Zero(field)]; 
+        else 
+            ValuesHom[i] := [values[i], One(field)]; 
+        fi;
+            
+        od;
+        return ValuesHom;
 end
 );
 
@@ -416,16 +416,16 @@ end
  
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HOMOGENIZE_VALUES", 
 function()
-	local field, values, homValues;
-	field := GF(11);
-	
-	values := [ One(field), Zero(field), infinity , One(field)*5];
-	homValues :=  Hurwitz@HMAC.Internal.HomogenizeValues( values, field );
-	Assert(0, Size(homValues)=Size(values) );
-	Assert(0, homValues[1]=[One(field),One(field)]);
-	Assert(0, homValues[2]=[Zero(field),One(field)]);
-	Assert(0, homValues[3]=[One(field),Zero(field)]);
-	Assert(0, homValues[4]=[5*One(field),One(field)]);
+    local field, values, homValues;
+    field := GF(11);
+    
+    values := [ One(field), Zero(field), infinity , One(field)*5];
+    homValues :=  Hurwitz@HMAC.Internal.HomogenizeValues( values, field );
+    Assert(0, Size(homValues)=Size(values) );
+    Assert(0, homValues[1]=[One(field),One(field)]);
+    Assert(0, homValues[2]=[Zero(field),One(field)]);
+    Assert(0, homValues[3]=[One(field),Zero(field)]);
+    Assert(0, homValues[4]=[5*One(field),One(field)]);
 end
 );
 
@@ -434,17 +434,17 @@ end
  
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "DehomogenizeValues", 
 function( ValuesHom )
-	local values,i;
-	 values := List ( [1..Size(ValuesHom)], n->0 );
-	    for i in [1..Length(values)] do
-		if IsZero(ValuesHom[i][2]) then       	
-			 values[i] := infinity;
-		else 
-			values[i] := ValuesHom[i][1]/ValuesHom[i][2]; 
-		fi;
-			
-	    od;
-	    return values;
+    local values,i;
+     values := List ( [1..Size(ValuesHom)], n->0 );
+        for i in [1..Length(values)] do
+        if IsZero(ValuesHom[i][2]) then           
+             values[i] := infinity;
+        else 
+            values[i] := ValuesHom[i][1]/ValuesHom[i][2]; 
+        fi;
+            
+        od;
+        return values;
 end
 );
 
@@ -452,13 +452,13 @@ end
 #Hurwitz@HMAC.Tests.TEST_DEHOMOGENIZE_VALUES :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_DEHOMOGENIZE_VALUES", 
 function()
-	local field, values, homValues, deHomVal;
-	field := GF(11);
-	
-	values := [ One(field), Zero(field), infinity , One(field)*5];
-	homValues :=  Hurwitz@HMAC.Internal.HomogenizeValues( values, field );
-	deHomVal :=  Hurwitz@HMAC.Internal.DehomogenizeValues(homValues);
-	Assert(0, values=deHomVal);
+    local field, values, homValues, deHomVal;
+    field := GF(11);
+    
+    values := [ One(field), Zero(field), infinity , One(field)*5];
+    homValues :=  Hurwitz@HMAC.Internal.HomogenizeValues( values, field );
+    deHomVal :=  Hurwitz@HMAC.Internal.DehomogenizeValues(homValues);
+    Assert(0, values=deHomVal);
 end
 );
 
@@ -583,10 +583,10 @@ end
 #Hurwitz@HMAC.Internal.ComputeCVNormalizationMap :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "ComputeCVNormalizationMap", 
 function( criticalValuesHom )
-	local mat, i, idx;
-	 Assert( 0, IsList( criticalValuesHom ) );
-	 Assert( 0, Size(criticalValuesHom) >= 3 );
-	 # normalize homogen coordinates. # todo: write a function which normalizes homogen coordinates!
+    local mat, i, idx;
+     Assert( 0, IsList( criticalValuesHom ) );
+     Assert( 0, Size(criticalValuesHom) >= 3 );
+     # normalize homogen coordinates. # todo: write a function which normalizes homogen coordinates!
      for idx in [1..Size(criticalValuesHom)] do 
         if not IsZero(criticalValuesHom[idx][2]) then
              criticalValuesHom[idx][1]:=criticalValuesHom[idx][1]/criticalValuesHom[idx][2];
@@ -600,10 +600,10 @@ function( criticalValuesHom )
         Error(" critical values has to be distinct!");
      fi;
      
-	 mat := [ [ criticalValuesHom[2][2], -criticalValuesHom[2][1]  ] , [ criticalValuesHom[1][2],-criticalValuesHom[1][1]] ];
-  	 i := mat*criticalValuesHom[3];
-    	 mat := -[ mat[1]*i[2], mat[2]*i[1] ];   
-    	 return mat;
+     mat := [ [ criticalValuesHom[2][2], -criticalValuesHom[2][1]  ] , [ criticalValuesHom[1][2],-criticalValuesHom[1][1]] ];
+       i := mat*criticalValuesHom[3];
+         mat := -[ mat[1]*i[2], mat[2]*i[1] ];   
+         return mat;
 end
 );
 
@@ -633,14 +633,14 @@ InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HOMOGEN_COORD
 function( )
     local rng, ind, x, y, linearFactor,homogenCoord,homogenVariable;
     rng := PolynomialRing( GF(121), ["x","y"] );
-	ind :=IndeterminatesOfPolynomialRing(rng);
-	x := ind[1];
-	y := ind[2];
-	linearFactor := (x+1*y);
-	homogenVariable := y;
-	homogenCoord := Hurwitz@HMAC.Internal.HomogenCoordinates(linearFactor,x,y);
-	Assert(0, homogenCoord=[One(GF(121)),One(GF(121)) ]);
-	
+    ind :=IndeterminatesOfPolynomialRing(rng);
+    x := ind[1];
+    y := ind[2];
+    linearFactor := (x+1*y);
+    homogenVariable := y;
+    homogenCoord := Hurwitz@HMAC.Internal.HomogenCoordinates(linearFactor,x,y);
+    Assert(0, homogenCoord=[One(GF(121)),One(GF(121)) ]);
+    
 end
 );
 
@@ -651,13 +651,13 @@ end
 
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "NormalizeCriticalValues", 
 function( criticalValues, finiteField )
-	local criticalValuesHom, mat, criticalValuesHomTrans, criticalValuesTrans, i;
-	
-	criticalValuesHom := Hurwitz@HMAC.Internal.HomogenizeValues( criticalValues,finiteField );
-	mat := Hurwitz@HMAC.Internal.ComputeCVNormalizationMap( criticalValuesHom );	
-	criticalValuesHomTrans := List( criticalValuesHom,x->mat*x );
-	criticalValuesTrans := Hurwitz@HMAC.Internal.DehomogenizeValues( criticalValuesHomTrans );
-    	return criticalValuesTrans;
+    local criticalValuesHom, mat, criticalValuesHomTrans, criticalValuesTrans, i;
+    
+    criticalValuesHom := Hurwitz@HMAC.Internal.HomogenizeValues( criticalValues,finiteField );
+    mat := Hurwitz@HMAC.Internal.ComputeCVNormalizationMap( criticalValuesHom );    
+    criticalValuesHomTrans := List( criticalValuesHom,x->mat*x );
+    criticalValuesTrans := Hurwitz@HMAC.Internal.DehomogenizeValues( criticalValuesHomTrans );
+        return criticalValuesTrans;
 end
 );
 
@@ -665,9 +665,9 @@ end
 
 #Hurwitz@HMAC.Internal.FindHurwitzMapModPrime :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "FindHurwitzMapModPrime", 
-function( field, partitions, criticalValues,  strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula )
-    local convayPolynomial, flags, input, output, degree, i, mat, p, poly, rat, f,
-          criticalValuesHom, criticalValuesHomTrans, polynomials,postError;
+function( field, partitions, criticalValues,  strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization )
+    local convayPolynomial, flags, input, output, degree, i, mat, p, poly, rat, f, map,
+          criticalValuesHom, criticalValuesHomTrans, criticalValuesTrans, polynomials,postError, polynomial,degreesum;
 
     postError := "\nArguments should be '<field>, <partitions>, <critical values>, <strictNormalization>, <onlyComputeSearchSpaceSize>' ";    
     if not IsDuplicateFree(criticalValues) then Error(Concatenation("critical values not distinct!",postError ) );  fi;
@@ -683,8 +683,9 @@ function( field, partitions, criticalValues,  strictNormalization, onlyComputeSe
     degree := Sum( partitions[1] );
     Info(InfoHMAC,1, String(  List(partitions,x->Sum(x-1) ) ) );
     if not ignoreHurwitzFormula then
+    degreesum:=Sum(List(partitions,x->Sum(x-1)));
     while Sum(List(partitions,x->Sum(x-1)))<>2*degree-2 do
-        Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
+        Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2, "but to ",degreesum);
     od;
     fi;
     input := "";
@@ -740,10 +741,20 @@ function( field, partitions, criticalValues,  strictNormalization, onlyComputeSe
         p := poly[i];
 
         polynomials := List(p, polynomialCoeffs->UnivariatePolynomialByCoefficients( FamilyObj(One(field)), polynomialCoeffs ));
-             
+        for polynomial in polynomials do 
+          SetExpectedDegree(polynomial,degree);
+        od;
         rat := mat^-1*[p[2],p[1]];
         poly[i] := [UnivariateRationalFunctionByCoefficients(FamilyObj(One(field)),rat[1],rat[2],0), polynomials ];
     od;
+
+    # check result; separate it from FindHurwitzMapModPrime? 
+    if checkNormalization then 
+        criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, field );
+        for map in poly do
+          Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  map, partitions, criticalValues, criticalValuesTrans, strictNormalization );
+        od;
+    fi;
     return poly;
 end
 );
@@ -789,7 +800,19 @@ end
 ## <#/GAPDoc>
 InstallOtherMethod( FindHurwitzMapModPrime@HMAC, "", [ IsPrimeField, IsList, IsList, IsBool ],
 function( field, partitions, criticalValues, strictNormalization )
-	return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, criticalValues, strictNormalization, false, false );
+
+    local onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization;
+
+    onlyComputeSearchSpaceSize := false;
+    ignoreHurwitzFormula := false;
+    checkNormalization := true;
+
+    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, 
+                                                        criticalValues, 
+                                                        strictNormalization, 
+                                                        onlyComputeSearchSpaceSize, 
+                                                        ignoreHurwitzFormula, 
+                                                        checkNormalization);
 end
 );
 
@@ -824,7 +847,7 @@ DeclareSynonym("FindHurwitzMapModPrimeEx@HMAC",FindHurwitzMapModPrime@HMAC);
 ## <#/GAPDoc>
 InstallOtherMethod( FindHurwitzMapModPrime@HMAC, "", [IsPrimeField, IsList, IsList ],
 function( field, perms, criticalValues )
-    local degree, partitions, postError;
+    local degree, partitions, postError, strictNormalization, onlyComputeSearchSpaceSize, ignoreHurwitzFormula, checkNormalization;
     
     postError := "\nArguments should be '<field>, <permutations>, <critical values>' ";    
         
@@ -850,7 +873,20 @@ function( field, perms, criticalValues )
     while Sum( List(partitions,x->Sum(x-1)))<>2*degree-2 do
         Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
     od;
-    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, partitions, criticalValues, false ,false, false );
+
+    strictNormalization:= false;
+    onlyComputeSearchSpaceSize:= false;
+    ignoreHurwitzFormula :=false;
+    checkNormalization := true;
+
+    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field,
+                                                         partitions,  
+                                                         criticalValues, 
+                                                         strictNormalization , 
+                                                         onlyComputeSearchSpaceSize, 
+                                                         ignoreHurwitzFormula, 
+                                                         checkNormalization 
+                                                       );
 end 
 );
 
@@ -889,24 +925,44 @@ DeclareSynonym("FindHurwitzMapModPrimeByPermutations@HMAC",FindHurwitzMapModPrim
 ## <#/GAPDoc>
 InstallMethod( HurwitzMapSearchSpaceSize@HMAC, "", [IsPrimeField, IsList, IsList, IsBool ],
 function( field, permsOrShapes, criticalValues, ignoreHurwitzFormula )
-   local degree, shapes;
+   local degree, shapes,strictNormalization,onlyComputeSearchSpaceSize,checkNormalization;
+
+
+   strictNormalization:= false;
+    onlyComputeSearchSpaceSize:= true;
+    checkNormalization := true;
+
    
    if IsPerm( permsOrShapes[1] ) then
-	    while Length(criticalValues)<>Length(permsOrShapes) do
-           		Error("Fields <perms> and <criticalValues> should have same length");
-	    od;
-	    if not ForAll( permsOrShapes, IsPerm ) then
-		    Error("second parameter is not a list of permutations!");
-	    fi;
-	
-	    degree := Maximum(List( permsOrShapes,LargestMovedPoint ));
-	    shapes := List(permsOrShapes, p->CycleLengths( p,[1..degree]) );
-	    while Sum( List(shapes,x->Sum(x-1)))<>2*degree-2 do
-		    Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
-	    od; 
-	    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, shapes, criticalValues,  false, true, ignoreHurwitzFormula );
+        while Length(criticalValues)<>Length(permsOrShapes) do
+                   Error("Fields <perms> and <criticalValues> should have same length");
+        od;
+        if not ForAll( permsOrShapes, IsPerm ) then
+            Error("second parameter is not a list of permutations!");
+        fi;
+    
+        degree := Maximum(List( permsOrShapes,LargestMovedPoint ));
+        shapes := List(permsOrShapes, p->CycleLengths( p,[1..degree]) );
+        while Sum( List(shapes,x->Sum(x-1)))<>2*degree-2 do
+            Error("Sum of local degrees does not add to 2*degree-2 = ",2*degree-2);
+        od; 
+        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, 
+                                                             shapes, 
+                                                             criticalValues,  
+                                                             strictNormalization, 
+                                                             onlyComputeSearchSpaceSize,
+                                                             ignoreHurwitzFormula,
+                                                             checkNormalization  
+                                                            );
    else
-	    return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, permsOrShapes, criticalValues, false, true, ignoreHurwitzFormula ); 	
+        return Hurwitz@HMAC.Internal.FindHurwitzMapModPrime( field, 
+                                                             permsOrShapes, 
+                                                             criticalValues, 
+                                                             strictNormalization, 
+                                                             onlyComputeSearchSpaceSize,
+                                                             ignoreHurwitzFormula ,
+                                                             checkNormalization
+                                                            );     
    fi;
  end
  );
@@ -927,48 +983,49 @@ end
 #Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "CHECK_FINITE_FIELD_MAP",
 function( mapData, partitions, criticalValues, criticalValuesTrans, strictNormalization )
-	local  degree, polynomial, shape, i, polSetData, fam, rm, map, W1, W2, Wi, expected;
-	
-	degree := Sum( partitions[1] );
-	map := mapData[1];
-	polynomial := NumeratorOfRationalFunction( map ) ;
-	shape := ComputeShape@HMAC( polynomial, degree ); 
-	Assert(0, ComputeShape@HMAC(polynomial,degree ) = Shape@HMAC( partitions[2]) );
+    local  rationalMapDegree, polynomial, shape, i, polSetData, fam, rm, map, W1, W2, Wi, expected;
+    
+    rationalMapDegree := Sum( partitions[1] ); # degree of the rationalMap
+    map := mapData[1];
+    polynomial := NumeratorOfRationalFunction( map ) ;
+    shape := ComputeShape@HMAC( polynomial, rationalMapDegree ); 
+    Assert(0, ComputeShape@HMAC(polynomial,rationalMapDegree ) = Shape@HMAC( partitions[2]) );
 
-	polynomial := DenominatorOfRationalFunction( map ) ;
-	Assert(0,  ComputeShape@HMAC(polynomial,degree )= Shape@HMAC( partitions[1] ) );
-	
-	polynomial := NumeratorOfRationalFunction( map-1 ) ;
-	Assert(0,  ComputeShape@HMAC(polynomial,degree ) = Shape@HMAC( partitions[3] ) );
-	
-	#check if normalization is correct
-	if strictNormalization then	
-		polynomial  :=  NumeratorOfRationalFunction( map );
-		rm := RootMultiplicity@HMAC(polynomial,  criticalValues[2],degree );
-		Assert(0, rm = partitions[2][1] ); # expected zero root with  multiplicity shapes[2][1](=1).
-		polynomial :=  DenominatorOfRationalFunction( map );
-		rm := RootMultiplicity@HMAC(polynomial, criticalValues[1] ,degree );
-		Assert(0, rm = partitions[1][1] ); # expected infinity root with  multiplicity shapes[1][1](=2).
+    polynomial := DenominatorOfRationalFunction( map ) ;
+    Assert(0,  ComputeShape@HMAC(polynomial,rationalMapDegree )= Shape@HMAC( partitions[1] ) );
+    
+    polynomial := NumeratorOfRationalFunction( map-1 ) ;
+    Assert(0,  ComputeShape@HMAC(polynomial,rationalMapDegree ) = Shape@HMAC( partitions[3] ) );
+    
+    #check if normalization is correct
+    if strictNormalization then    
+        polynomial  :=  NumeratorOfRationalFunction( map );
+        rm := RootMultiplicity@HMAC(polynomial,  criticalValues[2],rationalMapDegree );
+        Assert(0, rm = partitions[2][1] ); # expected zero root with  multiplicity shapes[2][1](=1).
+        polynomial :=  DenominatorOfRationalFunction( map );
+        rm := RootMultiplicity@HMAC(polynomial, criticalValues[1] ,rationalMapDegree );
+        Assert(0, rm = partitions[1][1] ); # expected infinity root with  multiplicity shapes[1][1](=2).
 
-		polynomial  :=  NumeratorOfRationalFunction( map-1 );
-		rm := RootMultiplicity@HMAC(polynomial, criticalValues[3] ,degree );
-		Assert(0, rm = partitions[3][1] ); # expected one root with  multiplicity shapes[3][1](=3).
-		
-	fi;
-	polSetData := mapData[2];
-	
-	fam := FamilyObj( One( LeadingCoefficient(polynomial)^-1*LeadingCoefficient(polynomial) ));
-	W1 :=  polSetData[1] ;
-	W2 :=  polSetData[2] ;
-	
-	# check shapes and critical values.
-	for i in [3..Size(polSetData)] do
-		Wi  :=  polSetData[i] ;
-		Assert(0,  ComputeShape@HMAC(Wi,degree )= Shape@HMAC( partitions[i] ) );
-		
-		expected := W2 - criticalValuesTrans[i]*W1;
-		Assert(0, expected = Wi );
-	od;
+        polynomial  :=  NumeratorOfRationalFunction( map-1 );
+        rm := RootMultiplicity@HMAC(polynomial, criticalValues[3] ,rationalMapDegree );
+        Assert(0, rm = partitions[3][1] ); # expected one root with  multiplicity shapes[3][1](=3).
+        
+    fi;
+
+    polSetData := mapData[2];
+    
+    fam := FamilyObj( One( LeadingCoefficient(polynomial)^-1*LeadingCoefficient(polynomial) ));
+    W1 :=  polSetData[1] ;
+    W2 :=  polSetData[2] ;
+    
+    # check shapes and critical values.
+    for i in [3..Size(polSetData)] do
+        Wi  :=  polSetData[i] ;
+        Assert(0,  ComputeShape@HMAC(Wi,rationalMapDegree )= Shape@HMAC( partitions[i] ) );
+        
+        expected := W2 - criticalValuesTrans[i]*W1;
+        Assert(0, expected = Wi );
+    od;
 end
 );
 
@@ -977,14 +1034,14 @@ end
 #Hurwitz@HMAC.Tests.TEST_CRITICAL_VALUES_NORMALIZATION := 
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_CRITICAL_VALUES_NORMALIZATION",
 function()
-	local fieldSize, finiteField, criticalValues,criticalValuesTrans;
-	fieldSize := 7;
-	finiteField :=GF(fieldSize);	
-	criticalValues := [ 0*Z(fieldSize), Z(fieldSize)^1, Z(fieldSize)^6 ,infinity];
-	criticalValuesTrans:= Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
-	Assert(0, criticalValuesTrans[1]=infinity);
-	Assert(0, criticalValuesTrans[2]=Zero(finiteField) );
-	Assert(0, criticalValuesTrans[3]=One(finiteField) );	
+    local fieldSize, finiteField, criticalValues,criticalValuesTrans;
+    fieldSize := 7;
+    finiteField :=GF(fieldSize);    
+    criticalValues := [ 0*Z(fieldSize), Z(fieldSize)^1, Z(fieldSize)^6 ,infinity];
+    criticalValuesTrans:= Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
+    Assert(0, criticalValuesTrans[1]=infinity);
+    Assert(0, criticalValuesTrans[2]=Zero(finiteField) );
+    Assert(0, criticalValuesTrans[3]=One(finiteField) );    
 end
 );
 
@@ -993,19 +1050,19 @@ end
 #Hurwitz@HMAC.Tests.TEST_COMPUTE_HURWITZ_MAP_SEARCH_SPACE_SIZE :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_COMPUTE_HURWITZ_MAP_SEARCH_SPACE_SIZE",
 function()
-	local fieldSize, finiteField, permutations,  criticalValues, partitions, searchSpaceSize;
+    local fieldSize, finiteField, permutations,  criticalValues, partitions, searchSpaceSize;
 
-	fieldSize := 11;
-	finiteField:= Field( Z(fieldSize) );
+    fieldSize := 11;
+    finiteField:= Field( Z(fieldSize) );
 
-	criticalValues := [infinity, 0*Z(fieldSize),Z(fieldSize)^1];
-	
+    criticalValues := [infinity, 0*Z(fieldSize),Z(fieldSize)^1];
+    
 
-	#HurwitzMapSearchSpaceSize@HMAC( finiteField, permutations, criticalValues);
-	
-	partitions := [[4,3,2,2,2],[4,3,2,2,2],[4,3,2,2,2]] ;
-	searchSpaceSize := HurwitzMapSearchSpaceSize@HMAC( finiteField,partitions, criticalValues);
-	Assert(0, searchSpaceSize = 112258800);
+    #HurwitzMapSearchSpaceSize@HMAC( finiteField, permutations, criticalValues);
+    
+    partitions := [[4,3,2,2,2],[4,3,2,2,2],[4,3,2,2,2]] ;
+    searchSpaceSize := HurwitzMapSearchSpaceSize@HMAC( finiteField,partitions, criticalValues);
+    Assert(0, searchSpaceSize = 112258800);
 end 
 );
 
@@ -1014,32 +1071,32 @@ end
 #Hurwitz@HMAC.Tests.TEST_HMS_THREE_CRITICAL_VALUES:=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HMS_THREE_CRITICAL_VALUES",
 function()
-	local fieldSize, finiteField, permutations, degree,
-	      partitions,  criticalValues,criticalValuesTrans, countonly, maps, mapData;
-	
-	fieldSize := 11;
-	finiteField := GF(fieldSize);
-	permutations := [(1,2),(2,3),(1,2,3)];
-	degree := Maximum(List(permutations,LargestMovedPoint));
-	partitions := List(permutations,p->CycleLengths(p,[1..degree]));
-	criticalValues := [ infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
-	
-	
-	maps := FindHurwitzMapModPrime@HMAC( finiteField ,permutations,criticalValues );
-	criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField );
-	mapData := maps[1] ;
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  mapData, partitions, criticalValues,criticalValuesTrans, false );
-	
-	maps:=[];
-	criticalValues := [ 0*Z(fieldSize), infinity, Z(fieldSize)^0 ];
-	maps := FindHurwitzMapModPrime@HMAC( finiteField, permutations ,criticalValues );
-	criticalValuesTrans:= Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
-	
-	mapData := maps[1] ;
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP( mapData, partitions, criticalValues,criticalValuesTrans, false );
-	
-	# kept an example for CoefficientsOfUnivariatePolynomial and IntFFESymm usage:
-	# List( last, p->List( CoefficientsOfUnivariatePolynomial(p), IntFFESymm) );
+    local fieldSize, finiteField, permutations, degree,
+          partitions,  criticalValues,criticalValuesTrans, countonly, maps, mapData;
+    
+    fieldSize := 11;
+    finiteField := GF(fieldSize);
+    permutations := [(1,2),(2,3),(1,2,3)];
+    degree := Maximum(List(permutations,LargestMovedPoint));
+    partitions := List(permutations,p->CycleLengths(p,[1..degree]));
+    criticalValues := [ infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
+    
+    
+    maps := FindHurwitzMapModPrime@HMAC( finiteField ,permutations,criticalValues );
+    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField );
+    mapData := maps[1] ;
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  mapData, partitions, criticalValues,criticalValuesTrans, false );
+    
+    maps:=[];
+    criticalValues := [ 0*Z(fieldSize), infinity, Z(fieldSize)^0 ];
+    maps := FindHurwitzMapModPrime@HMAC( finiteField, permutations ,criticalValues );
+    criticalValuesTrans:= Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
+    
+    mapData := maps[1] ;
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP( mapData, partitions, criticalValues,criticalValuesTrans, false );
+    
+    # kept an example for CoefficientsOfUnivariatePolynomial and IntFFESymm usage:
+    # List( last, p->List( CoefficientsOfUnivariatePolynomial(p), IntFFESymm) );
 end 
 );
 
@@ -1048,24 +1105,24 @@ end
 #Hurwitz@HMAC.Tests.TEST_HMS_STRICT_NORMALIZATION := 
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HMS_STRICT_NORMALIZATION",
 function()
-	local fieldSize, finiteField, permutations, degree, partitions,
-	      criticalValues, criticalValuesTrans, strictNormalization, maps;
-	
-	fieldSize := 11;
-	finiteField := GF(fieldSize);
-	permutations := [(1,2),(2,3),(1,2,3)];
-	Assert(0, Product(permutations)=() );
-	degree := Maximum( List(permutations,LargestMovedPoint) );
-	partitions := List(permutations,p->CycleLengths(p,[1..degree]));
-	partitions := [ [2,1], [1,2], [3] ];
-	criticalValues := [  infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
-	
-	strictNormalization := true;
-	
-	maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions ,criticalValues,  strictNormalization );
-	Assert( 0, Size(maps)=1 );
-	criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
+    local fieldSize, finiteField, permutations, degree, partitions,
+          criticalValues, criticalValuesTrans, strictNormalization, maps;
+    
+    fieldSize := 11;
+    finiteField := GF(fieldSize);
+    permutations := [(1,2),(2,3),(1,2,3)];
+    Assert(0, Product(permutations)=() );
+    degree := Maximum( List(permutations,LargestMovedPoint) );
+    partitions := List(permutations,p->CycleLengths(p,[1..degree]));
+    partitions := [ [2,1], [1,2], [3] ];
+    criticalValues := [  infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
+    
+    strictNormalization := true;
+    
+    maps := FindHurwitzMapModPrime@HMAC( finiteField, partitions ,criticalValues,  strictNormalization );
+    Assert( 0, Size(maps)=1 );
+    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
 end 
 );
 
@@ -1074,20 +1131,20 @@ end
 #Hurwitz@HMAC.Tests.TEST_HMS_FOUR_CRITICAL_VALUES :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HMS_FOUR_CRITICAL_VALUES",
 function()
-	local fieldSize, finiteField, permutations, degree, partitions,  
-	      criticalValues,criticalValuesTrans, strictNormalization, maps;
-	
-	fieldSize := 7; # 
-	finiteField :=GF(fieldSize);	 
-	partitions := [ [2,1],[2,1],[2,1],[2,1] ]; 
-	criticalValues := [infinity, 0*Z(fieldSize), Z(fieldSize)^0, Z(fieldSize)^5 ];
-	
-	strictNormalization := false;
-	
-	maps  := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );
-	Assert(0, Size(maps)=1);
-	criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField);
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues, criticalValuesTrans, strictNormalization );
+    local fieldSize, finiteField, permutations, degree, partitions,  
+          criticalValues,criticalValuesTrans, strictNormalization, maps;
+    
+    fieldSize := 7; # 
+    finiteField :=GF(fieldSize);     
+    partitions := [ [2,1],[2,1],[2,1],[2,1] ]; 
+    criticalValues := [infinity, 0*Z(fieldSize), Z(fieldSize)^0, Z(fieldSize)^5 ];
+    
+    strictNormalization := false;
+    
+    maps  := FindHurwitzMapModPrime@HMAC( finiteField, partitions, criticalValues, strictNormalization );
+    Assert(0, Size(maps)=1);
+    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField);
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues, criticalValuesTrans, strictNormalization );
 end 
 );
 
@@ -1096,26 +1153,26 @@ end
 #Hurwitz@HMAC.Tests.TEST_HMS_UNCOMMON_CRITICAL_VALUES :=
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Tests"], "TEST_HMS_UNCOMMON_CRITICAL_VALUES",
 function()
-	local fieldSize, finiteField, permutations, degree, partitions,  criticalValues, criticalValuesTrans,countonly,  strictNormalization, maps;
-	
-	fieldSize := 7; # todo : check in M2: recently no results for char 7 
-	finiteField :=GF(fieldSize);	 
-	partitions := [ [2,1],[2,1],[2,1],[2,1] ]; 
-	criticalValues := [infinity, 0*Z(fieldSize), Z(fieldSize)^1, Z(fieldSize)^6 ];
-	
-	strictNormalization := false;
-	
-	maps  := FindHurwitzMapModPrime@HMAC(finiteField,partitions,criticalValues,  strictNormalization);
-	Assert(0, Size(maps)=1);
-	criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
-	
-	maps:=[];
-	criticalValues := [ 0*Z(fieldSize), infinity, Z(fieldSize)^0, Z(fieldSize)^1 ];
-	maps  := FindHurwitzMapModPrime@HMAC( finiteField,partitions, criticalValues,  strictNormalization);
-	Assert(0, Size(maps)=1);
-	criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField );
-	Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
+    local fieldSize, finiteField, permutations, degree, partitions,  criticalValues, criticalValuesTrans,countonly,  strictNormalization, maps;
+    
+    fieldSize := 7; # todo : check in M2: recently no results for char 7 
+    finiteField :=GF(fieldSize);     
+    partitions := [ [2,1],[2,1],[2,1],[2,1] ]; 
+    criticalValues := [infinity, 0*Z(fieldSize), Z(fieldSize)^1, Z(fieldSize)^6 ];
+    
+    strictNormalization := false;
+    
+    maps  := FindHurwitzMapModPrime@HMAC(finiteField,partitions,criticalValues,  strictNormalization);
+    Assert(0, Size(maps)=1);
+    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues(criticalValues,finiteField);
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
+    
+    maps:=[];
+    criticalValues := [ 0*Z(fieldSize), infinity, Z(fieldSize)^0, Z(fieldSize)^1 ];
+    maps  := FindHurwitzMapModPrime@HMAC( finiteField,partitions, criticalValues,  strictNormalization);
+    Assert(0, Size(maps)=1);
+    criticalValuesTrans := Hurwitz@HMAC.Internal.NormalizeCriticalValues( criticalValues, finiteField );
+    Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP(  maps[1], partitions, criticalValues,criticalValuesTrans, strictNormalization );
 end 
 );
 
@@ -1305,17 +1362,17 @@ InstallGlobalFunction( IsNormalizationRule@HMAC ,
 function(normRule)
 
     if not IsRecord(normRule) 
-	    or not "dataType"  in RecNames(normRule)
-	    or not normRule.dataType="NormalizationRule" 
-	    or not "polynomialId"  in RecNames(normRule)
-	    or not "multiplicity" in RecNames(normRule)
-	    or not "root" in RecNames(normRule)
-	    or (not normRule.polynomialId in PositiveIntegers and not normRule.polynomialId=Null@HMAC)
-	    or (not IsPosInt(normRule.multiplicity)  and not normRule.multiplicity=Null@HMAC)
-	    or not normRule = NormalizationRule@HMAC( normRule.polynomialId,  normRule.multiplicity, normRule. root) then
-		    return false;
-	fi;	
-	return true;
+        or not "dataType"  in RecNames(normRule)
+        or not normRule.dataType="NormalizationRule" 
+        or not "polynomialId"  in RecNames(normRule)
+        or not "multiplicity" in RecNames(normRule)
+        or not "root" in RecNames(normRule)
+        or (not normRule.polynomialId in PositiveIntegers and not normRule.polynomialId=Null@HMAC)
+        or (not IsPosInt(normRule.multiplicity)  and not normRule.multiplicity=Null@HMAC)
+        or not normRule = NormalizationRule@HMAC( normRule.polynomialId,  normRule.multiplicity, normRule. root) then
+            return false;
+    fi;    
+    return true;
 end
 );
 
@@ -1365,11 +1422,11 @@ function( shapes, criticalValues, normalizationRules)
         if not normalizationRules[i].polynomialId=Null@HMAC and normalizationRules[i].polynomialId>Size( shapes ) then
                 Error("invalid polynomialId in normalization rules!");
         fi;
-	    for j in [1..Size(normalizationRules)] do
-		    if  i<>j and normalizationRules[i].root = normalizationRules[j].root then 
-			        Error(" different normalization rules cannot have same root value!");
-	        fi;
-	    od;
+        for j in [1..Size(normalizationRules)] do
+            if  i<>j and normalizationRules[i].root = normalizationRules[j].root then 
+                    Error(" different normalization rules cannot have same root value!");
+            fi;
+        od;
     od;
 
     hmsProblem := rec();
@@ -1991,8 +2048,8 @@ function( RootDataList )
      #polynomial := 1;
      for RootData in RootDataList do
          if (RootData[1]<>infinity) then 
-	    polynomial := polynomial*( ( ind[1] - RootData[1] )^RootData[2] );
-	 fi;
+        polynomial := polynomial*( ( ind[1] - RootData[1] )^RootData[2] );
+     fi;
      od;
      return polynomial;
 end
@@ -2008,18 +2065,18 @@ function( value,   moebiusTransformMatrix )
      Assert(0, not IsInfinity(a));      Assert(0, not IsInfinity(b));
      Assert(0, not IsInfinity(c));     Assert(0, not IsInfinity(d));
          if ( value = infinity) then 
-	    return One(value)*a/c;
+        return One(value)*a/c;
          else
             if ( IsZero( value*c+d ) ) then 
                if (  AbsoluteValue(value*a+b) >0 ) then 
-         	   return infinity ;
-                   else          	 
+                return infinity ;
+                   else               
                        return -infinity ;
                fi;
             else
                 return (a*value+b)/(c*value+d);
             fi;
-	 fi;
+     fi;
 end
 );
 
@@ -2074,7 +2131,7 @@ end
 InstallGlobalRecordFunction@HMAC ( ["Hurwitz@HMAC","Internal"], "HurwitzMapData",
 function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing ) 
     # creates polynomials [A,B,C,...] from single rootData with  B-lambdaA = C, B-mueA = D, etc.
-    local createPolynomialList, createRationalMaps, hurwitzMapData, computeResiduesEx, computeMaxResidue;
+    local createPolynomialList, createRationalMaps, hurwitzMapData, computeResiduesEx, computeMaxResidue, expectedDegree;
     
     hurwitzMapData := rec();
     
@@ -2082,35 +2139,38 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
     hurwitzMapData.scalingConstants := scalingConstants; # how to call?
     
     createPolynomialList := function ( preimageList, polynomialRing )
-	    local currentPolynomial,polynomialList, pos, ind, preimageData ;
-	    polynomialList := [];
-	     
-	    ind := IndeterminatesOfPolynomialRing(polynomialRing);
-	    for pos in [1..Size(preimageList)] do
-		    currentPolynomial := NewFloat(@hmac.isc,"1.0")*(ind[1])^0;
-		    for preimageData in preimageList[pos] do
-			    if (preimageData[1]<>infinity) then 
-				    currentPolynomial := currentPolynomial*( ( ind[1] - preimageData[1] )^preimageData[2] );
-			    fi;
-		    od;
-		    Append(polynomialList,[currentPolynomial]);
-	    od;
-	    return polynomialList; 
+        local currentPolynomial,polynomialList, pos, ind, preimageData ;
+        polynomialList := [];
+         
+        ind := IndeterminatesOfPolynomialRing(polynomialRing);
+        for pos in [1..Size(preimageList)] do
+            expectedDegree := 0;
+            currentPolynomial := NewFloat(@hmac.isc,"1.0")*(ind[1])^0;
+            for preimageData in preimageList[pos] do
+                expectedDegree:= expectedDegree+preimageData[2];
+                if (preimageData[1]<>infinity) then 
+                    currentPolynomial := currentPolynomial*( ( ind[1] - preimageData[1] )^preimageData[2] );
+                fi;
+            od;
+            SetExpectedDegree( currentPolynomial, expectedDegree ) ; 
+            Append(polynomialList,[currentPolynomial]);
+        od;
+        return polynomialList; 
     end;
 
  
 
     createRationalMaps := function ( preimages, scalingVals, polynomialRing )
-	    local coeffFam,polynomialList,rationalMapList, currPos,scalingFactor, num , denom,numExtRep, denomExtRep ,rfam,rmap ;
-	    polynomialList := createPolynomialList( preimages, polynomialRing ) ;
-	    rationalMapList := [];
-	    currPos := 3;
+        local coeffFam,polynomialList,rationalMapList, currPos,scalingFactor, num , denom,numExtRep, denomExtRep ,rfam,rmap ;
+        polynomialList := createPolynomialList( preimages, polynomialRing ) ;
+        rationalMapList := [];
+        currPos := 3;
         coeffFam := RationalFunctionsFamily(FamilyObj(One(CoefficientsRing( polynomialRing ))));
 
        rfam := RationalFunctionsFamily(FamilyObj(One( polynomialRing )));
-	    for scalingFactor in scalingVals do
-		    num := polynomialList[2];
-		    denom := polynomialList[1]*scalingFactor;
+        for scalingFactor in scalingVals do
+            num := polynomialList[2];
+            denom := polynomialList[1]*scalingFactor;
 
             numExtRep   := ExtRepNumeratorRatFun(num);
             denomExtRep := ExtRepNumeratorRatFun(denom);
@@ -2119,12 +2179,12 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
             rmap := num/denom ; # why the hell this is working, and the other stuff not?
             SetIsUnivariateRationalFunction( rmap, true );
             if Degree(denom)>0 then  SetIsPolynomial( rmap, false ); fi;
-		    Append(rationalMapList, [ rmap ] );
-		    #Append(rationalMapList,[ num/denom ]);
-		    #Append(rationalMapList,[ rec( numerator:=num , denominator:=denom ) ] );
-		    currPos := currPos+1;
-	    od;
-	    return rationalMapList;
+            Append(rationalMapList, [ rmap ] );
+            #Append(rationalMapList,[ num/denom ]);
+            #Append(rationalMapList,[ rec( numerator:=num , denominator:=denom ) ] );
+            currPos := currPos+1;
+        od;
+        return rationalMapList;
     end;
    
     hurwitzMapData.preimages := function(image)
@@ -2179,12 +2239,12 @@ function( preimageLists, scalingConstants, complexCriticalValuesApprox, polRing 
                                             [hurwitzMapData.indeterminate], hurwitzMapData.preImageLists[idx+2] ) );
         od;    
                                                                                           
-	    return residues;
-	 end;
-	 	 
+        return residues;
+     end;
+          
    
-	 hurwitzMapData.maxResidue := Maximum(  hurwitzMapData.computeResidues() );
-	
+     hurwitzMapData.maxResidue := Maximum(  hurwitzMapData.computeResidues() );
+    
      return Immutable(hurwitzMapData);
 end
 );
@@ -2508,7 +2568,7 @@ end
 ## gap> modPCriticalValues := [ infinity, Zero(finiteField),  One(finiteField) ];;
 ## gap> hmsProblem := Hurwitz@HMAC.HurwitzMapSearchProblem( 
 ## > permutations , complexCriticalValuesApprox );;
-## gap> 	
+## gap>     
 ## gap> ############# finite field search
 ## gap> mapsModPrime := Hurwitz@HMAC.FindHurwitzMapModPrime( 
 ## > finiteField , permutations, modPCriticalValues );;
@@ -2546,29 +2606,29 @@ function()
           polynomialTuple, hurwitzMapSearchProblem, strictNormalization, liftOptions, hurwitzMapCandidates;
           
     fieldSize := 11;
-	finiteField := GF(fieldSize);
+    finiteField := GF(fieldSize);
     permutations := [(1,2,3),(1,2),(2,3)];
-	
-	mapDegree := Maximum(List(permutations,LargestMovedPoint));
-	# partitions := List( permutations,p->CycleLengths(p,[1..mapDegree]) );
+    
+    mapDegree := Maximum(List(permutations,LargestMovedPoint));
+    # partitions := List( permutations,p->CycleLengths(p,[1..mapDegree]) );
     partitions := [ [ 3 ], [ 2, 1 ], [ 2, 1 ] ];
-	
-	complexCriticalValueRationalApprox := [ [infinity,infinity], [0,0], [1,0] ];
-	
-	reducedCriticalValues := [ infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
+    
+    complexCriticalValueRationalApprox := [ [infinity,infinity], [0,0], [1,0] ];
+    
+    reducedCriticalValues := [ infinity, 0*Z(fieldSize), Z(fieldSize)^0 ];
 
-	strictNormalization := true;
-		
-	mapsModPrime := FindHurwitzMapModPrime@HMAC( finiteField  ,partitions, reducedCriticalValues , strictNormalization);
+    strictNormalization := true;
+        
+    mapsModPrime := FindHurwitzMapModPrime@HMAC( finiteField  ,partitions, reducedCriticalValues , strictNormalization);
  
-	liftOptions := @HMAC@PadicLift.LiftOptions();
-	liftOptions.setDecimalPrecision(24);
-	
+    liftOptions := @HMAC@PadicLift.LiftOptions();
+    liftOptions.setDecimalPrecision(24);
+    
     hurwitzMapSearchProblem := HurwitzMapSearchProblem@HMAC( partitions , complexCriticalValueRationalApprox, strictNormalization);
-	hurwitzMapCandidates := ApproxComplexHurwitzMaps@HMAC( hurwitzMapSearchProblem, mapsModPrime[1][2], finiteField, liftOptions);
-	
-	Assert(0, ForAll(hurwitzMapCandidates, function(mapCandidate) return mapCandidate.maxResidue < 1.0e-15; end) );
-	
+    hurwitzMapCandidates := ApproxComplexHurwitzMaps@HMAC( hurwitzMapSearchProblem, mapsModPrime[1][2], finiteField, liftOptions);
+    
+    Assert(0, ForAll(hurwitzMapCandidates, function(mapCandidate) return mapCandidate.maxResidue < 1.0e-15; end) );
+    
     z := hurwitzMapCandidates[1].indeterminate;
     Assert(0, Degree( (NewFloat(@hmac.isc,"3.0")*z^2+(NewFloat(@hmac.isc,"-2.0")*z^3)) /hurwitzMapCandidates[1].map ) =0);
 end
@@ -2586,14 +2646,14 @@ function()
 
     hurwitzMapCandidates := []; # variable for result  
     
-	finiteField := GF(13); 	mapDegree := 3;
-	partitions := [ [1,2], [2,1], [2,1], [2,1] ];
-	approxBranchValues := [ [infinity,infinity], [0,0], [1,0], [0/1, -1/2] ]; 	
-	
-	# reduce critical values to finite field. TODO: pass minimal polynomials to c++ binary instead CV to avoid redundant computation.
-	reducedCritivalValueLists := Hurwitz@HMAC.ReduceCriticalValuesApprox( approxBranchValues, finiteField );
-    strictNormalization := true;    	
-	
+    finiteField := GF(13);     mapDegree := 3;
+    partitions := [ [1,2], [2,1], [2,1], [2,1] ];
+    approxBranchValues := [ [infinity,infinity], [0,0], [1,0], [0/1, -1/2] ];     
+    
+    # reduce critical values to finite field. TODO: pass minimal polynomials to c++ binary instead CV to avoid redundant computation.
+    reducedCritivalValueLists := Hurwitz@HMAC.ReduceCriticalValuesApprox( approxBranchValues, finiteField );
+    strictNormalization := true;        
+    
     for reducedCriticalValues in reducedCritivalValueLists do           
 
         mapsModPrime := FindHurwitzMapModPrime@HMAC( finiteField  ,partitions, reducedCriticalValues, strictNormalization );
@@ -2611,7 +2671,7 @@ function()
    od;      
    # todo: kann auf ein Problem hindeuten mapCandidate.maxResidue von 1.0e-15 auf 1.0e-11 reduziert
    approxMapCandidatesCount := Number( hurwitzMapCandidates, function(mapCandidate) return mapCandidate.maxResidue < 1.0e-11; end);
-   Assert(0, approxMapCandidatesCount = 4 );	
+   Assert(0, approxMapCandidatesCount = 4 );    
 end
 );
 

@@ -169,6 +169,8 @@ gap>     Hurwitz@HMAC.Internal.CHECK_FINITE_FIELD_MAP( mapData, partitions, crit
 #
 # Hurwitz@HMAC.Tests.TEST_HMS_STRICT_NORMALIZATION : 
 #
+# TODO: test is insufficient.
+#
 gap> 
 gap>     fieldSize := 11;;
 gap>     finiteField := GF( fieldSize );;

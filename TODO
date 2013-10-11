@@ -70,3 +70,17 @@ Applications
 is there a class of ideals ?
 
 ####################################
+
+# now for real command line  Options 
+
+# try first: tclap, second: popt, third: boost options
+
+
+# for renormalization:
+
+choose three target (linear) factors and then renormalize.
+( but how polynomials get renormalized? )
+Do the renormalization in GAP, since it is probably too hard in C++
+
+
+

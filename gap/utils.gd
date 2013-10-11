@@ -34,6 +34,10 @@ DeclareGlobalFunction( "@HMAC@Utils.");
 @HMAC@Utils.Tests    := rec();
 @HMAC@Utils.Internal := rec();
 
+DeclareAttribute("ExpectedDegree",IsPolynomial);
+#DeclareAttribute("HasInfinityRoot",IsPolynomial);
+
+
 
 # Introduce Null@HMAC to  indicate an uninitialized pointer/variable
 if not IsBound( Null@HMAC ) then
