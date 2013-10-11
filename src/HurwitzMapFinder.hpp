@@ -347,6 +347,7 @@ namespace RationalMapSearch
                             return false;  
                         }                      
                      }
+                     it++;
                 }
                 return true;
 
