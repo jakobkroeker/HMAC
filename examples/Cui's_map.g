@@ -25,6 +25,7 @@ permutations := [  (1, 7, 11, 2)(3, 8)(4, 5)(6, 10)(9, 12, 13),
                    (1, 3, 12, 4)(5, 9)(6, 7)(10, 13, 11)(2, 8),
                    (1, 5, 13, 6)(7, 10)(2, 3)(8, 11, 12)(4, 9)  ]; 
 
+   targetPerms:=permutations;
    Assert(0, ()=Product(permutations) );
    finiteField := GF(11); 
 
