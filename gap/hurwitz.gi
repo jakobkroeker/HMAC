@@ -2068,7 +2068,7 @@ function( value,   moebiusTransformMatrix )
         return One(value)*a/c;
          else
             if ( IsZero( value*c+d ) ) then 
-               if (  AbsoluteValue(value*a+b) >0 ) then 
+               if (  AbsoluteValue(value*a+b) >Zero(a) ) then 
                 return infinity ;
                    else               
                        return -infinity ;
