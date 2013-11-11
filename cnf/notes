@@ -1,0 +1,8 @@
+
+
+to recreate configure,
+
+run autoconf 
+and 
+aclocal -I m4 --install
+
