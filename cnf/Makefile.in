@@ -252,6 +252,26 @@ wwwdir: .version tarballs
 	cp doc/manual.css www/manual.css
 #	rsync -arvp --delete www/ laurent@rlaurent.uni-math.gwdg.de:public_html/FR/
 
+
+checkfloat:
+	./runGapTest.sh $(GAPPROG)../float/tst/testall.g
+
+
+checkfr:
+	./runGapTest.sh $(GAPPROG) ../fr/tst/testall.g
+
+checkpkg: 
+	./runGapTest.sh $(GAPPROG) tst/testall.g
+
+
+check: 
+	$(MAKE) checkfloat
+	$(MAKE) checkfr
+	$(MAKE) checkpkg
+
+test: check
+
+
 doc: doc/chap0.html doc/manual.pdf
 
 doc/manual.pdf: 

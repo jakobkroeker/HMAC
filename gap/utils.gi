@@ -2112,7 +2112,7 @@ end
 ## TODO : someting is fishy here...
 
 # test: String(@HMAC@Utils.Tests.TEST_SORT_POWERS_BY_EXPONENT);
-InstallGlobalRecordFunction@HMAC (["@HMAC@Utils","Internal"], "CreateTestString",
+InstallGlobalRecordFunction@HMAC (["@HMAC@Utils","Internal"], "CreateTestStringLong",
 function( testRecordVariableString, prefix)
     local testRecord, prefixString, str,strs, fullStr, name,strNew, pos, localRow, separators, line,strsCopy;
 
@@ -2170,6 +2170,26 @@ function( testRecordVariableString, prefix)
         fullStr:= Concatenation(fullStr,"#\n" ,str);
     od;    
     return fullStr;
+end
+);
+
+InstallGlobalRecordFunction@HMAC (["@HMAC@Utils","Internal"], "CreateTestString",
+function( testRecordVariableString, prefix)
+    local testRecord, prefixString, str,strs, fullStr, name,strNew, pos, localRow, separators, line,strsCopy;
+
+ testRecord := EvalString(testRecordVariableString);
+    fullStr:="";
+    str := "\n";
+    
+    separators := [' ',',',';' ];
+
+
+    fullStr := Concatenation(fullStr, "#\n#\n");      
+   for name in RecNames(testRecord) do        
+      fullStr := Concatenation(fullStr, "gap> ",testRecordVariableString, ".", name, "() ; \n" );
+   od;
+
+   return fullStr;
 end
 );
 

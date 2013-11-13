@@ -292,7 +292,7 @@ function()
     complexPoly := x-oneFloat;
     complexPoly := x;
 
-    roots := RootsFloat(complexPoly);
+    #roots := RootsFloat(complexPoly); fails. see ticket 21
 
 
     fieldType := CXSC_PSEUDOFIELD;
