@@ -20,6 +20,12 @@ BindGlobal("@hmac", rec()); # a record to store locals in the package
 @hmac.isc := IsMPCFloat;
 @hmac.field := MPC_PSEUDOFIELD;
 
+#  should not be mandatory:
+#  bitPrecision := 600;
+#  SetP1Points( MPC, bitPrecision );
+#  MAKEP1EPS@FR();
+
+
 #############################################################################
 ##
 #I Create info class to be able to debug loading
