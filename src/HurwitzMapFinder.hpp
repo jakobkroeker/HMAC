@@ -628,8 +628,11 @@ namespace RationalMapSearch
                         while ( substpol.nextInPlace(field_m) );
             }
 
-            ///@note es ist zwar prinzipiell egal, ob das Zweite Polynom als Nullstelle inf hat, aber um konstante Faktoren be den Polynomen zu vermeiden,
-            /// sollte das schon so gehandhabt werden.            
+            /// constructs all polSet[i] from polSet[1], polSet[2], respecting requirements on Shape
+            ///
+            ///@note es ist zwar prinzipiell egal, ob ausgerechnet das zweite Polynom als Nullstelle inf hat, aber um konstante Faktoren be den Polynomen zu vermeiden,
+            /// sollte das schon so gehandhabt werden.     
+          
             template <class TPolRingTypePar>
             void  FiniteFieldSearch<TPolRingTypePar>::last_search_level(  const ShapeList & shapeList,  FiniteFieldSearch<TPolRingTypePar>::PolSetType & polSet )
             {
@@ -645,7 +648,7 @@ namespace RationalMapSearch
                 return;
 
                 if (   searchOptions_m.dryRun() )
-                    assert( false ); //should not happen
+                    assert( false ); //should not happen: in a dry run the last search level is never called.
                 //    return 1;
 
                 //CounterType localCounter=0;
