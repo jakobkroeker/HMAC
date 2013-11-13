@@ -1,5 +1,7 @@
-
+*~
 examples/*~
 gap/*~
 experiments/*~
 sandbox/*~
+tst/*~
+tst/*.tmp
