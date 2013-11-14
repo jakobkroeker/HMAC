@@ -30,6 +30,8 @@ LoadPackage("hmac");
 	fieldMap :=  NewDictionary(finiteFields[1], true);
 	
 
+   allMapsModPrime:=[];
+
 		
 	
 	for finiteField in finiteFields do
@@ -83,9 +85,13 @@ LoadPackage("hmac");
 
 
                 mapsModPrime := Hurwitz@HMAC.FindHurwitzMapModPrime( finiteField  ,partitions, reducedCriticalValues, strictNormalization );
+
+                # AddDictionary(mapsModPrimeDic, [finiteField, idx], mapsModPrime);
                 
                 if Size(mapsModPrime)>0 then 
                 ########## lift #################################################
+
+                   Append( allMapsModPrime, [  [ finiteField, partitions,reducedCriticalValues,strictNormalization, mapsModPrime  ] ]);
 
                     mapModPrime := mapsModPrime[1];
                     for mapModPrime  in mapsModPrime do 
@@ -94,7 +100,7 @@ LoadPackage("hmac");
                         for mapCandidate in mapCandidates do
                             if mapCandidate.maxResidue<0.001_c then
                                 if not  mapCandidate.map in allMapCandidates then
-                                    Append( allMapCandidates, [ mapCandidate.map1 ]);
+                                    Append( allMapCandidates, [ mapCandidate.map ]);
                                 fi;
                             fi;
                         od;
